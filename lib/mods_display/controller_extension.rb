@@ -21,9 +21,15 @@ module ModsDisplay::ControllerExtension
         output << "<dt class='#{field_config.label_class}'>#{field.label}:</dt>"
         output << "<dd class='#{field_config.value_class}'>"
           if field_config.link
-            output << "<a href='#{send(field_config.link[0], replace_tokens(field_config.link[1], field.text))}'>#{field.text}</a>"
+            if field.text.is_a?(Array)
+              field.text.each do |text|
+                output << "<a href='#{send(field_config.link[0], replace_tokens(field_config.link[1], text))}'>#{text}</a>"
+              end
+            else
+              output << "<a href='#{send(field_config.link[0], replace_tokens(field_config.link[1], field.text))}'>#{field.text}</a>"
+            end
           else
-            output << value
+            output << field.text
           end
         output << "</dd>"
       end
