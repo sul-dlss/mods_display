@@ -1,6 +1,6 @@
 class ModsDisplay::Configuration::Base
   def initialize &config
-    instance_eval &config
+    instance_eval &config if block_given?
   end
   
   def label_class label_class=""

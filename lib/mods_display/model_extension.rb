@@ -10,7 +10,8 @@ module ModsDisplay::ModelExtension
   def mods_display_xml
     xml = self.class.mods_xml_source.call(self)
     return if xml.nil?
-    Stanford::Mods::Record.new.from_str(xml, false)
+    mods = Stanford::Mods::Record.new
+    mods.from_str(xml, false)
   end
   
   module ClassMethods
