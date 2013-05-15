@@ -6,7 +6,7 @@ class ModsDisplay::Language < ModsDisplay::Field
 
   def text
     return super unless super.nil?
-    language_codes[@value.text.strip]
+    language_codes[@value.text.strip] || @value.text.strip
   end
 
   def to_html

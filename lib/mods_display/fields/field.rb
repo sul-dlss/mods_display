@@ -6,18 +6,21 @@ class ModsDisplay::Field
   end
 
   def label
+    return nil if @value.nil?
     if @value.attributes["displayLabel"].respond_to?(:value)
       @value.attributes["displayLabel"].value
     end
   end
 
   def text
-    if @value.respond_to?(:displayForm)
-      @value.displayForm.text
+    return nil if @value.nil?
+    if displayForm(@value)
+      displayForm(@value).text
     end
   end
 
   def to_html
+    return nil if (@value.nil? or text.nil?)
     output = ""
     output << "<dt class='#{@config.label_class}'>#{label}:</dt>"
     output << "<dd class='#{@config.value_class}'>"
@@ -36,6 +39,10 @@ class ModsDisplay::Field
   end
 
   private
+
+  def displayForm(element)
+    element.children.find{|c| c.name == "displayForm"}
+  end
 
   def replace_tokens(object, value)
     object = object.dup

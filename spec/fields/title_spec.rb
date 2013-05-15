@@ -33,7 +33,6 @@ describe ModsDisplay::Title do
       mods_display_title(@title_parts).text.should == "The Title For Something 62"
     end
     it "should use the displayForm when available" do
-      pending
       mods_display_title(@display_form).text.should == "The Title of This Item"
     end
     it "should return the basic text held in a sub element of titleInfo" do
