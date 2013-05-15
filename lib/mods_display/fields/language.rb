@@ -1,26 +1,23 @@
-class ModsDisplay::Language
-  def initialize(language)
-    @language = language
-  end
-  
+class ModsDisplay::Language < ModsDisplay::Field
   def label
+    return super unless super.nil?
     "Language"
   end
-  
+
   def text
-    output = []
-    if @language.respond_to?(:displayForm)
-      output << @language.displayForm.text
-    else
-      output << language_codes[@language.text.strip]
-    end
-    output.join(" ").strip
+    return super unless super.nil?
+    language_codes[@value.text.strip]
   end
-  
+
+  def to_html
+    return nil if text.strip == ""
+    super
+  end
+
   private
-  
+
   def language_codes
     SEARCHWORKS_LANGUAGES
   end
-  
+
 end

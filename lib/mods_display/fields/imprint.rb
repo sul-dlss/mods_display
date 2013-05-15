@@ -1,40 +1,35 @@
-class ModsDisplay::Imprint
-  def initialize(imprint)
-    @imprint = imprint
-  end
-  
+class ModsDisplay::Imprint < ModsDisplay::Field
+
   def label
-    if @imprint.attributes["displayLabel"].respond_to?(:value)
-      @imprint.attributes["displayLabel"].value
-    elsif @imprint.attributes["type"].respond_to?(:value) and title_labels.has_key?(@imprint.attributes["type"].value)
-      title_labels[@imprint.attributes["type"].value]
-    else
-      "Imprint"
-    end
+    return super unless super.nil?
+    "Imprint"
   end
-  
+
   def text
+    return super unless super.nil?
     output = []
-    if @imprint.respond_to?(:displayForm)
-      output << @imprint.displayForm.text
-    else
-      imprint_parts.each do |part|
-        if @imprint.respond_to? part
-          imprint_part = @imprint.send(part)
-          attributes = imprint_part.attributes.first || {}
-          unless ( ["dateCreated", "dateIssued"].include?(imprint_part.name.join) and
-                   attributes.has_key?("encoding") )
-            output << imprint_part.text
-          end
+    imprint_parts.each do |part|
+      if @value.respond_to? part
+        imprint_part = @value.send(part)
+        attributes = imprint_part.attributes.first || {}
+        unless ( ["dateCreated", "dateIssued"].include?(imprint_part.name.join) and
+                 attributes.has_key?("encoding") )
+          output << imprint_part.text
         end
       end
     end
     output.join(" ").strip
   end
-  
+
+  def to_html
+    return nil if text.strip == ""
+    super
+  end
+
   private
-  
+
   def imprint_parts
     [:place, :publisher, :dateCreated, :dateIssued]
   end
+
 end

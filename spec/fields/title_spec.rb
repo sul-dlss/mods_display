@@ -1,6 +1,13 @@
 require "spec_helper"
+require "mods_display/configuration"
+require "mods_display/configuration/base"
+require "mods_display/fields/field"
 require "mods_display/fields/title"
 require "stanford-mods"
+
+def mods_display_title(mods_record)
+  ModsDisplay::Title.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+end
 
 describe ModsDisplay::Title do
   before(:all) do
@@ -12,25 +19,25 @@ describe ModsDisplay::Title do
   end
   describe "labels" do
     it "should return a default label of Title if nothing else is available" do
-      ModsDisplay::Title.new(@title).label.should == "Title"
+      mods_display_title(@title).label.should == "Title"
     end
     it "should return an appropriate label from the type attribute" do
-      ModsDisplay::Title.new(@alt_title).label.should == "Alternative Title"
+      mods_display_title(@alt_title).label.should == "Alternative Title"
     end
     it "should return the label held in the displayLabel attribute of the titleInfo element when available" do
-      ModsDisplay::Title.new(@display_label).label.should == "MyTitle"
+      mods_display_title(@display_label).label.should == "MyTitle"
     end
   end
   describe "values" do
     it "should construct all the elements in titleInfo" do
-      ModsDisplay::Title.new(@title_parts).text.should == "The Title For Something 62"
+      mods_display_title(@title_parts).text.should == "The Title For Something 62"
     end
     it "should use the displayForm when available" do
       pending
-      ModsDisplay::Title.new(@display_form).text.should == "The Title of This Item"
+      mods_display_title(@display_form).text.should == "The Title of This Item"
     end
     it "should return the basic text held in a sub element of titleInfo" do
-      ModsDisplay::Title.new(@title).text.should == "Title"
+      mods_display_title(@title).text.should == "Title"
     end
   end
   
