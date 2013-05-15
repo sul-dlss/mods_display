@@ -26,9 +26,11 @@ class ModsDisplay::Field
     output << "<dd class='#{@config.value_class}'>"
       if @config.link
         if text.is_a?(Array)
+          links = []
           text.each do |txt|
-            output << "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], txt))}'>#{txt}</a>"
+            links << "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], txt))}'>#{txt}</a>"
           end
+          output << links.join(@config.delimiter)
         else
           output << "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], text))}'>#{text}</a>"
         end
