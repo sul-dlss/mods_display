@@ -5,66 +5,15 @@ require "mods_display/fields/field"
 require "mods_display/fields/imprint"
 require "stanford-mods"
 
+require "fixtures/imprint_fixtures"
+include ImprintFixtures
+
 def mods_display_imprint(mods_record)
   ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
 end
 
 describe ModsDisplay::Imprint do
   before(:all) do
-    imprint_mods = <<-MODS
-      <mods>
-        <originInfo>
-          <place>A Place</place>
-          <publisher>A Publisher</publisher>
-          <dateCreated>A Create Date</dateCreated>
-          <dateIssued>An Issue Date</dateIssued>
-          <dateCaptured>A Capture Date</dateCaptured>
-          <dateOther>Another Date</dateOther>
-        </originInfo>
-      </mods>
-    MODS
-    origin_info_mods = <<-MODS
-      <mods>
-        <originInfo>
-          <dateValid>A Valid Date</dateValid>
-        </originInfo>
-        <originInfo>
-          <edition>The Edition</edition>
-        </originInfo>
-      </mods>
-    MODS
-    encoded_date = <<-MODS
-      <mods>
-        <originInfo>
-          <place>A Place</place>
-          <dateIssued encoding="an-encoding">An Encoded Date</dateIssued>
-        </originInfo>
-      </mods>
-    MODS
-    mixed_mods = <<-MODS
-      <mods>
-        <originInfo>
-          <place>A Place</place>
-          <publisher>A Publisher</publisher>
-          <edition>The Edition</edition>
-        </originInfo>
-      </mods>
-    MODS
-    display_form = <<-MODS
-      <mods>
-        <originInfo>
-          <place>A Place</place>
-          <publisher>A Publisher</publisher>
-          <displayForm>The Display Form</displayForm>
-        </originInfo>
-        <originInfo displayLabel="TheLabel">
-          <place>A Place</place>
-          <publisher>A Publisher</publisher>
-          <displayForm>The Display Form</displayForm>
-        </originInfo>
-      </mods>
-    MODS
-    
     @imprint = Stanford::Mods::Record.new.from_str(imprint_mods, false).origin_info.first
     @date_valid = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info.first
     @edition = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info.last
