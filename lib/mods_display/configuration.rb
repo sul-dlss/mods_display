@@ -19,4 +19,8 @@ class ModsDisplay::Configuration
     @language ||= ModsDisplay::Configuration::Base.new(&language || Proc.new{})
   end
 
+  def description &description
+    @description ||= ModsDisplay::Configuration::Base.new(&description || Proc.new{})
+  end
+
 end
