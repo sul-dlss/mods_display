@@ -42,8 +42,8 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     return nil if values == []
     output = ""
     values.each do |field|
-      output << "<dt>#{field[:label]}:</dt>"
-      output << "<dd>"
+      output << "<dt#{label_class}>#{field[:label]}:</dt>"
+      output << "<dd#{value_class}>"
         if @config.link
           output << link_to_value(field[:value].strip)
         else

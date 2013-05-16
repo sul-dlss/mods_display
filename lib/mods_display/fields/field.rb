@@ -22,8 +22,8 @@ class ModsDisplay::Field
   def to_html
     return nil if (@value.nil? or text.nil?)
     output = ""
-    output << "<dt class='#{@config.label_class}'>#{label}:</dt>"
-    output << "<dd class='#{@config.value_class}'>"
+    output << "<dt#{label_class}>#{label}:</dt>"
+    output << "<dd#{value_class}>"
       if @config.link
         if text.is_a?(Array)
           links = []
@@ -41,6 +41,14 @@ class ModsDisplay::Field
   end
 
   private
+
+  def label_class
+    " class='#{@config.label_class}'" unless @config.label_class == ""
+  end
+
+  def value_class
+    " class='#{@config.value_class}'" unless @config.value_class == ""
+  end
 
   def link_to_value(val)
     "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], val))}'>#{val}</a>"
