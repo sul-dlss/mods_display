@@ -11,11 +11,11 @@ class ModsDisplay::Imprint < ModsDisplay::Field
           val << element.text
         end
       end
-      return_values << {:label => "Imprint", :value => val.map{|v| v.strip }.join(" ")}
+      return_values << {:label => label || "Imprint", :value => val.map{|v| v.strip }.join(" ")}
     end
     if other_pub_info.length > 0
       other_pub_info.each do |pub_info|
-        return_values << {:label => pub_info_labels[pub_info.name.to_sym], :value => pub_info.text.strip}
+        return_values << {:label => label || pub_info_labels[pub_info.name.to_sym], :value => pub_info.text.strip}
       end
     end
     imprint_display_form || return_values

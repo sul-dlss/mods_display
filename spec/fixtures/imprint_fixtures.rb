@@ -62,4 +62,19 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def display_label
+    <<-MODS
+      <mods>
+        <originInfo displayLabel="TheLabel">
+          <place>A Place</place>
+          <publisher>A Publisher</publisher>
+        </originInfo>
+        <originInfo displayLabel="EditionLabel">
+          <place>A Place</place>
+          <publisher>A Publisher</publisher>
+          <edition>The Edition</edition>
+        </originInfo>
+      </mods>
+    MODS
+  end
 end

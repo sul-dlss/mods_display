@@ -21,6 +21,8 @@ describe ModsDisplay::Imprint do
     @mixed = Stanford::Mods::Record.new.from_str(mixed_mods, false).origin_info.first
     @display_form = Stanford::Mods::Record.new.from_str(display_form, false).origin_info.first
     @display_form_with_label = Stanford::Mods::Record.new.from_str(display_form, false).origin_info.last
+    @display_label = Stanford::Mods::Record.new.from_str(display_label, false).origin_info.first
+    @edition_display_label = Stanford::Mods::Record.new.from_str(display_label, false).origin_info.last
   end
 
   describe "labels" do
@@ -33,6 +35,10 @@ describe ModsDisplay::Imprint do
     end
     it "should get multiple labels when we have mixed content" do
       mods_display_imprint(@mixed).values.map{|val| val[:label] }.should == ["Imprint", "Edition"]
+    end
+    it "should use the displayLabel when available" do
+       mods_display_imprint(@display_label).values.map{|val| val[:label] }.should == ["TheLabel"]
+       mods_display_imprint(@edition_display_label).values.map{|val| val[:label] }.should == ["EditionLabel", "EditionLabel"]
     end
   end
 
