@@ -1,17 +1,9 @@
 class ModsDisplay::Imprint < ModsDisplay::Field
 
-  def label
-    return super unless super.nil?
-    if imprint?
-      "Imprint"
-    else
-      origin_info_labels[origin_info_part]
-    end
-  end
-
   def values
     imprint_data = []
     origin_info_data = []
+    return_values = []
     @value.children.each do |child|
       if imprint_parts.include?(child.name.to_sym)
         imprint_data << child
@@ -19,47 +11,42 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         origin_info_data << child
       end
     end
-    {:imprint => imprint_data, :origin_info => origin_info_data}
-  end
-
-  def text
-    return super unless super.nil?
-    output = []
-    if imprint?
-      imprint_parts.each do |part|
-        if @value.respond_to? part
-          imprint_part = @value.send(part)
-          attributes = imprint_part.attributes.first || {}
-          unless ( ["dateCreated", "dateIssued"].include?(imprint_part.name.join) and
-                   attributes.has_key?("encoding") )
-            output << imprint_part.text
-          end
+    if imprint_data.length > 0
+      val = []
+      imprint_data.each do |element|
+        attributes = element.attributes || {}
+        unless ( ["dateCreated", "dateIssued"].include?(element.name) and
+                 attributes.has_key?("encoding") )
+          val << element.text
         end
       end
-    else
-      output << @value.text.strip
+      return_values << {:label => "Imprint", :value => val.map{|v| v.strip }.join(" ")}
     end
-    output.join(" ").strip
+    if origin_info_data.length > 0
+      origin_info_data.each do |origin_info|
+        return_values << {:label => origin_info_labels[origin_info.name.to_sym], :value => origin_info.text.strip}
+      end
+    end
+    return_values
   end
 
   def to_html
-    return nil if text.strip == "" or (values[:imprint] == [] && values[:origi_info] == [])
-    super
+    return text if !text.nil? or values == []
+    output = ""
+    values.each do |field|
+      output << "<dt>#{field[:label]}:</dt>"
+      output << "<dd>"
+        if @config.link
+          output << link_to_value(field[:value].strip)
+        else
+          output << field[:value].strip
+        end
+      output << "</dd>"
+    end
+    output
   end
 
   private
-
-  def imprint?
-    imprint_parts.any?{ |part| !@value.send(part).nil? and @value.send(part).length > 0 }
-  end
-
-  def origin_info_part
-    @value.children.map do |child|
-      unless child.name == "text"
-        child.name
-      end
-    end.compact.first.to_sym
-  end
 
   def imprint_parts
     [:place, :publisher, :dateCreated, :dateIssued, :dateCaptured, :dateOther]
