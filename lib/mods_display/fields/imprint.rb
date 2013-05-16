@@ -29,7 +29,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   private
 
   def imprint_parts
-    [:place, :publisher, :dateCreated, :dateIssued]
+    [:place, :publisher, :dateCreated, :dateIssued, :dateCaptured, :dateOther]
   end
 
 end
