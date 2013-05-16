@@ -50,11 +50,28 @@ describe ModsDisplay::Imprint do
         </originInfo>
       </mods>
     MODS
+    display_form = <<-MODS
+      <mods>
+        <originInfo>
+          <place>A Place</place>
+          <publisher>A Publisher</publisher>
+          <displayForm>The Display Form</displayForm>
+        </originInfo>
+        <originInfo displayLabel="TheLabel">
+          <place>A Place</place>
+          <publisher>A Publisher</publisher>
+          <displayForm>The Display Form</displayForm>
+        </originInfo>
+      </mods>
+    MODS
+    
     @imprint = Stanford::Mods::Record.new.from_str(imprint_mods, false).origin_info.first
     @date_valid = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info.first
     @edition = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info.last
     @encoded_date = Stanford::Mods::Record.new.from_str(encoded_date, false).origin_info.first
     @mixed = Stanford::Mods::Record.new.from_str(mixed_mods, false).origin_info.first
+    @display_form = Stanford::Mods::Record.new.from_str(display_form, false).origin_info.first
+    @display_form_with_label = Stanford::Mods::Record.new.from_str(display_form, false).origin_info.last
   end
 
   describe "labels" do
@@ -89,6 +106,14 @@ describe ModsDisplay::Imprint do
     end
   end
   describe "to_html" do
+    it "should return the display form if one is available" do
+      html = mods_display_imprint(@display_form).to_html
+      html.scan(/<dd>/).length.should == 1
+      html.should match(/<dd>The Display Form<\/dd>/)
+    end
+    it "should return the displayLabel when present if we're using the displayForm" do
+      mods_display_imprint(@display_form_with_label).to_html.should match(/<dt>TheLabel:<\/dt>/)
+    end
     it "should have individual dt/dd pairs for mixed content" do
       html = mods_display_imprint(@mixed).to_html
       html.scan(/<dt>Imprint:<\/dt>/).length.should == 1

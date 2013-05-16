@@ -18,7 +18,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         return_values << {:label => pub_info_labels[pub_info.name.to_sym], :value => pub_info.text.strip}
       end
     end
-    return_values
+    imprint_display_form || return_values
   end
 
   def imprints
@@ -32,9 +32,14 @@ class ModsDisplay::Imprint < ModsDisplay::Field
       pub_info_parts.include?(child.name.to_sym)
     end
   end
+  
+  def imprint_display_form
+    return nil if text.nil?
+    [{:label => label || "Imprint", :value => text}]
+  end
 
   def to_html
-    return text if !text.nil? or values == []
+    return nil if values == []
     output = ""
     values.each do |field|
       output << "<dt>#{field[:label]}:</dt>"
