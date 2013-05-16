@@ -1,14 +1,15 @@
 module ModsDisplay::ControllerExtension
-  extend ActiveSupport::Concern
 
-  included do
-    if self.respond_to?(:helper_method)
-      helper_method :mods_display_config, :render_mods_display
+  def self.included(base)
+    base.extend ClassMethods
+    base.class_eval do
+      def mods_display_config
+        @mods_display_config || self.class.mods_display_config
+      end
+      if base.respond_to?(:helper_method)
+        helper_method :mods_display_config, :render_mods_display
+      end
     end
-  end
-
-  def mods_display_config
-    @mods_display_config || self.class.mods_display_config
   end
 
   def render_mods_display model
