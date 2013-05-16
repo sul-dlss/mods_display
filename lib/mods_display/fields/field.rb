@@ -7,9 +7,7 @@ class ModsDisplay::Field
 
   def label
     return nil if @value.nil?
-    if @value.attributes["displayLabel"].respond_to?(:value)
-      @value.attributes["displayLabel"].value
-    end
+    displayLabel(@value)
   end
 
   def text
@@ -56,6 +54,13 @@ class ModsDisplay::Field
 
   def displayForm(element)
     element.children.find{|c| c.name == "displayForm"}
+  end
+
+  def displayLabel(element)
+    if (element.respond_to?(:attributes) and
+        element.attributes["displayLabel"].respond_to?(:value))
+      element.attributes["displayLabel"].value
+    end
   end
 
   def replace_tokens(object, value)
