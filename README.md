@@ -29,8 +29,8 @@ Configure the source of the MODS xml string
     class MyClass
       ....
       
-      mods_xml_source do |document|
-        document[:mods]
+      mods_xml_source do |model|
+        model.mods
       end
       
     end
@@ -54,7 +54,7 @@ Optionally configure the mods display gem (more on configuration later).
 
 Once installed, the class that included the `ControllerExtension` (`MyController`) will have the `render_mods_display` method available.  This method takes one argument which is an instance of the class that included the `ModelExtension` (`MyClass`).
 
-    render_mods_display(@document) # where @document.is_a?(MyClass)
+    render_mods_display(@model) # where @model.is_a?(MyClass)
 
 
 ## Contributing
