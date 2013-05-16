@@ -1,7 +1,5 @@
 require "spec_helper"
 
-require "stanford-mods"
-
 describe "Installation" do
   before(:all) do
     @pieces_of_data = 1

@@ -1,6 +1,4 @@
 require "spec_helper"
-require "mods_display/configuration"
-require "mods_display/configuration/base"
 
 describe ModsDisplay::Configuration::Base do
   it "should set config options w/ a block" do

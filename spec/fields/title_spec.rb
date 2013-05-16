@@ -1,9 +1,4 @@
 require "spec_helper"
-require "mods_display/configuration"
-require "mods_display/configuration/base"
-require "mods_display/fields/field"
-require "mods_display/fields/title"
-require "stanford-mods"
 
 def mods_display_title(mods_record)
   ModsDisplay::Title.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))

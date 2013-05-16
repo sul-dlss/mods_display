@@ -1,11 +1,6 @@
 require "spec_helper"
-require "mods_display/configuration"
-require "mods_display/configuration/base"
-require "mods_display/fields/field"
-require "mods_display/fields/imprint"
-require "stanford-mods"
-
 require "fixtures/imprint_fixtures"
+
 include ImprintFixtures
 
 def mods_display_imprint(mods_record)

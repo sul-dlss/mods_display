@@ -1,9 +1,4 @@
 require "spec_helper"
-require "mods_display/configuration"
-require "mods_display/configuration/base"
-require "mods_display/fields/field"
-require "mods_display/fields/language"
-require "stanford-mods"
 
 def mods_display_language(mods_record)
   ModsDisplay::Language.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
