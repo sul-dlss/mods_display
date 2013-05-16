@@ -28,11 +28,11 @@ class ModsDisplay::Field
         if text.is_a?(Array)
           links = []
           text.each do |txt|
-            links << "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], txt))}'>#{txt}</a>"
+            links << link_to_value(txt)
           end
           output << links.join(@config.delimiter)
         else
-          output << "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], text))}'>#{text}</a>"
+          output << link_to_value(text)
         end
       else
         output << text
@@ -41,6 +41,10 @@ class ModsDisplay::Field
   end
 
   private
+
+  def link_to_value(val)
+    "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], val))}'>#{val}</a>"
+  end
 
   def displayForm(element)
     element.children.find{|c| c.name == "displayForm"}
