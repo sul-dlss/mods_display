@@ -7,6 +7,10 @@ class ModsDisplay::Configuration
     @title ||= ModsDisplay::Configuration::Base.new(&title || Proc.new{})
   end
 
+  def format &format
+    @format ||= ModsDisplay::Configuration::Base.new(&format || Proc.new{})
+  end
+
   def imprint &imprint
     @imprint ||= ModsDisplay::Configuration::Base.new(&imprint || Proc.new{})
   end
