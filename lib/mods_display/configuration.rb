@@ -23,4 +23,8 @@ class ModsDisplay::Configuration
     @description ||= ModsDisplay::Configuration::Base.new(&description || Proc.new{})
   end
 
+  def cartographics &cartographics
+    @cartographics ||= ModsDisplay::Configuration::Base.new(&cartographics || Proc.new{})
+  end
+
 end

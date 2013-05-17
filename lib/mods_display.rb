@@ -9,6 +9,7 @@ require "mods_display/fields/format"
 require "mods_display/fields/imprint"
 require "mods_display/fields/language"
 require "mods_display/fields/description"
+require "mods_display/fields/cartographics"
 module ModsDisplay
 
 end
