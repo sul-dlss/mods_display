@@ -1,5 +1,6 @@
-class ModsDisplay::Description < ModsDisplay::Field  
-  def values
+class ModsDisplay::Description < ModsDisplay::Field
+
+  def fields
     description_fields.map do |description|
       ModsDisplay::Values.new({:label => (label || labels[description.name.to_sym] || "Physical Description"), 
                                :values => [description.text]})

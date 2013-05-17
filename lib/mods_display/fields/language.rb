@@ -4,7 +4,7 @@ class ModsDisplay::Language < ModsDisplay::Field
     "Language"
   end
 
-  def values
+  def fields
     [ModsDisplay::Values.new(:label => label || "Language", :values => [text])]
   end
 

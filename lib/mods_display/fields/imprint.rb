@@ -1,6 +1,6 @@
 class ModsDisplay::Imprint < ModsDisplay::Field
 
-  def values
+  def fields
     return_values = []
     if imprints.length > 0
       val = []

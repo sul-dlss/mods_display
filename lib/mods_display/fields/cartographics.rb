@@ -1,6 +1,6 @@
 class ModsDisplay::Cartographics < ModsDisplay::Field
 
-  def values
+  def fields
     return nil if @value.nil?
     return_values = []
     if @value.respond_to?(:cartographics)

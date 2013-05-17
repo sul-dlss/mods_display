@@ -4,7 +4,7 @@ class ModsDisplay::Title < ModsDisplay::Field
     super || title_label(@value)
   end
   
-  def values
+  def fields
     [ModsDisplay::Values.new(:label => label, :values => [text])]
   end
 

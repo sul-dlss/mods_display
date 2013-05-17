@@ -15,22 +15,22 @@ describe ModsDisplay::Cartographics do
   end
   describe "values" do
     it "should get the full cartographic note" do
-      values = mods_display_cartographics(@cart).values
+      values = mods_display_cartographics(@cart).fields
       values.length.should == 1
       values.first.values.should == ["The scale ; the projection the coordinates"]
     end
     it "should put a scale not given note if no scale is present" do
-      values = mods_display_cartographics(@no_scale).values
+      values = mods_display_cartographics(@no_scale).fields
       values.length.should == 1
       values.first.values.should == ["Scale not given ; the projection the coordinates"]
     end
     it "should handle when there is only a scale note" do
-      values = mods_display_cartographics(@scale_only).values
+      values = mods_display_cartographics(@scale_only).fields
       values.length.should == 1
       values.first.values.should == ["The scale"]
     end
     it "should handle when only one post-scale piece of the data is available" do
-      values = mods_display_cartographics(@coordinates).values
+      values = mods_display_cartographics(@coordinates).fields
       values.length.should == 1
       values.first.values.should == ["Scale not given ; the coordinates"]
     end

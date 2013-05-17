@@ -19,9 +19,9 @@ describe ModsDisplay::Language do
       mods_display_language(@display_label).label.should == "Lang"
     end
   end
-  describe "values" do
+  describe "fields" do
     it "should return an array with a label/values object" do
-      values = mods_display_language(@display_label).values
+      values = mods_display_language(@display_label).fields
       values.length.should == 1
       values.first.should be_a ModsDisplay::Values
       values.first.label.should == "Lang"

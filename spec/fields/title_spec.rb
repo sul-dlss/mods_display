@@ -23,9 +23,9 @@ describe ModsDisplay::Title do
       mods_display_title(@display_label).label.should == "MyTitle"
     end
   end
-  describe "values" do
+  describe "fields" do
     it "should return an array of label/value objects" do
-      values = mods_display_title(@display_label).values
+      values = mods_display_title(@display_label).fields
       values.length.should == 1
       values.first.should be_a ModsDisplay::Values
       values.first.label.should == "MyTitle"

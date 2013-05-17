@@ -5,7 +5,7 @@ class ModsDisplay::Field
     @klass = klass
   end
 
-  def values
+  def fields
     []
   end
 
@@ -22,13 +22,13 @@ class ModsDisplay::Field
   end
 
   def to_html
-    return nil if values.empty?
+    return nil if fields.empty?
     output = ""
-    values.each do |val|
-      output << "<dt#{label_class}>#{val.label}:</dt>"
+    fields.each do |field|
+      output << "<dt#{label_class}>#{field.label}:</dt>"
       output << "<dd#{value_class}>"
-        output << val.values.map do |v|
-          @config.link ? link_to_value(v) : v
+        output << field.values.map do |val|
+          @config.link ? link_to_value(val) : val
         end.join(@config.delimiter)
       output << "</dd>"
     end
