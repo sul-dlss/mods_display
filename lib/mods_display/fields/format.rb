@@ -1,5 +1,9 @@
 class ModsDisplay::Format < ModsDisplay::Field
 
+  def values
+    [ModsDisplay::Values.new(:label => label || 'Format', :values => [text])]
+  end
+
   def text
     return super unless super.nil?
     @value.text
@@ -7,9 +11,10 @@ class ModsDisplay::Format < ModsDisplay::Field
 
   def to_html
     output = ""
-    output << "<dt#{label_class}>#{label || 'Format'}:</dt>"
+    val = values.first
+    output << "<dt#{label_class}>#{val.label}:</dt>"
     output << "<dd#{value_class}>"
-      output << "<span class='#{format_class}'>#{text}</span>"
+      output << "<span class='#{format_class}'>#{val.values.join(@config.delimiter)}</span>"
     output << "</dd>"
   end
 

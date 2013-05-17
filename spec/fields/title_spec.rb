@@ -24,6 +24,15 @@ describe ModsDisplay::Title do
     end
   end
   describe "values" do
+    it "should return an array of label/value objects" do
+      values = mods_display_title(@display_label).values
+      values.length.should == 1
+      values.first.should be_a ModsDisplay::Values
+      values.first.label.should == "MyTitle"
+      values.first.values.should == ["Title"]
+    end
+  end
+  describe "text" do
     it "should construct all the elements in titleInfo" do
       mods_display_title(@title_parts).text.should == "The Title For Something 62"
     end

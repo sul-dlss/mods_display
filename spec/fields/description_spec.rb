@@ -12,22 +12,22 @@ describe ModsDisplay::Description do
   end
   describe "labels" do
     it "should use the dislayLabel if one is provided" do
-      mods_display_description(@display_label).values.first[:label].should == "SpecialLabel"
+      mods_display_description(@display_label).values.first.label.should == "SpecialLabel"
     end
     it "should get the default label for a child element" do
-      mods_display_description(@form).values.first[:label].should == "Form"
+      mods_display_description(@form).values.first.label.should == "Form"
     end
     it "should get multiple lables for mixed content" do
-      mods_display_description(@mixed).values.map{|v| v[:label] }.should == ["Form", "Extent"]
+      mods_display_description(@mixed).values.map{|v| v.label }.should == ["Form", "Extent"]
     end
   end
   
   describe "values" do
     it "should get the value from a field in physicalDescription" do
-      mods_display_description(@form).values.first[:value].should == "Form Note"
+      mods_display_description(@form).values.first.values.should == ["Form Note"]
     end
     it "should get multiple values for mixed content" do
-      mods_display_description(@mixed).values.map{|v| v[:value] }.should == ["Form Note", "Extent Note"]
+      mods_display_description(@mixed).values.map{|v| v.values }.should == [["Form Note"], ["Extent Note"]]
     end
   end
 end

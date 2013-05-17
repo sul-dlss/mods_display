@@ -22,37 +22,37 @@ describe ModsDisplay::Imprint do
 
   describe "labels" do
     it "should get the Imprint label by default" do
-      mods_display_imprint(@imprint).values.first[:label].should == "Imprint"
+      mods_display_imprint(@imprint).values.first.label.should == "Imprint"
     end
     it "should get the label from non-imprint origin info fields" do
-      mods_display_imprint(@date_valid).values.first[:label].should == "Date Valid"
-      mods_display_imprint(@edition).values.first[:label].should == "Edition"
+      mods_display_imprint(@date_valid).values.first.label.should == "Date Valid"
+      mods_display_imprint(@edition).values.first.label.should == "Edition"
     end
     it "should get multiple labels when we have mixed content" do
-      mods_display_imprint(@mixed).values.map{|val| val[:label] }.should == ["Imprint", "Edition"]
+      mods_display_imprint(@mixed).values.map{|val| val.label }.should == ["Imprint", "Edition"]
     end
     it "should use the displayLabel when available" do
-       mods_display_imprint(@display_label).values.map{|val| val[:label] }.should == ["TheLabel"]
-       mods_display_imprint(@edition_display_label).values.map{|val| val[:label] }.should == ["EditionLabel", "EditionLabel"]
+       mods_display_imprint(@display_label).values.map{|val| val.label }.should == ["TheLabel"]
+       mods_display_imprint(@edition_display_label).values.map{|val| val.label }.should == ["EditionLabel", "EditionLabel"]
     end
   end
 
   describe "values" do
     it "should return various parts of the imprint" do
-      mods_display_imprint(@imprint).values.map{|val| val[:value] }.join(" ").should == "A Place A Publisher A Create Date An Issue Date A Capture Date Another Date"
+      mods_display_imprint(@imprint).values.map{|val| val.values }.join(" ").should == "A Place A Publisher A Create Date An Issue Date A Capture Date Another Date"
     end
     it "should get the text for non-imprint origin info fields" do
-      mods_display_imprint(@date_valid).values.first[:value].should == "A Valid Date"
-      mods_display_imprint(@edition).values.first[:value].should == "The Edition"
+      mods_display_imprint(@date_valid).values.first.values.should == ["A Valid Date"]
+      mods_display_imprint(@edition).values.first.values.should == ["The Edition"]
     end
     it "should omit dates with an encoding attribute" do
-      mods_display_imprint(@encoded_date).values.map{|val| val[:value] }.join.should_not include("An Encoded Date")
+      mods_display_imprint(@encoded_date).values.map{|val| val.values }.join.should_not include("An Encoded Date")
     end
     it "should handle mixed mods properly" do
       values = mods_display_imprint(@mixed).values
       values.length.should == 2
-      values.map{|val| val[:value]}.should include("A Place A Publisher")
-      values.map{|val| val[:value]}.should include("The Edition")
+      values.map{|val| val.values}.should include(["A Place A Publisher"])
+      values.map{|val| val.values}.should include(["The Edition"])
     end
   end
   describe "to_html" do

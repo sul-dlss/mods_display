@@ -5,6 +5,10 @@ class ModsDisplay::Field
     @klass = klass
   end
 
+  def values
+    []
+  end
+
   def label
     return nil if @value.nil?
     displayLabel(@value)
@@ -18,24 +22,17 @@ class ModsDisplay::Field
   end
 
   def to_html
-    return nil if (@value.nil? or text.nil?)
+    return nil if values.empty?
     output = ""
-    output << "<dt#{label_class}>#{label}:</dt>"
-    output << "<dd#{value_class}>"
-      if @config.link
-        if text.is_a?(Array)
-          links = []
-          text.each do |txt|
-            links << link_to_value(txt)
-          end
-          output << links.join(@config.delimiter)
-        else
-          output << link_to_value(text)
-        end
-      else
-        output << text
-      end
-    output << "</dd>"
+    values.each do |val|
+      output << "<dt#{label_class}>#{val.label}:</dt>"
+      output << "<dd#{value_class}>"
+        output << val.values.map do |v|
+          @config.link ? link_to_value(v) : v
+        end.join(@config.delimiter)
+      output << "</dd>"
+    end
+    output
   end
 
   private

@@ -4,14 +4,13 @@ class ModsDisplay::Language < ModsDisplay::Field
     "Language"
   end
 
+  def values
+    [ModsDisplay::Values.new(:label => label || "Language", :values => [text])]
+  end
+
   def text
     return super unless super.nil?
     language_codes[@value.text.strip] || @value.text.strip
-  end
-
-  def to_html
-    return nil if text.strip == ""
-    super
   end
 
   private

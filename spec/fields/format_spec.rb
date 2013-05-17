@@ -21,6 +21,9 @@ describe ModsDisplay::Format do
     end
   end
   describe "format_class" do
+    it "should wrap the format in a span w/ the format class in it" do
+      mods_display_format(@format).to_html.should match(/<span class='format'>Format<\/span>/)
+    end
     it "should remove any spaces" do
       mods_display_format(@space_format).send(:format_class).should == "mixed_materials"
     end

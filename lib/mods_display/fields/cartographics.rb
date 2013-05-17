@@ -9,27 +9,11 @@ class ModsDisplay::Cartographics < ModsDisplay::Field
         projection = field.projection.empty? ? nil : field.projection.text
         coordinates = field.coordinates.empty? ? nil : field.coordinates.text
         post_scale = [projection, coordinates].compact.length > 0 ? [projection, coordinates].compact.join(" ") : nil
-        return_values << {:label => (displayLabel(field) || label || "Map Data"),
-                          :value => [scale, post_scale].compact.join(" ; ")}
+        return_values << ModsDisplay::Values.new({:label => (displayLabel(field) || label || "Map Data"),
+                                                  :values => [[scale, post_scale].compact.join(" ; ")]})
       end
     end
     return_values
-  end
-
-  def to_html
-    return super if !super.nil? or values == []
-    output = ""
-    values.each do |cart|
-      output << "<dt#{label_class}>#{cart[:label]}:</dt>"
-      output << "<dd#{value_class}>"
-        if @config.link
-          output << link_to_value(cart[:value])
-        else
-          output << cart[:value]
-        end
-      output << "</dd>"
-    end
-    output
   end
 
 end
