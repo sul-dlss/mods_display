@@ -29,7 +29,7 @@ module ModsDisplay::ControllerExtension
   private
 
   def mods_display_fields
-    [:title, :format, :imprint, :language, :description, :cartographics]
+    [:title, :format, :imprint, :language, :description, :cartographics, :abstract]
   end
 
   def mods_display_field_mapping
@@ -38,7 +38,8 @@ module ModsDisplay::ControllerExtension
     :imprint       => :origin_info,
     :language      => :language,
     :description   => :physical_description,
-    :cartographics => :subject}
+    :cartographics => :subject,
+    :abstract      => :abstract}
   end
 
   def field_config(field_key)

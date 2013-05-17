@@ -6,7 +6,7 @@ class ModsDisplay::Field
   end
 
   def fields
-    []
+    [ModsDisplay::Values.new(:label => label, :values => [text || @value.text].flatten)]
   end
 
   def label
