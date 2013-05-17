@@ -31,4 +31,8 @@ class ModsDisplay::Configuration
     @abstract ||= ModsDisplay::Configuration::Base.new(&abstract || Proc.new{})
   end
 
+  def contents &contents
+    @contents ||= ModsDisplay::Configuration::Base.new(&contents || Proc.new{})
+  end
+
 end
