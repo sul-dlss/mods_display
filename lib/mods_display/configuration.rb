@@ -35,4 +35,7 @@ class ModsDisplay::Configuration
     @contents ||= ModsDisplay::Configuration::Base.new(&contents || Proc.new{})
   end
 
+  def audience &audience
+    @audience ||= ModsDisplay::Configuration::Base.new(&audience || Proc.new{})
+  end
 end
