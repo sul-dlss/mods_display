@@ -1,10 +1,10 @@
 require "spec_helper"
 
 def mods_display_location(mods_record)
-  ModsDisplay::Location.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::RelatedLocation.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
 end
 
-describe ModsDisplay::Location do
+describe ModsDisplay::RelatedLocation do
   before(:all) do
     @location = Stanford::Mods::Record.new.from_str("<mods><relatedItem><location>The Location</location></relatedItem></mods>", false).related_item.first
     @non_location = Stanford::Mods::Record.new.from_str("<mods><relatedItem><title>No Location</title></relatedItem></mods>", false).related_item.first

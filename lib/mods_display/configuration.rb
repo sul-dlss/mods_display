@@ -47,7 +47,7 @@ class ModsDisplay::Configuration
     @collection ||= ModsDisplay::Configuration::Base.new(&collection || Proc.new{})
   end
 
-  def location &location
-    @location ||= ModsDisplay::Configuration::Base.new(&location || Proc.new{})
+  def related_location &related_location
+    @related_location ||= ModsDisplay::Configuration::Base.new(&related_location || Proc.new{})
   end
 end

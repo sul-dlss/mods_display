@@ -1,4 +1,4 @@
-class ModsDisplay::Location < ModsDisplay::Field
+class ModsDisplay::RelatedLocation < ModsDisplay::Field
 
   def label
     super || "Location"
