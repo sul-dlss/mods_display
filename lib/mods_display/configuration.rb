@@ -50,4 +50,8 @@ class ModsDisplay::Configuration
   def related_location &related_location
     @related_location ||= ModsDisplay::Configuration::Base.new(&related_location || Proc.new{})
   end
+
+  def related_item &related_item
+    @related_item ||= ModsDisplay::Configuration::Base.new(&related_item || Proc.new{})
+  end
 end
