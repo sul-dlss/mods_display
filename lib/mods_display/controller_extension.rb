@@ -29,7 +29,7 @@ module ModsDisplay::ControllerExtension
   private
 
   def mods_display_fields
-    [:title, :format, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :collection]
+    [:title, :format, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :collection, :location]
   end
 
   def mods_display_field_mapping
@@ -43,7 +43,8 @@ module ModsDisplay::ControllerExtension
     :contents      => :tableOfContents,
     :audience      => :targetAudience,
     :note          => :note,
-    :collection    => :related_item}
+    :collection    => :related_item,
+    :location      => :related_item}
   end
 
   def field_config(field_key)
