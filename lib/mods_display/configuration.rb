@@ -42,4 +42,8 @@ class ModsDisplay::Configuration
   def note &note
     @note ||= ModsDisplay::Configuration::Base.new(&note || Proc.new{})
   end
+  
+  def collection &collection
+    @collection ||= ModsDisplay::Configuration::Base.new(&collection || Proc.new{})
+  end
 end
