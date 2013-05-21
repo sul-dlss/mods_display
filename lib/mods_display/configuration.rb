@@ -55,6 +55,10 @@ class ModsDisplay::Configuration
     @related_item ||= ModsDisplay::Configuration::Base.new(&related_item || Proc.new{})
   end
 
+  def subject &subject
+    @subject ||= ModsDisplay::Configuration::Subject.new(&subject || Proc.new{})
+  end
+
   def identifier &identifier
     @identifier ||= ModsDisplay::Configuration::Base.new(&identifier || Proc.new{})
   end

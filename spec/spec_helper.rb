@@ -28,4 +28,8 @@ end
 
 class TestController
   include ModsDisplay::ControllerExtension
+
+  def link_method(val)
+    "http://library.stanford.edu?#{val}"
+  end
 end

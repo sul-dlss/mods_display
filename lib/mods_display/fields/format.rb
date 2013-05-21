@@ -13,7 +13,7 @@ class ModsDisplay::Format < ModsDisplay::Field
   def to_html
     output = ""
     fields.each do |field|
-      output << "<dt#{label_class}>#{field.label}:</dt>"
+      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
       output << "<dd#{value_class}>"
         field.values.map do |val|
           output << "<span class='#{self.class.format_class(val)}'>#{val}</span>"

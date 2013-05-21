@@ -13,6 +13,8 @@ class ModsDisplay::Language < ModsDisplay::Field
         return_values << language_codes[term.text]
       end
       [ModsDisplay::Values.new(:label => label || "Language", :values => return_values)] unless return_values.empty?
+    else
+      []
     end
   end
 
