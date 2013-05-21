@@ -1,6 +1,7 @@
 class ModsDisplay::Format < ModsDisplay::Field
 
   def fields
+    return [] if text.strip.empty?
     [ModsDisplay::Values.new(:label => label || 'Format', :values => [text])]
   end
 
