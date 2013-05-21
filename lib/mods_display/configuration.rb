@@ -58,4 +58,8 @@ class ModsDisplay::Configuration
   def identifier &identifier
     @identifier ||= ModsDisplay::Configuration::Base.new(&identifier || Proc.new{})
   end
+
+  def location &location
+    @location ||= ModsDisplay::Configuration::Base.new(&location || Proc.new{})
+  end
 end
