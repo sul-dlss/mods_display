@@ -3,10 +3,14 @@ class ModsDisplay::Subject < ModsDisplay::Field
   def fields
     return_values = []
     selected_subjects.each do |child|
-      if child.text.include?("--")
-        return_values << child.text.split("--").map{|t| t.strip }
+      if self.respond_to?(:"process_#{child.name}")
+        return_values << self.send(:"process_#{child.name}", child)
       else
-        return_values << child.text
+        if child.text.include?("--")
+          return_values << child.text.split("--").map{|t| t.strip }
+        else
+          return_values << child.text
+        end
       end
     end
     return [] if return_values.empty?
@@ -38,11 +42,27 @@ class ModsDisplay::Subject < ModsDisplay::Field
     end
     output
   end
+
+  def process_hierarchicalGeographic(element)
+    values_from_subjects(element)
+  end
   
   private
+
+  def values_from_subjects(element)
+    return_values = []
+    selected_subjects(element).each do |child|
+      if child.text.include?("--")
+        return_values << child.text.split("--").map{|t| t.strip }
+      else
+        return_values << child.text.strip
+      end
+    end
+    return_values
+  end
   
-  def selected_subjects
-    @value.children.select do |child|
+  def selected_subjects(element=@value)
+    element.children.select do |child|
       !omit_elements.include?(child.name.to_sym)
     end
   end

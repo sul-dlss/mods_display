@@ -20,4 +20,18 @@ module SubjectsFixtures
       </mods>
     XML
   end
+  
+  def hierarchical_geo_subjects
+    <<-XML
+      <mods>
+        <subject>
+          <hierarchicalGeographic>
+            <country>United States</country>
+            <state>California</state>
+            <city>Stanford</city>
+          </hierarchicalGeographic>
+        </subject>
+      </mods>
+    XML
+  end
 end

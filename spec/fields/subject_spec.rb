@@ -20,6 +20,7 @@ describe ModsDisplay::Subject do
   before(:all) do
     @subject = Stanford::Mods::Record.new.from_str(subjects, false).subject.first
     @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects, false).subject.first
+    @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject.first
   end
   describe "fields" do
     it "should split individual child elments of subject into separate parts" do
@@ -31,6 +32,11 @@ describe ModsDisplay::Subject do
       fields = mods_display_subject(@emdash_subject).fields
       fields.length.should == 1
       fields.first.values.should == ["Jazz", "Japan", "History and criticism"]
+    end
+    it "should handle hierarchicalGeogaphic subjects properly" do
+      fields = mods_display_subject(@geo_subject).fields
+      fields.length.should == 1
+      fields.first.values.should == ["United States", "California", "Stanford"]
     end
   end
   describe "to_html" do
