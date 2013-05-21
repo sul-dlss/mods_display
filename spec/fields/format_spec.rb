@@ -14,10 +14,10 @@ describe ModsDisplay::Format do
   
   describe "labels" do
     it "should return the format label" do
-      mods_display_format(@format).to_html.should match(/<dt>Format:<\/dt>/)
+      mods_display_format(@format).to_html.should match(/<dt title='Format'>Format:<\/dt>/)
     end
     it "should return the displayLabel when available" do
-      mods_display_format(@display_label).to_html.should match(/<dt>SpecialFormat:<\/dt>/)
+      mods_display_format(@display_label).to_html.should match(/<dt title='SpecialFormat'>SpecialFormat:<\/dt>/)
     end
   end
   describe "format_class" do

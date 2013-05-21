@@ -13,11 +13,11 @@ describe "Installation" do
     @html.scan(/<dl>/).length.should == 1
   end
   it "should return a dt/dd pair for each piece of metadata in the mods" do
-    @html.scan(/<dt>/).length.should == @pieces_of_data
+    @html.scan(/<dt/).length.should == @pieces_of_data
     @html.scan(/<dd>/).length.should == @pieces_of_data
   end
   it "should return a proper label" do
-    @html.scan(/<dt>Title:<\/dt>/).length.should == 1
+    @html.scan(/<dt title='Title'>Title:<\/dt>/).length.should == 1
   end
   it "should return a proper value" do
     @html.scan(/<dd>The Title of this Item<\/dd>/).length.should == 1

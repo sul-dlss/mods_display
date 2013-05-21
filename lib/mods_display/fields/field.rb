@@ -22,10 +22,11 @@ class ModsDisplay::Field
   end
 
   def to_html
+puts @value.inspect if fields.nil?
     return nil if fields.empty?
     output = ""
     fields.each do |field|
-      output << "<dt#{label_class}>#{field.label}:</dt>"
+      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
       output << "<dd#{value_class}>"
         output << field.values.map do |val|
           @config.link ? link_to_value(val) : val
@@ -45,8 +46,8 @@ class ModsDisplay::Field
     " class='#{@config.value_class}'" unless @config.value_class == ""
   end
 
-  def link_to_value(val)
-    "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], val))}'>#{val}</a>"
+  def link_to_value(link_text, link_href=nil)
+    "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], link_href || link_text))}'>#{link_text}</a>"
   end
 
   def displayForm(element)

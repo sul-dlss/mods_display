@@ -66,12 +66,12 @@ describe ModsDisplay::Imprint do
       html.should match(/<dd>The Display Form<\/dd>/)
     end
     it "should return the displayLabel when present if we're using the displayForm" do
-      mods_display_imprint(@display_form_with_label).to_html.should match(/<dt>TheLabel:<\/dt>/)
+      mods_display_imprint(@display_form_with_label).to_html.should match(/<dt title='TheLabel'>TheLabel:<\/dt>/)
     end
     it "should have individual dt/dd pairs for mixed content" do
       html = mods_display_imprint(@mixed).to_html
-      html.scan(/<dt>Imprint:<\/dt>/).length.should == 1
-      html.scan(/<dt>Edition:<\/dt>/).length.should == 1
+      html.scan(/<dt title='Imprint'>Imprint:<\/dt>/).length.should == 1
+      html.scan(/<dt title='Edition'>Edition:<\/dt>/).length.should == 1
       html.scan(/<dd>/).length.should == 2
     end
   end
