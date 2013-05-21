@@ -8,6 +8,7 @@ describe ModsDisplay::Description do
   before(:all) do
     @form = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form></physicalDescription></mods>", false).physical_description.first
     @display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription displayLabel='SpecialLabel'><form>Form Note</form></physicalDescription></mods>", false).physical_description.first
+    @child_display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form displayLabel='Form Label'>Form Note</form></physicalDescription></mods>", false).physical_description.first
     @mixed = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form><extent>Extent Note</extent></physicalDescription></mods>", false).physical_description.first
   end
   describe "labels" do
@@ -19,6 +20,9 @@ describe ModsDisplay::Description do
     end
     it "should get multiple lables for mixed content" do
       mods_display_description(@mixed).fields.map{|v| v.label }.should == ["Form", "Extent"]
+    end
+    it "should get the display label from child elements" do
+      mods_display_description(@child_display_label).fields.map{|f| f.label }.should == ["Form Label"]
     end
   end
   

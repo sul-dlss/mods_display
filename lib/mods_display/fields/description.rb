@@ -2,9 +2,13 @@ class ModsDisplay::Description < ModsDisplay::Field
 
   def fields
     description_fields.map do |description|
-      ModsDisplay::Values.new({:label => (label || labels[description.name.to_sym] || "Physical Description"), 
+      ModsDisplay::Values.new({:label => (label || description_label(description) || labels[description.name.to_sym] || "Physical Description"),
                                :values => [description.text]})
     end
+  end
+
+  def description_label(element)
+    element.attributes["displayLabel"].value if element.attributes["displayLabel"].respond_to?(:value)
   end
 
   private
