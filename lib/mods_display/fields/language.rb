@@ -5,17 +5,14 @@ class ModsDisplay::Language < ModsDisplay::Field
   end
 
   def fields
-    if @value.languageTerm.length > 0
-      return_values = []
-      @value.languageTerm.select do |term|
-        term.attributes["type"].respond_to?(:value) && term.attributes["type"].value == "code"
-      end.each do |term|
-        return_values << language_codes[term.text]
-      end
-      [ModsDisplay::Values.new(:label => label || "Language", :values => return_values)] unless return_values.empty?
-    else
-      []
+    return [] if @value.languageTerm.length < 1 or @value.languageTerm.text.strip.empty?
+    return_values = []
+    @value.languageTerm.select do |term|
+      term.attributes["type"].respond_to?(:value) && term.attributes["type"].value == "code"
+    end.each do |term|
+      return_values << language_codes[term.text]
     end
+    [ModsDisplay::Values.new(:label => label || "Language", :values => return_values)] unless return_values.empty?
   end
 
   def text
