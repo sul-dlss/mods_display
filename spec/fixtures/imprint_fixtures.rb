@@ -35,6 +35,15 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def only_encoded_data
+    <<-MODS
+      <mods>
+        <originInfo>
+          <dateIssued encoding="an-encoding">An Encoded Date</dateIssued>
+        </originInfo>
+      </mods>
+    MODS
+  end
   def mixed_mods
     <<-MODS
       <mods>

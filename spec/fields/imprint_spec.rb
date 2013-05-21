@@ -13,6 +13,7 @@ describe ModsDisplay::Imprint do
     @date_valid = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info.first
     @edition = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info.last
     @encoded_date = Stanford::Mods::Record.new.from_str(encoded_date, false).origin_info.first
+    @encoded_only = Stanford::Mods::Record.new.from_str(only_encoded_data, false).origin_info.first
     @mixed = Stanford::Mods::Record.new.from_str(mixed_mods, false).origin_info.first
     @display_form = Stanford::Mods::Record.new.from_str(display_form, false).origin_info.first
     @display_form_with_label = Stanford::Mods::Record.new.from_str(display_form, false).origin_info.last
@@ -47,6 +48,9 @@ describe ModsDisplay::Imprint do
     end
     it "should omit dates with an encoding attribute" do
       mods_display_imprint(@encoded_date).fields.map{|val| val.values }.join.should_not include("An Encoded Date")
+    end
+    it "should not try to return data w/ only encoded data" do
+      mods_display_imprint(@encoded_only).fields.should be_empty
     end
     it "should handle mixed mods properly" do
       values = mods_display_imprint(@mixed).fields

@@ -11,7 +11,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
           val << element.text
         end
       end
-      return_values << ModsDisplay::Values.new(:label => label || "Imprint", :values => [val.map{|v| v.strip }.join(" ")])
+      return_values << ModsDisplay::Values.new(:label => label || "Imprint", :values => [val.map{|v| v.strip }.join(" ")]) unless val.empty?
     end
     if other_pub_info.length > 0
       other_pub_info.each do |pub_info|
