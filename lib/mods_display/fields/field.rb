@@ -22,14 +22,13 @@ class ModsDisplay::Field
   end
 
   def to_html
-puts @value.inspect if fields.nil?
     return nil if fields.empty?
     output = ""
     fields.each do |field|
       output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
       output << "<dd#{value_class}>"
         output << field.values.map do |val|
-          @config.link ? link_to_value(val) : val
+          @config.link ? link_to_value(val.to_s) : val.to_s
         end.join(@config.delimiter)
       output << "</dd>"
     end

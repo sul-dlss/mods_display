@@ -29,11 +29,12 @@ module ModsDisplay::ControllerExtension
   private
 
   def mods_display_fields
-    [:title, :format, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location]
+    [:title, :name, :format, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location]
   end
 
   def mods_display_field_mapping
    {:title           => :title_info,
+    :name            => :plain_name,
     :format          => :typeOfResource,
     :imprint         => :origin_info,
     :language        => :language,

@@ -7,6 +7,10 @@ class ModsDisplay::Configuration
     @title ||= ModsDisplay::Configuration::Base.new(&title || Proc.new{})
   end
 
+  def name &name
+    @name ||= ModsDisplay::Configuration::Base.new(&name || Proc.new{})
+  end
+
   def format &format
     @format ||= ModsDisplay::Configuration::Base.new(&format || Proc.new{})
   end
