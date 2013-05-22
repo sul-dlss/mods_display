@@ -17,6 +17,7 @@ class ModsDisplay::Subject < ModsDisplay::Field
     [ModsDisplay::Values.new(:label => "Subject", :values => return_values.flatten)]
   end
   
+  # Would really like to clean this up, but it works and is tested for now.
   def to_html
     return nil if fields.empty?
     output = ""
@@ -27,11 +28,27 @@ class ModsDisplay::Subject < ModsDisplay::Field
           buffer = []
           subs = []
           field.values.each do |val|
-            buffer << val
-            if @config.hierarchical_link
-              subs << link_to_value(val, buffer.join(' '))
+            if val.is_a?(ModsDisplay::Name::Person)
+              buffer << val.name
             else
-              subs << link_to_value(val)
+              buffer << val
+            end
+            if @config.hierarchical_link
+              if val.is_a?(ModsDisplay::Name::Person)
+                txt = link_to_value(val.name, buffer.join(' '))
+                txt << " (#{val.role})" if val.role
+                subs << txt
+              else
+                subs << link_to_value(val, buffer.join(' '))
+              end
+            else
+              if val.is_a?(ModsDisplay::Name::Person)
+                txt = link_to_value(val.name)
+                txt << " (#{val.role})" if val.role
+                subs << txt
+              else
+                subs << link_to_value(val.to_s)
+              end
             end
           end
           output << subs.join(@config.delimiter)
@@ -45,6 +62,10 @@ class ModsDisplay::Subject < ModsDisplay::Field
 
   def process_hierarchicalGeographic(element)
     values_from_subjects(element)
+  end
+  
+  def process_name(element)
+    ModsDisplay::Name.new(element, @config, @klass).fields.first.values.first
   end
   
   private

@@ -10,7 +10,7 @@ module SubjectsFixtures
       </mods>
     XML
   end
-  
+
   def emdash_subjects
     <<-XML
       <mods>
@@ -20,7 +20,7 @@ module SubjectsFixtures
       </mods>
     XML
   end
-  
+
   def hierarchical_geo_subjects
     <<-XML
       <mods>
@@ -34,4 +34,21 @@ module SubjectsFixtures
       </mods>
     XML
   end
+
+  def name_subjects
+    <<-XML
+      <mods>
+        <subject>
+          <name>
+            <role>
+              <roleTerm type='text'>Depicted</roleTerm>
+            </role>
+            <namePart>John Doe</namePart>
+          </name>
+          <topic>Anonymous People</topic>
+        </subject>
+      </mods>
+    XML
+  end
+
 end
