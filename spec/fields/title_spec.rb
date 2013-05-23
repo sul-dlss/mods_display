@@ -34,7 +34,7 @@ describe ModsDisplay::Title do
   end
   describe "text" do
     it "should construct all the elements in titleInfo" do
-      mods_display_title(@title_parts).text.should == "The Title For Something 62"
+      mods_display_title(@title_parts).text.should == "The Title : For. Something, 62"
     end
     it "should use the displayForm when available" do
       mods_display_title(@display_form).text.should == "The Title of This Item"
