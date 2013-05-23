@@ -108,7 +108,7 @@ The link configuration option takes 2 parameters. The first is a key that is a m
 
 Depending on the implementation of subjects there may be different ways you would want to link them.  The standard way of linking will just create a link passing the value to the href and the link text.  However; in certain cases the subjects should be linked so that each subject to the right of a delimiter should have the values of all its preceding values in the href.
 
-    [Country](http://example.com/?"Country") > [State](http://example.com/?"Country State") > [City](http://example.com/?"Country State City")
+[Country](http://example.com/?"Country") > [State](http://example.com/?"Country State") > [City](http://example.com/?"Country State City")
     
 This can be accomplished by setting the hierarchical_link configuration option to true for subjects
 
