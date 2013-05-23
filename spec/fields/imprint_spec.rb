@@ -40,7 +40,7 @@ describe ModsDisplay::Imprint do
 
   describe "fields" do
     it "should return various parts of the imprint" do
-      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "A Place A Publisher A Create Date An Issue Date A Capture Date Another Date"
+      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "A Place : A Publisher, A Create Date, An Issue Date, A Capture Date, Another Date"
     end
     it "should get the text for non-imprint origin info fields" do
       mods_display_imprint(@date_valid).fields.first.values.should == ["A Valid Date"]
@@ -55,7 +55,7 @@ describe ModsDisplay::Imprint do
     it "should handle mixed mods properly" do
       values = mods_display_imprint(@mixed).fields
       values.length.should == 2
-      values.map{|val| val.values}.should include(["A Place A Publisher"])
+      values.map{|val| val.values}.should include(["A Place : A Publisher"])
       values.map{|val| val.values}.should include(["The Edition"])
     end
   end

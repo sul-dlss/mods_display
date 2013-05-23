@@ -2,16 +2,25 @@ class ModsDisplay::Imprint < ModsDisplay::Field
 
   def fields
     return_values = []
-    if imprints.length > 0
-      val = []
-      imprints.each do |element|
-        attributes = element.attributes || {}
-        unless ( ["dateCreated", "dateIssued"].include?(element.name) and
-                 attributes.has_key?("encoding") )
-          val << element.text
-        end
-      end
-      return_values << ModsDisplay::Values.new(:label => label || "Imprint", :values => [val.map{|v| v.strip }.join(" ")]) unless val.empty?
+    place = nil
+    publisher = nil
+    placePub = nil
+    place = @value.place.map do |p|
+      p.text unless p.text.strip.empty?
+    end.compact.join(" : ").strip unless @value.place.text.strip.empty?
+    publisher = @value.publisher.map do |p|
+      p.text unless p.text.strip.empty?
+    end.compact.join(" : ").strip unless @value.publisher.text.strip.empty?
+    placePub = [place, publisher].compact.join(" : ")
+    placePub = nil if placePub.strip.empty?
+    parts = @value.children.select do |child|
+      ["dateCreated", "dateIssued", "dateCaptured", "dateOther"].include?(child.name) and !child.attributes.has_key?("encoding")
+    end.map do |child|
+      child.text.strip unless child.text.strip.empty?
+    end.compact.join(", ")
+    parts = nil if parts.strip.empty?
+    unless [placePub, parts].compact.join(", ").strip.empty?
+      return_values << ModsDisplay::Values.new(:label => label || "Imprint", :values => [[placePub, parts].compact.join(", ")])
     end
     if other_pub_info.length > 0
       other_pub_info.each do |pub_info|
@@ -19,12 +28,6 @@ class ModsDisplay::Imprint < ModsDisplay::Field
       end
     end
     imprint_display_form || return_values
-  end
-
-  def imprints
-    @value.children.select do |child|
-      imprint_parts.include?(child.name.to_sym)
-    end
   end
 
   def other_pub_info
@@ -39,10 +42,6 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   end
 
   private
-
-  def imprint_parts
-    [:place, :publisher, :dateCreated, :dateIssued, :dateCaptured, :dateOther]
-  end
 
   def pub_info_parts
     pub_info_labels.keys
