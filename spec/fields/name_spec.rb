@@ -18,6 +18,8 @@ describe ModsDisplay::Language do
     @name = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name></mods>", false).plain_name
     @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name
     @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name
+    @collapse_label = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name></mods>", false).plain_name
+    @complex_labels = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name><name type='conference'><namePart>John Dough</namePart></name><name><namePart>Jane Dough</namePart></name></mods>", false).plain_name
     @name_with_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='text'>Depicted</roleTerm></role></name></mods>", false).plain_name
   end
   describe "label" do
@@ -43,6 +45,32 @@ describe ModsDisplay::Language do
       fields.first.values.length.should == 1
       fields.first.values.first.should be_a(ModsDisplay::Name::Person)
       fields.first.values.first.role.should == "Depicted"
+    end
+    it "should collapse adjacent matching labels" do
+      fields = mods_display_name(@collapse_label).fields
+      fields.length.should == 1
+      fields.first.label.should == "Creator/Contributor"
+      fields.first.values.each do |val|
+        ["John Doe", "Jane Doe"].should include val.to_s
+      end
+    end
+    it "should perseve order and separation of non-adjesent matching labels" do
+      fields = mods_display_name(@complex_labels).fields
+
+      fields.length.should == 3
+      fields.first.label.should == "Creator/Contributor"
+      fields.first.values.length.should == 2
+      fields.first.values.each do |val|
+        ["John Doe", "Jane Doe"].should include val.to_s
+      end
+
+      fields[1].label.should == "Meeting"
+      fields[1].values.length.should == 1
+      fields[1].values.first.to_s.should == "John Dough"
+
+      fields.last.label.should == "Creator/Contributor"
+      fields.last.values.length.should == 1
+      fields.last.values.first.to_s.should == "Jane Dough"
     end
   end
   

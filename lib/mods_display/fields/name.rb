@@ -2,7 +2,11 @@ class ModsDisplay::Name < ModsDisplay::Field
 
   def fields
     return_values = []
-    @value.each do |val|
+    current_label = nil
+    prev_label = nil
+    buffer = []
+    @value.each_with_index do |val, index|
+      current_label = (displayLabel(val) || name_label(val))
       people = []
       role = nil
       if val.role.length > 0 and val.role.roleTerm.length > 0
@@ -19,7 +23,23 @@ class ModsDisplay::Name < ModsDisplay::Field
         end.join(", ")
         people << ModsDisplay::Name::Person.new(:name => name_parts, :role => role)
       end
-      return_values << ModsDisplay::Values.new(:label => displayLabel(val) || name_label(val), :values => people)
+      if @value.length == 1
+        return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten)
+      elsif index == (@value.length-1)
+        # need to deal w/ when we have a last element but we have separate labels in the buffer.
+        if current_label != prev_label
+          return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
+          return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten)
+        else
+          buffer << people
+          return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten)
+        end
+      elsif prev_label and (current_label != prev_label)
+        return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
+        buffer = []
+      end
+      buffer << people
+      prev_label = current_label
     end
     return_values
   end
