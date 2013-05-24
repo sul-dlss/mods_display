@@ -6,12 +6,12 @@ end
 
 describe ModsDisplay::Language do
   before(:all) do
-    @language = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm type='code'>eng</languageTerm></language></mods>", false).language.first
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><language displayLabel='Lang'><languageTerm type='code'>eng</languageTerm></language></mods>", false).language.first
-    @no_lang = Stanford::Mods::Record.new.from_str("<mods><language displayLabel='Lang'><languageTerm type='code'>zzzxxx</languageTerm></language></mods>", false).language.first
-    @mixed = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm type='text'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language></mods>", false).language.first
-    @multi = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm type='code'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language></mods>", false).language.first
-    @display_form = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm>zzzxxx</languageTerm><displayForm>Klingon</displayForm></language></mods>", false).language.first
+    @language = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm type='code'>eng</languageTerm></language></mods>", false).language
+    @display_label = Stanford::Mods::Record.new.from_str("<mods><language displayLabel='Lang'><languageTerm type='code'>eng</languageTerm></language></mods>", false).language
+    @no_lang = Stanford::Mods::Record.new.from_str("<mods><language displayLabel='Lang'><languageTerm type='code'>zzzxxx</languageTerm></language></mods>", false).language
+    @mixed = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm type='text'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language></mods>", false).language
+    @multi = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm type='code'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language></mods>", false).language
+    @display_form = Stanford::Mods::Record.new.from_str("<mods><language><languageTerm>zzzxxx</languageTerm><displayForm>Klingon</displayForm></language></mods>", false).language
   end
   describe "label" do
     it "should default to Language when no displayLabel is available" do

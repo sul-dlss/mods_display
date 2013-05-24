@@ -2,22 +2,26 @@ class ModsDisplay::Name < ModsDisplay::Field
 
   def fields
     return_values = []
-    role = nil
-    if @value.role.length > 0 and @value.role.roleTerm.length > 0
-      role = @value.role.roleTerm.find do |term|
-        term.attributes["type"].respond_to?(:value) and
-        term.attributes["type"].value == "text"
+    @value.each do |val|
+      people = []
+      role = nil
+      if val.role.length > 0 and val.role.roleTerm.length > 0
+        role = val.role.roleTerm.find do |term|
+          term.attributes["type"].respond_to?(:value) and
+          term.attributes["type"].value == "text"
+        end
       end
+      if val.displayForm.length > 0
+        people << ModsDisplay::Name::Person.new(:name => val.displayForm.text, :role => role)
+      else
+        name_parts = val.namePart.map do |name_part|
+          name_part.text
+        end.join(", ")
+        people << ModsDisplay::Name::Person.new(:name => name_parts, :role => role)
+      end
+      return_values << ModsDisplay::Values.new(:label => displayLabel(val) || name_label(val), :values => people)
     end
-    if @value.displayForm.length > 0
-      return_values << ModsDisplay::Name::Person.new(:name => @value.displayForm.text, :role => role)
-    else
-      name_parts = @value.namePart.map do |name_part|
-        name_part.text
-      end.join(", ")
-      return_values << ModsDisplay::Name::Person.new(:name => name_parts, :role => role)
-    end
-    [ModsDisplay::Values.new(:label => label || name_label, :values => return_values)]
+    return_values
   end
 
   def to_html
@@ -42,9 +46,9 @@ class ModsDisplay::Name < ModsDisplay::Field
 
   private
 
-  def name_label
-    if @value.attributes.has_key?("type") && name_labels.has_key?(@value.attributes["type"].value)
-      return name_labels[@value.attributes["type"].value]
+  def name_label(element)
+    if element.attributes.has_key?("type") && name_labels.has_key?(element.attributes["type"].value)
+      return name_labels[element.attributes["type"].value]
     end
     "Creator/Contributor"
   end

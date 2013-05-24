@@ -1,7 +1,11 @@
 class ModsDisplay::Location < ModsDisplay::Field
-
-  def label
-    super || location_label(@value)
+  
+  def fields
+    return_values = []
+    @value.each do |val|
+      return_values << ModsDisplay::Values.new(:label => label || location_label(val), :values => [val.text])
+    end
+    return_values
   end
   
   private

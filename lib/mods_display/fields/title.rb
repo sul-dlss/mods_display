@@ -1,32 +1,32 @@
 class ModsDisplay::Title < ModsDisplay::Field
 
-  def label
-    super || title_label(@value)
-  end
   
   def fields
-    [ModsDisplay::Values.new(:label => label, :values => [text])]
-  end
-
-  def text
-    return super unless super.nil?
-    nonSort = nil
-    title = nil
-    subTitle = nil
-    nonSort = @value.nonSort.text.strip unless @value.nonSort.text.strip.empty?
-    title = @value.title.text.strip unless @value.title.text.strip.empty?
-    subTitle = @value.subTitle.text unless @value.subTitle.text.strip.empty?
-    preSubTitle = [nonSort, title].compact.join(" ")
-    preSubTitle = nil if preSubTitle.strip.empty?
-    preParts = [preSubTitle, subTitle].compact.join(" : ")
-    preParts = nil if preParts.strip.empty?
-    parts = @value.children.select do |child|
-      ["partName", "partNumber"].include?(child.name)
-    end.map do |child|
-      child.text
-    end.compact.join(", ")
-    parts = nil if parts.strip.empty?
-    [preParts, parts].compact.join(". ")
+    return_values = []
+    @value.each do |val|
+      if displayForm(val)
+        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [displayForm(val).text])
+      else
+        nonSort = nil
+        title = nil
+        subTitle = nil
+        nonSort = val.nonSort.text.strip unless val.nonSort.text.strip.empty?
+        title = val.title.text.strip unless val.title.text.strip.empty?
+        subTitle = val.subTitle.text unless val.subTitle.text.strip.empty?
+        preSubTitle = [nonSort, title].compact.join(" ")
+        preSubTitle = nil if preSubTitle.strip.empty?
+        preParts = [preSubTitle, subTitle].compact.join(" : ")
+        preParts = nil if preParts.strip.empty?
+        parts = val.children.select do |child|
+          ["partName", "partNumber"].include?(child.name)
+        end.map do |child|
+          child.text
+        end.compact.join(", ")
+        parts = nil if parts.strip.empty?
+        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [[preParts, parts].compact.join(". ")])
+      end
+    end
+    return_values
   end
 
   private

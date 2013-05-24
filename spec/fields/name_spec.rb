@@ -15,10 +15,10 @@ end
 
 describe ModsDisplay::Language do
   before(:all) do
-    @name = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name></mods>", false).plain_name.first
-    @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name.first
-    @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name.first
-    @name_with_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='text'>Depicted</roleTerm></role></name></mods>", false).plain_name.first
+    @name = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name></mods>", false).plain_name
+    @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name
+    @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name
+    @name_with_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='text'>Depicted</roleTerm></role></name></mods>", false).plain_name
   end
   describe "label" do
     it "should default Creator/Contributor when none is available" do

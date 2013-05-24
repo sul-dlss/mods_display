@@ -1,13 +1,14 @@
 class ModsDisplay::Format < ModsDisplay::Field
 
   def fields
-    return [] if text.strip.empty?
-    [ModsDisplay::Values.new(:label => label || 'Format', :values => [text])]
+    return [] if (text.nil? and @value.text.strip.empty?)
+    return_values = @value.map{|v| v.text }
+    return_values = [text] unless text.nil?
+    [ModsDisplay::Values.new(:label => label || 'Format', :values => return_values)]
   end
 
   def text
     return super unless super.nil?
-    @value.text
   end
 
   def to_html
@@ -24,10 +25,6 @@ class ModsDisplay::Format < ModsDisplay::Field
   end
 
   private
-
-  def format_class
-    self.class.format_class(text)
-  end
 
   def self.format_class(format)
     return format if format.nil?

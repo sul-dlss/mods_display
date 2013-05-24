@@ -1,7 +1,9 @@
 class ModsDisplay::Identifier < ModsDisplay::Field
-
-  def label
-    super || identifier_label(@value)
+  
+  def fields
+    @value.map do |val|
+      ModsDisplay::Values.new(:label => displayLabel(val) || identifier_label(val), :values => [val.text])
+    end
   end
   
   private

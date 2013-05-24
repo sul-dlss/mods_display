@@ -6,8 +6,8 @@ end
 
 describe ModsDisplay::Contents do
   before(:all) do
-    @contents = Stanford::Mods::Record.new.from_str("<mods><tableOfContents>Content Note</tableOfContents></mods>", false).tableOfContents.first
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><tableOfContents displayLabel='Special Label'>Content Note</tableOfContents></mods>", false).tableOfContents.first
+    @contents = Stanford::Mods::Record.new.from_str("<mods><tableOfContents>Content Note</tableOfContents></mods>", false).tableOfContents
+    @display_label = Stanford::Mods::Record.new.from_str("<mods><tableOfContents displayLabel='Special Label'>Content Note</tableOfContents></mods>", false).tableOfContents
   end
   describe "label" do
     it "should have a default label" do

@@ -6,10 +6,10 @@ end
 
 describe ModsDisplay::Description do
   before(:all) do
-    @form = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form></physicalDescription></mods>", false).physical_description.first
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription displayLabel='SpecialLabel'><form>Form Note</form></physicalDescription></mods>", false).physical_description.first
-    @child_display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form displayLabel='Form Label'>Form Note</form></physicalDescription></mods>", false).physical_description.first
-    @mixed = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form><extent>Extent Note</extent></physicalDescription></mods>", false).physical_description.first
+    @form = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form></physicalDescription></mods>", false).physical_description
+    @display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription displayLabel='SpecialLabel'><form>Form Note</form></physicalDescription></mods>", false).physical_description
+    @child_display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form displayLabel='Form Label'>Form Note</form></physicalDescription></mods>", false).physical_description
+    @mixed = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form><extent>Extent Note</extent></physicalDescription></mods>", false).physical_description
   end
   describe "labels" do
     it "should use the dislayLabel if one is provided" do

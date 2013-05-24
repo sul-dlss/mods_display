@@ -6,12 +6,14 @@ class ModsDisplay::Collection < ModsDisplay::Field
 
   def fields
     return_values = []
-    if @value.respond_to?(:titleInfo) and
-       @value.respond_to?(:typeOfResource) and
-       @value.typeOfResource.attributes.length > 0 and
-       @value.typeOfResource.attributes.first.has_key?("collection") and
-       @value.typeOfResource.attributes.first["collection"].value == "yes"
-      return_values << ModsDisplay::Values.new(:label => label, :values => [@value.titleInfo.text.strip])
+    @value.each do |val|
+      if val.respond_to?(:titleInfo) and
+         val.respond_to?(:typeOfResource) and
+         val.typeOfResource.attributes.length > 0 and
+         val.typeOfResource.attributes.first.has_key?("collection") and
+         val.typeOfResource.attributes.first["collection"].value == "yes"
+        return_values << ModsDisplay::Values.new(:label => label, :values => [val.titleInfo.text.strip])
+      end
     end
     return_values
   end

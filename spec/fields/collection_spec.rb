@@ -6,9 +6,9 @@ end
 
 describe ModsDisplay::Collection do
   before(:all) do
-    @collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo><title>The Collection</title></titleInfo><typeOfResource collection='yes' /></relatedItem></mods>", false).related_item.first
-    @non_collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>", false).related_item.first
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Collection'><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>", false).related_item.first
+    @collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo><title>The Collection</title></titleInfo><typeOfResource collection='yes' /></relatedItem></mods>", false).related_item
+    @non_collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>", false).related_item
+    @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Collection'><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>", false).related_item
   end
   describe "label" do
     it "should default to Collection" do

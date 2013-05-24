@@ -19,10 +19,10 @@ end
 
 describe ModsDisplay::Subject do
   before(:all) do
-    @subject = Stanford::Mods::Record.new.from_str(subjects, false).subject.first
-    @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects, false).subject.first
-    @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject.first
-    @name_subject = Stanford::Mods::Record.new.from_str(name_subjects, false).subject.first
+    @subject = Stanford::Mods::Record.new.from_str(subjects, false).subject
+    @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects, false).subject
+    @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject
+    @name_subject = Stanford::Mods::Record.new.from_str(name_subjects, false).subject
   end
 
   describe "fields" do

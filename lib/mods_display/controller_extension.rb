@@ -19,9 +19,7 @@ module ModsDisplay::ControllerExtension
     output = "<dl>"
     mods_display_fields.each do |field_key|
       fields = mods_field(xml, field_key)
-      fields.each do |field|
-        output << field.to_html unless field.to_html.nil?
-      end
+      output << fields.to_html unless fields.to_html.nil?
     end
     output << "</dl>"
   end
@@ -62,9 +60,8 @@ module ModsDisplay::ControllerExtension
 
   def mods_field(xml, field_key)
     if xml.respond_to?(mods_display_field_mapping[field_key])
-      xml.send(mods_display_field_mapping[field_key]).map do |field|
-        ModsDisplay.const_get("#{field_key.slice(0,1).upcase}#{field_key.slice(1..-1)}").new(field, field_config(field_key), self)
-      end
+      field = xml.send(mods_display_field_mapping[field_key])
+      ModsDisplay.const_get("#{field_key.slice(0,1).upcase}#{field_key.slice(1..-1)}").new(field, field_config(field_key), self)
     end
   end
 

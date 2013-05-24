@@ -6,12 +6,14 @@ class ModsDisplay::Field
   end
 
   def fields
-    [ModsDisplay::Values.new(:label => label, :values => [text || @value.text].flatten)]
+    @value.map do |val|
+      ModsDisplay::Values.new(:label => displayLabel(val), :values => [text || val.text].flatten)
+    end
   end
 
   def label
     return nil if @value.nil?
-    displayLabel(@value)
+    displayLabel(@value.first)
   end
 
   def text

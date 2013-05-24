@@ -1,8 +1,13 @@
 class ModsDisplay::Note < ModsDisplay::Field
-
-  def label
-    super || note_label(@value)
+  
+  def fields
+    return_values = []
+    @value.each do |val|
+      return_values << ModsDisplay::Values.new(:label => displayLabel(val) || note_label(val), :values => [val.text])
+    end
+    return_values
   end
+  
   
   private
   

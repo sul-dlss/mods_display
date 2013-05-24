@@ -2,19 +2,25 @@ class ModsDisplay::Subject < ModsDisplay::Field
   
   def fields
     return_values = []
-    selected_subjects.each do |child|
-      if self.respond_to?(:"process_#{child.name}")
-        return_values << self.send(:"process_#{child.name}", child)
-      else
-        if child.text.include?("--")
-          return_values << child.text.split("--").map{|t| t.strip }
+    @value.each do |val|
+      return_text = []
+      selected_subjects(val).each do |child|
+        if self.respond_to?(:"process_#{child.name}")
+          return_text << self.send(:"process_#{child.name}", child)
         else
-          return_values << child.text
+          if child.text.include?("--")
+            return_text << child.text.split("--").map{|t| t.strip }
+          else
+            return_text << child.text
+          end
         end
+      end
+      unless return_text.empty?
+        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || "Subject", :values => return_text.flatten)
       end
     end
     return [] if return_values.empty?
-    [ModsDisplay::Values.new(:label => "Subject", :values => return_values.flatten)]
+    return_values
   end
   
   # Would really like to clean this up, but it works and is tested for now.
@@ -65,7 +71,7 @@ class ModsDisplay::Subject < ModsDisplay::Field
   end
   
   def process_name(element)
-    ModsDisplay::Name.new(element, @config, @klass).fields.first.values.first
+    ModsDisplay::Name.new([element], @config, @klass).fields.first.values.first
   end
   
   private

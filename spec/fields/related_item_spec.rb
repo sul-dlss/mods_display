@@ -6,17 +6,17 @@ end
 
 describe ModsDisplay::RelatedItem do
   before(:all) do
-    @item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>A Related Item</titleInfo></relatedItem></mods>", false).related_item.first
-    @linked_item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>A Related Item</titleInfo><location><url>http://library.stanford.edu/</url></location></relatedItem></mods>", false).related_item.first
-    @collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>This is a Collection</titleInfo><typeOfResource collection='yes' /></relatedItem></mods>", false).related_item.first
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Item'><titleInfo>A Related Item</titleInfo></relatedItem></mods>", false).related_item.first
+    @item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>A Related Item</titleInfo></relatedItem></mods>", false).related_item
+    @linked_item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>A Related Item</titleInfo><location><url>http://library.stanford.edu/</url></location></relatedItem></mods>", false).related_item
+    @collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>This is a Collection</titleInfo><typeOfResource collection='yes' /></relatedItem></mods>", false).related_item
+    @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Item'><titleInfo>A Related Item</titleInfo></relatedItem></mods>", false).related_item
   end
   describe "label" do
     it "should default to Related Item" do
-      mods_display_item(@item).label.should == "Related Item"
+      mods_display_item(@item).fields.first.label.should == "Related Item"
     end
     it "should get the displayLabel if available" do
-      mods_display_item(@display_label).label.should == "Special Item"
+      mods_display_item(@display_label).fields.first.label.should == "Special Item"
     end
   end
   describe "fields" do
