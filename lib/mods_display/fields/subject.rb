@@ -16,11 +16,11 @@ class ModsDisplay::Subject < ModsDisplay::Field
         end
       end
       unless return_text.empty?
-        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || "Subject", :values => return_text.flatten)
+        return_values << return_text.flatten
       end
     end
     return [] if return_values.empty?
-    return_values
+    [ModsDisplay::Values.new(:label => "Subject", :values => return_values)]
   end
   
   # Would really like to clean this up, but it works and is tested for now.
@@ -28,39 +28,41 @@ class ModsDisplay::Subject < ModsDisplay::Field
     return nil if fields.empty?
     output = ""
     fields.each do |field|
-      output << "<dt#{label_class}>#{field.label}:</dt>"
+      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
       output << "<dd#{value_class}>"
-        if @config.link
+        subs = []
+        field.values.each do |subjects|
           buffer = []
-          subs = []
-          field.values.each do |val|
+          sub_parts = []
+          subjects.each do |val|
             if val.is_a?(ModsDisplay::Name::Person)
               buffer << val.name
             else
               buffer << val
             end
-            if @config.hierarchical_link
+            if @config.link and @config.hierarchical_link
               if val.is_a?(ModsDisplay::Name::Person)
                 txt = link_to_value(val.name, buffer.join(' '))
                 txt << " (#{val.role})" if val.role
-                subs << txt
+                sub_parts << txt
               else
-                subs << link_to_value(val, buffer.join(' '))
+                sub_parts << link_to_value(val, buffer.join(' '))
               end
-            else
+            elsif @config.link
               if val.is_a?(ModsDisplay::Name::Person)
                 txt = link_to_value(val.name)
                 txt << " (#{val.role})" if val.role
-                subs << txt
+                sub_parts << txt
               else
-                subs << link_to_value(val.to_s)
+                sub_parts << link_to_value(val.to_s)
               end
+            else
+              sub_parts << val.to_s
             end
           end
-          output << subs.join(@config.delimiter)
-        else
-          output << field.values.join(@config.delimiter)
+          subs << sub_parts.join(@config.delimiter)
         end
+        output << subs.join("<br/>")
       output << "</dd>"
     end
     output

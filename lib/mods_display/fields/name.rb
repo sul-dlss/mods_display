@@ -88,7 +88,7 @@ class ModsDisplay::Name < ModsDisplay::Field
     end
     
     def to_s
-      text = @name
+      text = @name.dup
       text << " (#{@role})" if @role
       text
     end

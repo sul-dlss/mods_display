@@ -51,4 +51,20 @@ module SubjectsFixtures
     XML
   end
 
+  def complex_subjects
+    <<-XML
+      <mods>
+        <subject>
+          <topic>Jazz</topic>
+          <geographical>Japan</geographical>
+          <topic>History and criticism</topic>
+        </subject>
+        <subject>
+          <topic>Bay Area</topic>
+          <geographical>Stanford</geographical>
+        </subject>
+      </mods>
+    XML
+  end
+
 end

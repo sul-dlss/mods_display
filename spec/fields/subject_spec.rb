@@ -23,23 +23,24 @@ describe ModsDisplay::Subject do
     @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects, false).subject
     @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject
     @name_subject = Stanford::Mods::Record.new.from_str(name_subjects, false).subject
+    @complex_subject = Stanford::Mods::Record.new.from_str(complex_subjects, false).subject
   end
 
   describe "fields" do
     it "should split individual child elments of subject into separate parts" do
       fields = mods_display_subject(@subject).fields
       fields.length.should == 1
-      fields.first.values.should == ["Jazz", "Japan", "History and criticism"]
+      fields.first.values.should == [["Jazz", "Japan", "History and criticism"]]
     end
     it "should split horizontalized subjects split with an emdash into separate parts" do
       fields = mods_display_subject(@emdash_subject).fields
       fields.length.should == 1
-      fields.first.values.should == ["Jazz", "Japan", "History and criticism"]
+      fields.first.values.should == [["Jazz", "Japan", "History and criticism"]]
     end
     it "should handle hierarchicalGeogaphic subjects properly" do
       fields = mods_display_subject(@geo_subject).fields
       fields.length.should == 1
-      fields.first.values.should == ["United States", "California", "Stanford"]
+      fields.first.values.should == [["United States", "California", "Stanford"]]
     end
   end
 
@@ -47,9 +48,9 @@ describe ModsDisplay::Subject do
     it "should handle name subjects properly" do
       fields = mods_display_subject(@name_subject).fields
       fields.length.should == 1
-      fields.first.values.first.should be_a(ModsDisplay::Name::Person)
-      fields.first.values.first.name.should == "John Doe"
-      fields.first.values.first.role.should == "Depicted"
+      fields.first.values.first.first.should be_a(ModsDisplay::Name::Person)
+      fields.first.values.first.first.name.should == "John Doe"
+      fields.first.values.first.first.role.should == "Depicted"
     end
     it "should link the name (and not the role) correctly" do
       html = mods_display_subject(@name_subject).to_html
@@ -75,6 +76,13 @@ describe ModsDisplay::Subject do
       html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz'>Jazz<\/a>/)
       html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz Japan'>Japan<\/a>/)
       html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz Japan History and criticism'>History and criticism<\/a>/)
+    end
+    it "should collapse fields into the same label" do
+      html = mods_display_subject(@complex_subject).to_html
+      html.scan(/<dt title='Subject'>Subject:<\/dt>/).length.should == 1
+      html.scan(/<dd>/).length.should == 1
+      html.scan(/<br\/>/).length.should == 1
+      html.scan(/ &gt; /).length.should == 3
     end
   end
 
