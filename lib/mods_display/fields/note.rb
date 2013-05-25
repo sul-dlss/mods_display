@@ -15,7 +15,7 @@ class ModsDisplay::Note < ModsDisplay::Field
           return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
           return_values << ModsDisplay::Values.new(:label => current_label, :values => [val.text])
         else
-          buffer << people
+          buffer << val.text
           return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten)
         end
       elsif prev_label and (current_label != prev_label)
