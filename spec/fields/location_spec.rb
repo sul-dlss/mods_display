@@ -18,8 +18,7 @@ describe ModsDisplay::Note do
       mods_display_location(@display_label).fields.first.label.should == "Special Label"
     end
     it "should use get a label from a list of translations" do
-      pending("Not consistently passing.")
-      mods_display_location(@repository_label).fields.label.should == "Repository"
+      mods_display_location(@repository_label).fields.first.label.should == "Repository"
     end
   end  
   
