@@ -25,7 +25,7 @@ describe "Configuration" do
     @html = controller.render_mods_display(model)
   end
   it "should apply the label class" do
-    @html.scan(/<dt class='label-class' title=/).length.should == 1
+    @html.should match(/<dt class='label-class' title=/)
   end
   it "should apply the value class" do
     @html.scan(/<dd class='value-class'>/).length.should == 1

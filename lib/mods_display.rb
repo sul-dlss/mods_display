@@ -1,4 +1,5 @@
 require "mods_display/controller_extension"
+require "mods_display/html"
 require "mods_display/model_extension"
 require "mods_display/configuration"
 require "mods_display/configuration/base"

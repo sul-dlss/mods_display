@@ -11,6 +11,7 @@ describe "Installation" do
   end
   it "should return a single <dl>" do
     @html.scan(/<dl>/).length.should == 1
+    @html.scan(/<\/dl>/).length.should == 1
   end
   it "should return a dt/dd pair for each piece of metadata in the mods" do
     @html.scan(/<dt/).length.should == @pieces_of_data
