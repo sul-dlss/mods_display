@@ -24,7 +24,3 @@ require "mods_display/fields/subject"
 require "mods_display/fields/title"
 require "mods_display/fields/values"
 require "mods_display/version"
-
-module ModsDisplay
-
-end
