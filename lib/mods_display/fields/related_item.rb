@@ -13,8 +13,11 @@ class ModsDisplay::RelatedItem < ModsDisplay::Field
           location = nil
           location = val.location.url.text if (val.location.length > 0 and
                                                val.location.url.length > 0)
-          return_text = "<a href='#{location}'>#{title}</a>" if location
-          return_values << ModsDisplay::Values.new(:label => displayLabel(val) || "Related Item", :values => [return_text])
+          return_text = "<a href='#{location}'>#{title}</a>" if location and !title.empty?
+          
+          unless return_text.empty?
+            return_values << ModsDisplay::Values.new(:label => displayLabel(val) || "Related Item", :values => [return_text])
+          end
         end
       end
     end
