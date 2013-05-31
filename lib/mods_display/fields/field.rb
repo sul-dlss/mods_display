@@ -7,7 +7,7 @@ class ModsDisplay::Field
 
   def fields
     @value.map do |val|
-      ModsDisplay::Values.new(:label => displayLabel(val), :values => [text || val.text].flatten)
+      ModsDisplay::Values.new(:label => displayLabel(val) || label, :values => [text || val.text].flatten)
     end
   end
 
@@ -27,12 +27,14 @@ class ModsDisplay::Field
     return nil if fields.empty?
     output = ""
     fields.each do |field|
-      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
-      output << "<dd#{value_class}>"
-        output << field.values.map do |val|
-          @config.link ? link_to_value(val.to_s) : val.to_s
-        end.join(@config.delimiter)
-      output << "</dd>"
+      if field.values.any?{|f| !f.empty? }
+        output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
+        output << "<dd#{value_class}>"
+          output << field.values.map do |val|
+            @config.link ? link_to_value(val.to_s) : val.to_s
+          end.join(@config.delimiter)
+        output << "</dd>"
+      end
     end
     output
   end
