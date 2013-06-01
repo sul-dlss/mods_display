@@ -8,6 +8,7 @@ describe ModsDisplay::RelatedLocation do
   before(:all) do
     @location = Stanford::Mods::Record.new.from_str("<mods><relatedItem><location>The Location</location></relatedItem></mods>", false).related_item
     @non_location = Stanford::Mods::Record.new.from_str("<mods><relatedItem><title>No Location</title></relatedItem></mods>", false).related_item
+    @related_item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>Do not display as Related Location</titleInfo><location>The Location</location></relatedItem></mods>", false).related_item
     @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Location'><location>The Location</location></relatedItem></mods>", false).related_item
   end
   describe "label" do
@@ -26,6 +27,9 @@ describe ModsDisplay::RelatedLocation do
     end
     it "should not return any fields if there is no location" do
       mods_display_related_location(@non_location).fields.should == []
+    end
+    it "should not return locations that are already related items" do
+      mods_display_related_location(@related_item).fields.should == []
     end
   end
 end
