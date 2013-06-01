@@ -16,6 +16,7 @@ end
 describe ModsDisplay::Language do
   before(:all) do
     @name = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name></mods>", false).plain_name
+    @blank_name = Stanford::Mods::Record.new.from_str("<mods><name><namePart/><role><roleTerm></roleTerm></role></name></mods>", false).plain_name
     @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name
     @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name
     @collapse_label = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name></mods>", false).plain_name
@@ -45,6 +46,9 @@ describe ModsDisplay::Language do
       fields.first.values.length.should == 1
       fields.first.values.first.should be_a(ModsDisplay::Name::Person)
       fields.first.values.first.role.should == "Depicted"
+    end
+    it "should not add blank names" do
+      mods_display_name(@blank_name).fields.should == []
     end
     it "should collapse adjacent matching labels" do
       fields = mods_display_name(@collapse_label).fields

@@ -21,21 +21,21 @@ class ModsDisplay::Name < ModsDisplay::Field
         name_parts = val.namePart.map do |name_part|
           name_part.text
         end.join(", ")
-        people << ModsDisplay::Name::Person.new(:name => name_parts, :role => role)
+        people << ModsDisplay::Name::Person.new(:name => name_parts, :role => role) unless name_parts.empty?
       end
       if @value.length == 1
-        return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten)
+        return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten) unless people.empty?
       elsif index == (@value.length-1)
         # need to deal w/ when we have a last element but we have separate labels in the buffer.
         if current_label != prev_label
-          return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
-          return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten)
+          return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten) unless buffer.flatten.empty?
+          return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten) unless people.empty?
         else
           buffer << people
-          return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten)
+          return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten) unless buffer.flatten.empty?
         end
       elsif prev_label and (current_label != prev_label)
-        return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
+        return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten) unless buffer.flatten.empty?
         buffer = []
       end
       buffer << people
