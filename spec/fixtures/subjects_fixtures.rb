@@ -10,6 +10,16 @@ module SubjectsFixtures
       </mods>
     XML
   end
+  
+  def blank_subject
+    <<-XML
+      <mods>
+        <subject>
+          <topic/>
+        </subject>
+      </mods>
+    XML
+  end
 
   def emdash_subjects
     <<-XML

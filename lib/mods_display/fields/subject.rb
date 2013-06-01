@@ -6,12 +6,12 @@ class ModsDisplay::Subject < ModsDisplay::Field
       return_text = []
       selected_subjects(val).each do |child|
         if self.respond_to?(:"process_#{child.name}")
-          return_text << self.send(:"process_#{child.name}", child)
+          return_text << self.send(:"process_#{child.name}", child) unless self.send(:"process_#{child.name}", child).to_s.empty?
         else
           if child.text.include?("--")
             return_text << child.text.split("--").map{|t| t.strip }
           else
-            return_text << child.text
+            return_text << child.text unless child.text.empty?
           end
         end
       end

@@ -20,6 +20,7 @@ end
 describe ModsDisplay::Subject do
   before(:all) do
     @subject = Stanford::Mods::Record.new.from_str(subjects, false).subject
+    @blank_subject = Stanford::Mods::Record.new.from_str(blank_subject, false).subject
     @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects, false).subject
     @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject
     @name_subject = Stanford::Mods::Record.new.from_str(name_subjects, false).subject
@@ -41,6 +42,9 @@ describe ModsDisplay::Subject do
       fields = mods_display_subject(@geo_subject).fields
       fields.length.should == 1
       fields.first.values.should == [["United States", "California", "Stanford"]]
+    end
+    it "should handle blank subjects properly" do
+      mods_display_subject(@blank_subject).fields.should == []
     end
   end
 
