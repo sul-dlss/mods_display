@@ -55,7 +55,7 @@ class ModsDisplay::HTML
   
   def field_config(field_key)
     begin
-      @config.send(field_key)
+      @config.send(field_key_translation[field_key] || field_key)
     rescue
       ModsDisplay::Configuration::Base.new
     end
@@ -84,4 +84,11 @@ class ModsDisplay::HTML
     :identifier      => :identifier,
     :location        => :location}
   end
+
+  def field_key_translation
+    {:relatedLocation => :related_location,
+     :relatedItem => :related_item
+    }
+  end
+
 end
