@@ -12,10 +12,10 @@ describe ModsDisplay::Abstract do
 
   describe "links" do
     it "should turn URLs into links" do
-      mods_display_abstract(@link).fields.first.values.first.should match(/\(<a href='http:\/\/library.stanford.edu'>http:\/\/library.stanford.edu<\/a>\)/)
+      mods_display_abstract(@link).to_html.should match(/A link to the library \(<a href='http:\/\/library.stanford.edu'>http:\/\/library.stanford.edu<\/a>\) should appear here/)
     end
     it "should turn email addresses into mailto links" do
-      mods_display_abstract(@email).fields.first.values.first.should match(/<a href='mailto:jdoe@example.com'>jdoe@example.com<\/a>/)
+      mods_display_abstract(@email).to_html.should match(/A link to an email address <a href='mailto:jdoe@example.com'>jdoe@example.com<\/a> should appear here/)
     end
   end
 end

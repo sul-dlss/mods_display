@@ -1,3 +1,4 @@
+# encoding: utf-8
 class ModsDisplay::Field
   def initialize(value, config, klass)
     @value = value
@@ -57,7 +58,7 @@ class ModsDisplay::Field
         output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
         output << "<dd#{value_class}>"
           output << field.values.map do |val|
-            @config.link ? link_to_value(val.to_s) : val.to_s
+            @config.link ? link_to_value(val.to_s) : link_urls_and_email(val.to_s)
           end.join(@config.delimiter)
         output << "</dd>"
       end
@@ -112,6 +113,25 @@ class ModsDisplay::Field
 
   def tokens
     ["%value%"]
+  end
+
+  def link_urls_and_email(val)
+    val = val.dup
+    # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+    url = /(?i)\b(?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])/i
+    # http://www.regular-expressions.info/email.html
+    email = /[A-Z0-9_\.%\+\-\']+@(?:[A-Z0-9\-]+\.)+(?:[A-Z]{2,4}|museum|travel)/i
+    matches = [val.scan(url), val.scan(email)].flatten
+    unless val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
+      matches.each do |match|
+        if match =~ email
+          val = val.gsub(match, "<a href='mailto:#{match}'>#{match}</a>")
+        else
+          val = val.gsub(match, "<a href='#{match}'>#{match}</a>")
+        end
+      end
+    end
+    val
   end
 
 end
