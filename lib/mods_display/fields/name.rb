@@ -67,10 +67,22 @@ class ModsDisplay::Name < ModsDisplay::Field
   private
 
   def name_label(element)
-    if element.attributes.has_key?("type") && name_labels.has_key?(element.attributes["type"].value)
-      return name_labels[element.attributes["type"].value]
+    if name_is_main_author?(element)
+      if element.attributes.has_key?("type") && name_labels.has_key?(element.attributes["type"].value)
+        return name_labels[element.attributes["type"].value]
+      end
+      "Author/Creator"
+    else
+      "Contributor"
     end
-    "Creator/Contributor"
+  end
+  
+  def name_is_main_author?(element)
+    begin
+      ["author", "aut", "creator", "cre", ""].include?(element.role.roleTerm.text.downcase)
+    rescue
+      false
+    end
   end
 
   def name_labels
