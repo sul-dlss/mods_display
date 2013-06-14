@@ -18,7 +18,9 @@ class ModsDisplay::HTML
   # and replace the first key in the the fields list with that.
   def body
     output = "<dl>"
-    mods_display_fields.each do |field_key|
+    body_fields = mods_display_fields.dup
+    body_fields[0] = :subTitle
+    body_fields.each do |field_key|
       unless mods_field(@xml, field_key).to_html.nil?
         output << mods_field(@xml, field_key).to_html
       end
@@ -67,6 +69,7 @@ class ModsDisplay::HTML
   
   def mods_display_field_mapping
    {:title           => :title_info,
+    :subTitle        => :title_info,
     :name            => :plain_name,
     :format          => :typeOfResource,
     :imprint         => :origin_info,
@@ -86,8 +89,9 @@ class ModsDisplay::HTML
   end
 
   def field_key_translation
-    {:relatedLocation => :related_location,
-     :relatedItem => :related_item
+    {:subTitle        => :sub_title,
+     :relatedLocation => :related_location,
+     :relatedItem     => :related_item
     }
   end
 

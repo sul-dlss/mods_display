@@ -1,3 +1,5 @@
+# We can probably do something smarter here using const_get to assign
+# special coniguration classes then fall back on the base config class
 class ModsDisplay::Configuration
   def initialize &config
     instance_eval &config
@@ -5,6 +7,10 @@ class ModsDisplay::Configuration
 
   def title &title
     @title ||= ModsDisplay::Configuration::Base.new(&title || Proc.new{})
+  end
+
+  def sub_title &sub_title
+    @sub_title ||= ModsDisplay::Configuration::Base.new(&sub_title || Proc.new{})
   end
 
   def name &name
