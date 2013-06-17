@@ -24,7 +24,7 @@ Include the `ModelExtension` into your model.
       include ModsDisplay::ModelExtension
     end
 
-Configure the source of the MODS xml string
+Configure the source of the MODS XML in your model.  You can pass a string of XML to the mods_xml_source method, however it will also accept a block where you can call methods on self (so if the MODS XML string is held in MyClass#mods):
 
     class MyClass
       ....
@@ -126,6 +126,17 @@ Once installed, the class that included the `ControllerExtension` (`MyController
 
     render_mods_display(@model) # where @model.is_a?(MyClass)
 
+The basic render call will return the top-level ModsDisplay::HTML class object.  Any String method (e.g. #html_safe) you call on this top-level object will be sent down to the #to_html method which will return the HTML for all the metadata in the MODS document.
+
+    render_mods_display(@model).to_html
+    
+You can abstract the main title by calling #title on the top-level HTML method
+
+    render_mods_display(@model).title
+    
+When getting JUST the main title out of the metadata, it will be useful to get the rest of the metadata without the main title.  You can accomplish this by calling #body on the top-level HTML object.
+
+    render_mods_display(@model).body
 
 ## Contributing
 
