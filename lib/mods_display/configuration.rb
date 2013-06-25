@@ -14,7 +14,7 @@ class ModsDisplay::Configuration
   end
 
   def name &name
-    @name ||= ModsDisplay::Configuration::Base.new(&name || Proc.new{})
+    @name ||= ModsDisplay::Configuration::Name.new(&name || Proc.new{})
   end
 
   def format &format
@@ -50,7 +50,7 @@ class ModsDisplay::Configuration
   end
 
   def note &note
-    @note ||= ModsDisplay::Configuration::Base.new(&note || Proc.new{})
+    @note ||= ModsDisplay::Configuration::Note.new(&note || Proc.new{})
   end
 
   def contact &contact
@@ -66,7 +66,7 @@ class ModsDisplay::Configuration
   end
 
   def related_item &related_item
-    @related_item ||= ModsDisplay::Configuration::Base.new(&related_item || Proc.new{})
+    @related_item ||= ModsDisplay::Configuration::RelatedItem.new(&related_item || Proc.new{})
   end
 
   def subject &subject
