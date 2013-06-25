@@ -33,9 +33,6 @@ class ModsDisplay::Field
       prev_label = current_label
     end
     return_values
-    @value.map do |val|
-      ModsDisplay::Values.new(:label => displayLabel(val) || label, :values => [text || val.text].flatten)
-    end
   end
 
   def label

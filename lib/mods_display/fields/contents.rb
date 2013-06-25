@@ -1,7 +1,8 @@
 class ModsDisplay::Contents < ModsDisplay::Field
 
-  def label
-    super || "Table of contents"
+  private
+  def displayLabel(element)
+    super(element) || "Table of contents"
   end
 
 end

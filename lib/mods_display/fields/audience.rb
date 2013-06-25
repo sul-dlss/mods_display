@@ -1,7 +1,8 @@
 class ModsDisplay::Audience < ModsDisplay::Field
 
-  def label
-    super || "Target audience"
+  private
+  def displayLabel(element)
+    super(element) || "Target audience"
   end
 
 end

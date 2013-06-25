@@ -1,7 +1,8 @@
 class ModsDisplay::Abstract < ModsDisplay::Field
 
-  def label
-    super || "Abstract"
+  private
+  def dislayLabel(element)
+    super(element) || "Abstract"
   end
 
 end
