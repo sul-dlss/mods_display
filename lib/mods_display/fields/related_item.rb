@@ -5,6 +5,7 @@ class ModsDisplay::RelatedItem < ModsDisplay::Field
     current_label = nil
     prev_label = nil
     buffer = []
+    return_text = ""
     @value.each_with_index do |val, index|
       current_label = (displayLabel(val) || "Related item")
       unless (val.typeOfResource.length > 0 and
