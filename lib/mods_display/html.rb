@@ -64,7 +64,7 @@ class ModsDisplay::HTML
   end
   
   def mods_display_fields
-    [:title, :name, :resourceType, :genre, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location]
+    [:title, :name, :language, :imprint, :resourceType, :genre, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location]
   end
   
   def mods_display_field_mapping
