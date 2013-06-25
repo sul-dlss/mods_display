@@ -17,6 +17,10 @@ class ModsDisplay::Configuration
     @name ||= ModsDisplay::Configuration::Name.new(&name || Proc.new{})
   end
 
+  def type_of_resource &type_of_resource
+    @type_of_resource ||= ModsDisplay::Configuration::Base.new(&type_of_resource || Proc.new{})
+  end
+
   def format &format
     @format ||= ModsDisplay::Configuration::Base.new(&format || Proc.new{})
   end
