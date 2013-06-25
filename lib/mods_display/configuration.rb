@@ -21,6 +21,10 @@ class ModsDisplay::Configuration
     @type_of_resource ||= ModsDisplay::Configuration::Base.new(&type_of_resource || Proc.new{})
   end
 
+  def genre &genre
+    @genre ||= ModsDisplay::Configuration::Base.new(&genre || Proc.new{})
+  end
+
   def format &format
     @format ||= ModsDisplay::Configuration::Base.new(&format || Proc.new{})
   end
