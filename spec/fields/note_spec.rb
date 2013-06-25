@@ -10,7 +10,7 @@ describe ModsDisplay::Note do
     @display_label = Stanford::Mods::Record.new.from_str("<mods><note displayLabel='Special Label'>Note Field</note></mods>", false).note
     @sor_label = Stanford::Mods::Record.new.from_str("<mods><note type='statement of responsibility'>Note Field</note></mods>", false).note
     @contact_note = Stanford::Mods::Record.new.from_str("<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false).note
-    @type_label = Stanford::Mods::Record.new.from_str("<mods><note type='Some other Type'>Note Field</note></mods>", false).note
+    @type_label = Stanford::Mods::Record.new.from_str("<mods><note type='some other Type'>Note Field</note></mods>", false).note
     @complex_label = Stanford::Mods::Record.new.from_str("<mods><note>Note Field</note><note>2nd Note Field</note><note type='statement of responsibility'>SoR</note><note>Another Note</note></mods>", false).note
   end
   describe "label" do
@@ -23,8 +23,8 @@ describe ModsDisplay::Note do
     it "should use get a label from a list of translations" do
       mods_display_note(@sor_label).fields.first.label.should == "Statement of responsibility"
     end
-    it "should use use the raw type attribute if one is present" do
-      mods_display_note(@type_label).fields.first.label.should == "Some other Type"
+    it "should use use the capitalized type attribute if one is present" do
+      mods_display_note(@type_label).fields.first.label.should == "Some other type"
     end
   end
   

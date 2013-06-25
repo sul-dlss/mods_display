@@ -41,7 +41,7 @@ class ModsDisplay::Note < ModsDisplay::Field
 
   def note_label(element)
     if element.attributes["type"].respond_to?(:value)
-      return note_labels[element.attributes["type"].value] || element.attributes["type"].value
+      return note_labels[element.attributes["type"].value] || element.attributes["type"].value.capitalize
     end
     "Note"
   end
@@ -49,6 +49,7 @@ class ModsDisplay::Note < ModsDisplay::Field
   def note_labels
     {"statement of responsibility" => "Statement of responsibility",
      "date/sequential designation" => "Date/Sequential designation",
+     "publications"                => "Publications",
      "references"                  => "References",
      "bibliography"                => "Bibliography",
      "preferred citation"          => "Preferred citation"}
