@@ -45,7 +45,7 @@ class ModsDisplay::Name < ModsDisplay::Field
   end
 
   def to_html
-    return nil if fields.empty?
+    return nil if fields.empty? or @config.ignore?
     output = ""
     fields.each do |field|
       output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"

@@ -26,4 +26,14 @@ describe ModsDisplay::Configuration::Base do
       ModsDisplay::Configuration::Base.new.delimiter.should == ", "
     end
   end
+  describe "ignore" do
+    it "should be set to true if the #ignore! method is called" do
+      ModsDisplay::Configuration::Base.new do
+        ignore!
+      end.ignore?.should be_true
+    end
+    it "should be false by default" do
+      ModsDisplay::Configuration::Base.new.ignore?.should be_false
+    end
+  end
 end

@@ -53,6 +53,10 @@ class ModsDisplay::Configuration
     @note ||= ModsDisplay::Configuration::Base.new(&note || Proc.new{})
   end
 
+  def contact &contact
+    @contact ||= ModsDisplay::Configuration::Base.new(&contact || Proc.new{})
+  end
+
   def collection &collection
     @collection ||= ModsDisplay::Configuration::Base.new(&collection || Proc.new{})
   end

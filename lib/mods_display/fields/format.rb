@@ -12,6 +12,7 @@ class ModsDisplay::Format < ModsDisplay::Field
   end
 
   def to_html
+    return nil if @config.ignore?
     output = ""
     fields.each do |field|
       output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"

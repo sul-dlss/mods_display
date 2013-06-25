@@ -20,4 +20,12 @@ class ModsDisplay::Configuration::Base
     @link ||= [method_name, args]
   end
 
+  def ignore!
+    @ignore = true
+  end
+
+  def ignore?
+    @ignore || false
+  end
+
 end

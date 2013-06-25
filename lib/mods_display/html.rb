@@ -64,7 +64,7 @@ class ModsDisplay::HTML
   end
   
   def mods_display_fields
-    [:title, :name, :format, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location]
+    [:title, :name, :format, :imprint, :language, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location]
   end
   
   def mods_display_field_mapping
@@ -80,6 +80,7 @@ class ModsDisplay::HTML
     :contents        => :tableOfContents,
     :audience        => :targetAudience,
     :note            => :note,
+    :contact         => :note,
     :collection      => :related_item,
     :relatedLocation => :related_item,
     :relatedItem     => :related_item,

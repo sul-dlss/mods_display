@@ -51,7 +51,7 @@ class ModsDisplay::Field
   end
 
   def to_html
-    return nil if fields.empty?
+    return nil if fields.empty? or @config.ignore?
     output = ""
     fields.each do |field|
       if field.values.any?{|f| !f.empty? }

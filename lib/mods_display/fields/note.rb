@@ -5,11 +5,11 @@ class ModsDisplay::Note < ModsDisplay::Field
     current_label = nil
     prev_label = nil
     buffer = []
-    @value.each_with_index do |val, index|
+    note_fields.each_with_index do |val, index|
       current_label = (displayLabel(val) || note_label(val))
-      if @value.length == 1
+      if note_fields.length == 1
         return_values << ModsDisplay::Values.new(:label => current_label, :values => [val.text])
-      elsif index == (@value.length-1)
+      elsif index == (note_fields.length-1)
         # need to deal w/ when we have a last element but we have separate labels in the buffer.
         if current_label != prev_label
           return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
@@ -30,14 +30,22 @@ class ModsDisplay::Note < ModsDisplay::Field
   
   
   private
-  
+
+  def note_fields
+    @value.select do |val|
+      (!val.attributes["type"].respond_to?(:value) or
+         (val.attributes["type"].respond_to?(:value) and
+            val.attributes["type"].value.downcase != "contact"))
+    end
+  end
+
   def note_label(element)
     if element.attributes["type"].respond_to?(:value)
       return note_labels[element.attributes["type"].value] || element.attributes["type"].value
     end
     "Note"
   end
-  
+
   def note_labels
     {"statement of responsibility" => "Statement of responsibility",
      "date/sequential designation" => "Date/Sequential designation",

@@ -9,6 +9,7 @@ describe ModsDisplay::Note do
     @note = Stanford::Mods::Record.new.from_str("<mods><note>Note Field</note></mods>", false).note
     @display_label = Stanford::Mods::Record.new.from_str("<mods><note displayLabel='Special Label'>Note Field</note></mods>", false).note
     @sor_label = Stanford::Mods::Record.new.from_str("<mods><note type='statement of responsibility'>Note Field</note></mods>", false).note
+    @contact_note = Stanford::Mods::Record.new.from_str("<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false).note
     @type_label = Stanford::Mods::Record.new.from_str("<mods><note type='Some other Type'>Note Field</note></mods>", false).note
     @complex_label = Stanford::Mods::Record.new.from_str("<mods><note>Note Field</note><note>2nd Note Field</note><note type='statement of responsibility'>SoR</note><note>Another Note</note></mods>", false).note
   end
@@ -47,6 +48,11 @@ describe ModsDisplay::Note do
       fields.last.label.should == "Note"
       fields.last.values.length == 1
       fields.last.values.should == ["Another Note"]
+    end
+    it "should not include any contact fields" do
+      fields = mods_display_note(@contact_note).fields
+      fields.length.should == 1
+      fields.first.values.should == ["Note Field"]
     end
   end
   
