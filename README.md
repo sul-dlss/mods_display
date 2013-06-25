@@ -56,6 +56,7 @@ In the class that you include the `ModsDisplay::ControllerExtension` you can con
 
 * label_class
 * value_class
+* ignore!
 * delimiter
 * link
 
@@ -74,6 +75,20 @@ Both label_ and value_class accept strings to put in as a class.
       end
     end
 
+### Ignore!
+
+In certain cases an application may need to explicitly remove a portion of the MODS metadata from the display (Contact being a prime example).  You can accomplish this by using the ignore! option.
+
+    class MyController
+      include ModsDisplay::ControllerExtension
+      
+      configure_mods_display do
+        contact do
+          ignore!
+        end
+      end
+    end
+
 ### Delimiter
 
 The delimiter configuration option accepts a string which will be used to delimit multiple multiple values within a single label.
@@ -84,7 +99,7 @@ The delimiter configuration option accepts a string which will be used to delimi
       end
     end
 
-Note: The default is a comma and a space (", ")
+Note: Different MODS elements will have different default delimiters (mainly varying between a comma+space or a HTML line-break).
 
 ### Link
 
