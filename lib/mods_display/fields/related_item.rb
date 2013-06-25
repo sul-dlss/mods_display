@@ -6,7 +6,7 @@ class ModsDisplay::RelatedItem < ModsDisplay::Field
     prev_label = nil
     buffer = []
     @value.each_with_index do |val, index|
-      current_label = (displayLabel(val) || "Related Item")
+      current_label = (displayLabel(val) || "Related item")
       unless (val.typeOfResource.length > 0 and
               val.typeOfResource.attributes.length > 0 and
               val.typeOfResource.attributes.first.has_key?("collection") and

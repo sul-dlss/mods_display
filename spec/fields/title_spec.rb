@@ -17,7 +17,7 @@ describe ModsDisplay::Title do
       mods_display_title(@title).fields.first.label.should == "Title"
     end
     it "should return an appropriate label from the type attribute" do
-      mods_display_title(@alt_title).fields.first.label.should == "Alternative Title"
+      mods_display_title(@alt_title).fields.first.label.should == "Alternative title"
     end
     it "should return the label held in the displayLabel attribute of the titleInfo element when available" do
       mods_display_title(@display_label).fields.first.label.should == "MyTitle"

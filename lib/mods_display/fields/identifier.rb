@@ -46,15 +46,15 @@ class ModsDisplay::Identifier < ModsDisplay::Field
      "hdl"                       => "Handle",
      "isrc"                      => "ISRC",
      "ismn"                      => "ISMN",
-     "issue number"              => "Issue Number",
+     "issue number"              => "Issue number",
      "lccn"                      => "LCCN",
-     "matrix number"             => "Matrix Number",
-     "music publisher"           => "Music Publisher",
-     "music plate"               => "Music Plate",
+     "matrix number"             => "Matrix number",
+     "music publisher"           => "Music publisher",
+     "music plate"               => "Music plate",
      "sici"                      => "SICI",
      "upc"                       => "UPC",
-     "videorecording identifier" => "Videorecording Identifier",
-     "stock number"              => "Stock Number"}
+     "videorecording identifier" => "Videorecording identifier",
+     "stock number"              => "Stock number"}
   end
 
 end

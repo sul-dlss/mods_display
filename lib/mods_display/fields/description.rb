@@ -29,7 +29,7 @@ class ModsDisplay::Description < ModsDisplay::Field
   end
 
   def description_label(element)
-    label || displayLabel(element) || labels[element.name.to_sym] || "Physical Description"
+    label || displayLabel(element) || labels[element.name.to_sym] || "Physical description"
   end
 
   private
@@ -43,7 +43,7 @@ class ModsDisplay::Description < ModsDisplay::Field
   def labels
     {:form          => "Form",
      :extent        => "Extent",
-     :digitalOrigin => "Digital Origin",
+     :digitalOrigin => "Digital origin",
      :note          => "Note"
      }
   end

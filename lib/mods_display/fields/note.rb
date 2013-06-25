@@ -39,8 +39,8 @@ class ModsDisplay::Note < ModsDisplay::Field
   end
   
   def note_labels
-    {"statement of responsibility" => "Statement of Responsibility",
-     "date/sequential designation" => "Date/Sequential Designation",
+    {"statement of responsibility" => "Statement of responsibility",
+     "date/sequential designation" => "Date/Sequential designation",
      "references"                  => "References",
      "bibliography"                => "Bibliography",
      "preferred citation"          => "Preferred citation"}

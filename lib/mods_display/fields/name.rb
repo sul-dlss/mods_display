@@ -87,9 +87,9 @@ class ModsDisplay::Name < ModsDisplay::Field
 
   def name_labels
     {"personal"   => "Author/Creator",
-     "corporate"  => "Corporate Author",
+     "corporate"  => "Corporate author",
      "conference" => "Meeting",
-     "family"     => "Family Author"}
+     "family"     => "Family author"}
   end
   
   class Person

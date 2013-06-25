@@ -20,7 +20,7 @@ describe ModsDisplay::Note do
       mods_display_id(@display_label).fields.first.label.should == "Special Label"
     end
     it "should use get a label from a list of translations" do
-      mods_display_id(@issue_label).fields.first.label.should == "Issue Number"
+      mods_display_id(@issue_label).fields.first.label.should == "Issue number"
     end
     it "should use use the raw type attribute if one is present" do
       mods_display_id(@type_label).fields.first.label.should == "Some other Type"
@@ -36,7 +36,7 @@ describe ModsDisplay::Note do
       fields.first.values.length.should == 2
       fields.first.values.should == ["12345", "54321"]
       
-      fields[1].label.should == "Issue Number"
+      fields[1].label.should == "Issue number"
       fields[1].values.length.should == 1
       fields[1].values.should == ["12345"]
       

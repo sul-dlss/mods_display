@@ -25,7 +25,7 @@ describe ModsDisplay::Imprint do
     end
     it "should get the label from non-imprint origin info fields" do
       fields = mods_display_imprint(@edition_and_date).fields
-      fields.first.label.should == "Date Valid"
+      fields.first.label.should == "Date valid"
       fields.last.label.should == "Edition"
     end
     it "should get multiple labels when we have mixed content" do

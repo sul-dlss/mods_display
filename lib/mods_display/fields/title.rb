@@ -40,10 +40,10 @@ class ModsDisplay::Title < ModsDisplay::Field
   end
 
   def title_labels
-    {"abbreviated" => "Abbreviated Title",
-     "translated"  => "Translated Title",
-     "alternative" => "Alternative Title",
-     "uniform"     => "Uniform Title"}
+    {"abbreviated" => "Abbreviated title",
+     "translated"  => "Translated title",
+     "alternative" => "Alternative title",
+     "uniform"     => "Uniform title"}
   end
 
 end

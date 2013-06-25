@@ -56,9 +56,9 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   end
 
   def pub_info_labels
-    {:dateValid     => "Date Valid",
-     :dateModified  => "Date Modified",
-     :copyrightDate => "Copyright Date",
+    {:dateValid     => "Date valid",
+     :dateModified  => "Date modified",
+     :copyrightDate => "Copyright date",
      :edition       => "Edition",
      :issuance      => "Issuance",
      :frequency     => "Frequency"
