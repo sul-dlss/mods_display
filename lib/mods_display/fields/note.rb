@@ -52,7 +52,12 @@ class ModsDisplay::Note < ModsDisplay::Field
      "publications"                => "Publications",
      "references"                  => "References",
      "bibliography"                => "Bibliography",
-     "preferred citation"          => "Preferred citation"}
+     "preferred citation"          => "Preferred citation",
+     "date/sequential designation" =>	"Date/Sequential designation",
+     "biographical/historical"     => "Biographical/Historical",
+     "creation/production credits" => "Creation/Production credits",
+     "citation/reference"          => "Citation/Reference"
+     }
   end
 
 end
