@@ -12,7 +12,7 @@ describe ModsDisplay::Description do
     @mixed = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><form>Form Note</form><extent>Extent Note</extent></physicalDescription></mods>", false).physical_description
   end
   describe "labels" do
-    it "should use the dislayLabel if one is provided" do
+    it "should use the displayLabel if one is provided" do
       mods_display_description(@display_label).fields.first.label.should == "SpecialLabel"
     end
     it "should get the default label for a child element" do
