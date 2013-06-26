@@ -9,6 +9,14 @@ describe ModsDisplay::Abstract do
     @link = Stanford::Mods::Record.new.from_str("<mods><abstract>A link to the library (http://library.stanford.edu) should appear here</abstract></mods>", false).abstract
     @email = Stanford::Mods::Record.new.from_str("<mods><abstract>A link to an email address jdoe@example.com should appear here</abstract></mods>", false).abstract
   end
+  
+  describe "labels" do
+    it "should get a default 'Abstract' label" do
+      fields = mods_display_abstract(@link).fields
+      fields.length.should == 1
+      fields.first.label.should == "Abstract"
+    end
+  end
 
   describe "links" do
     it "should turn URLs into links" do
