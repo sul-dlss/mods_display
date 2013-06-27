@@ -51,7 +51,7 @@ class ModsDisplay::Field
     return nil if fields.empty? or @config.ignore?
     output = ""
     fields.each do |field|
-      if field.values.any?{|f| !f.empty? }
+      if field.values.any?{|f| f && !f.empty? }
         output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
         output << "<dd#{value_class}>"
           output << field.values.map do |val|
