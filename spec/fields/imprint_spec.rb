@@ -30,7 +30,7 @@ describe ModsDisplay::Imprint do
       fields.last.label.should == "Issuance"
     end
     it "should get multiple labels when we have mixed content" do
-      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint", "Issuance"]
+      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint", "Issuance", "Date captured"]
     end
     it "should use the displayLabel when available" do
        mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel", "IssuanceLabel", "IssuanceLabel"]
@@ -39,7 +39,7 @@ describe ModsDisplay::Imprint do
 
   describe "fields" do
     it "should return various parts of the imprint" do
-      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "An edition - A Place : A Publisher, A Create Date, An Issue Date, A Capture Date, Another Date"
+      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "An edition - A Place : A Publisher, An Issue Date, Another Date"
     end
     it "should handle the punctuation when the edition is missing" do
       values = mods_display_imprint(@no_edition).fields.map{|val| val.values }.join(" ")
@@ -59,9 +59,10 @@ describe ModsDisplay::Imprint do
     end
     it "should handle mixed mods properly" do
       values = mods_display_imprint(@mixed).fields
-      values.length.should == 2
+      values.length.should == 3
       values.map{|val| val.values}.should include(["A Place : A Publisher"])
       values.map{|val| val.values}.should include(["The Issuance"])
+      values.map{|val| val.values}.should include(["The Capture Date"])
     end
   end
   describe "to_html" do
@@ -77,7 +78,8 @@ describe ModsDisplay::Imprint do
       html = mods_display_imprint(@mixed).to_html
       html.scan(/<dt title='Imprint'>Imprint:<\/dt>/).length.should == 1
       html.scan(/<dt title='Issuance'>Issuance:<\/dt>/).length.should == 1
-      html.scan(/<dd>/).length.should == 2
+      html.scan(/<dt title='Date captured'>Date captured:<\/dt>/).length.should == 1
+      html.scan(/<dd>/).length.should == 3
     end
   end
 

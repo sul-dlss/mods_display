@@ -20,7 +20,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
           p.text unless p.text.strip.empty?
         end.compact.join(" : ").strip unless val.publisher.text.strip.empty?
         parts = val.children.select do |child|
-          ["dateCreated", "dateIssued", "dateCaptured", "dateOther"].include?(child.name) and !child.attributes.has_key?("encoding")
+          ["dateIssued", "dateOther"].include?(child.name) and !child.attributes.has_key?("encoding")
         end.map do |child|
           child.text.strip unless child.text.strip.empty?
         end.compact.join(", ")
@@ -63,7 +63,9 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   end
 
   def pub_info_labels
-    {:dateValid     => "Date valid",
+    {:dateCreated   => "Date created",
+     :dateCaptured  => "Date captured",
+     :dateValid     => "Date valid",
      :dateModified  => "Date modified",
      :copyrightDate => "Copyright date",
      :issuance      => "Issuance",

@@ -6,9 +6,7 @@ module ImprintFixtures
           <edition>An edition</edition>
           <place>A Place</place>
           <publisher>A Publisher</publisher>
-          <dateCreated>A Create Date</dateCreated>
           <dateIssued>An Issue Date</dateIssued>
-          <dateCaptured>A Capture Date</dateCaptured>
           <dateOther>Another Date</dateOther>
         </originInfo>
       </mods>
@@ -66,6 +64,7 @@ module ImprintFixtures
           <place>A Place</place>
           <publisher>A Publisher</publisher>
           <issuance>The Issuance</issuance>
+          <dateCaptured>The Capture Date</dateCaptured>
         </originInfo>
       </mods>
     MODS
