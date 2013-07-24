@@ -10,6 +10,7 @@ end
 describe ModsDisplay::Imprint do
   before(:all) do
     @imprint = Stanford::Mods::Record.new.from_str(imprint_mods, false).origin_info
+    @no_edition = Stanford::Mods::Record.new.from_str(no_edition_mods, false).origin_info
     @edition_and_date = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info
     @encoded_date = Stanford::Mods::Record.new.from_str(encoded_date, false).origin_info
     @encoded_only = Stanford::Mods::Record.new.from_str(only_encoded_data, false).origin_info
@@ -26,24 +27,29 @@ describe ModsDisplay::Imprint do
     it "should get the label from non-imprint origin info fields" do
       fields = mods_display_imprint(@edition_and_date).fields
       fields.first.label.should == "Date valid"
-      fields.last.label.should == "Edition"
+      fields.last.label.should == "Issuance"
     end
     it "should get multiple labels when we have mixed content" do
-      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint", "Edition"]
+      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint", "Issuance"]
     end
     it "should use the displayLabel when available" do
-       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel", "EditionLabel", "EditionLabel"]
+       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel", "IssuanceLabel", "IssuanceLabel"]
     end
   end
 
   describe "fields" do
     it "should return various parts of the imprint" do
-      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "A Place : A Publisher, A Create Date, An Issue Date, A Capture Date, Another Date"
+      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "An edition - A Place : A Publisher, A Create Date, An Issue Date, A Capture Date, Another Date"
+    end
+    it "should handle the punctuation when the edition is missing" do
+      values = mods_display_imprint(@no_edition).fields.map{|val| val.values }.join(" ")
+      values.strip.should_not match(/^-/)
+      values.should match(/^A Place/)
     end
     it "should get the text for non-imprint origin info fields" do
       fields = mods_display_imprint(@edition_and_date).fields
       fields.first.values.should == ["A Valid Date"]
-      fields.last.values.should == ["The Edition"]
+      fields.last.values.should == ["The Issuance"]
     end
     it "should omit dates with an encoding attribute" do
       mods_display_imprint(@encoded_date).fields.map{|val| val.values }.join.should_not include("An Encoded Date")
@@ -55,7 +61,7 @@ describe ModsDisplay::Imprint do
       values = mods_display_imprint(@mixed).fields
       values.length.should == 2
       values.map{|val| val.values}.should include(["A Place : A Publisher"])
-      values.map{|val| val.values}.should include(["The Edition"])
+      values.map{|val| val.values}.should include(["The Issuance"])
     end
   end
   describe "to_html" do
@@ -70,7 +76,7 @@ describe ModsDisplay::Imprint do
     it "should have individual dt/dd pairs for mixed content" do
       html = mods_display_imprint(@mixed).to_html
       html.scan(/<dt title='Imprint'>Imprint:<\/dt>/).length.should == 1
-      html.scan(/<dt title='Edition'>Edition:<\/dt>/).length.should == 1
+      html.scan(/<dt title='Issuance'>Issuance:<\/dt>/).length.should == 1
       html.scan(/<dd>/).length.should == 2
     end
   end

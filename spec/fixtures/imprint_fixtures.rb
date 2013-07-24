@@ -3,6 +3,21 @@ module ImprintFixtures
     <<-MODS
       <mods>
         <originInfo>
+          <edition>An edition</edition>
+          <place>A Place</place>
+          <publisher>A Publisher</publisher>
+          <dateCreated>A Create Date</dateCreated>
+          <dateIssued>An Issue Date</dateIssued>
+          <dateCaptured>A Capture Date</dateCaptured>
+          <dateOther>Another Date</dateOther>
+        </originInfo>
+      </mods>
+    MODS
+  end
+  def no_edition_mods
+    <<-MODS
+      <mods>
+        <originInfo>
           <place>A Place</place>
           <publisher>A Publisher</publisher>
           <dateCreated>A Create Date</dateCreated>
@@ -20,7 +35,7 @@ module ImprintFixtures
           <dateValid>A Valid Date</dateValid>
         </originInfo>
         <originInfo>
-          <edition>The Edition</edition>
+          <issuance>The Issuance</issuance>
         </originInfo>
       </mods>
     MODS
@@ -50,7 +65,7 @@ module ImprintFixtures
         <originInfo>
           <place>A Place</place>
           <publisher>A Publisher</publisher>
-          <edition>The Edition</edition>
+          <issuance>The Issuance</issuance>
         </originInfo>
       </mods>
     MODS
@@ -75,13 +90,14 @@ module ImprintFixtures
     <<-MODS
       <mods>
         <originInfo displayLabel="TheLabel">
+          <edition>The edition</edition>
           <place>A Place</place>
           <publisher>A Publisher</publisher>
         </originInfo>
-        <originInfo displayLabel="EditionLabel">
+        <originInfo displayLabel="IssuanceLabel">
           <place>A Place</place>
           <publisher>A Publisher</publisher>
-          <edition>The Edition</edition>
+          <issuance>The Edition</issuance>
         </originInfo>
       </mods>
     MODS
