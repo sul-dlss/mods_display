@@ -7,7 +7,8 @@ end
 describe ModsDisplay::Title do
   before(:all) do
     @title = Stanford::Mods::Record.new.from_str("<mods><titleInfo><title>Title</title></titleInfo></mods>", false).title_info
-    @title_parts = Stanford::Mods::Record.new.from_str("<mods><titleInfo><nonSort>The</nonSort><title>Title</title><subTitle>For</subTitle><partName>Something</partName><partNumber>62</partNumber></titleInfo></mods>", false).title_info
+    @title_parts = Stanford::Mods::Record.new.from_str("<mods><titleInfo><nonSort>The</nonSort><title>Title</title><subTitle>For</subTitle><partName>Something</partName><partNumber>Part 62</partNumber></titleInfo></mods>", false).title_info
+    @reverse_title_parts = Stanford::Mods::Record.new.from_str("<mods><titleInfo><nonSort>The</nonSort><title>Title</title><subTitle>For</subTitle><partNumber>Part 62</partNumber><partName>Something</partName></titleInfo></mods>", false).title_info
     @display_label = Stanford::Mods::Record.new.from_str("<mods><titleInfo displayLabel='MyTitle'><title>Title</title></titleInfo></mods>", false).title_info
     @display_form = Stanford::Mods::Record.new.from_str("<mods><titleInfo><title>Title</title><displayForm>The Title of This Item</displayForm></titleInfo></mods>", false).title_info
     @alt_title = Stanford::Mods::Record.new.from_str("<mods><titleInfo type='alternative'><title>Title</title></titleInfo></mods>", false).title_info
@@ -34,7 +35,10 @@ describe ModsDisplay::Title do
   end
   describe "text" do
     it "should construct all the elements in titleInfo" do
-      mods_display_title(@title_parts).fields.first.values.should include "The Title : For. Something, 62"
+      mods_display_title(@title_parts).fields.first.values.should include "The Title : For. Something. Part 62"
+    end
+    it "should use the correct delimiter in the case that a partNumber comes before a partName" do
+      mods_display_title(@reverse_title_parts).fields.first.values.should include "The Title : For. Part 62, Something"
     end
     it "should use the displayForm when available" do
       mods_display_title(@display_form).fields.first.values.should include "The Title of This Item"

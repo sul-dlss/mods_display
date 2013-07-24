@@ -21,7 +21,7 @@ class ModsDisplay::Title < ModsDisplay::Field
           ["partName", "partNumber"].include?(child.name)
         end.map do |child|
           child.text
-        end.compact.join(", ")
+        end.compact.join(parts_delimiter(val))
         parts = nil if parts.strip.empty?
         return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [[preParts, parts].compact.join(". ")])
       end
@@ -30,6 +30,15 @@ class ModsDisplay::Title < ModsDisplay::Field
   end
 
   private
+
+  def parts_delimiter(element)
+    children = element.children.to_a
+    # index will retun nil which is not comparable so we call 100 if the element isn't present (thus meaning it's at the end of the list)
+    if (children.index{ |c| c.name == "partNumber" } || 100) < (children.index{|c| c.name == "partName"} || 100)
+      return ", "
+    end
+    ". "
+  end
 
   def title_label(element)
     if (element.attributes["type"].respond_to?(:value) and
