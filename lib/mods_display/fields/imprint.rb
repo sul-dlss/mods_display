@@ -19,10 +19,12 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         publisher = val.publisher.map do |p|
           p.text unless p.text.strip.empty?
         end.compact.join(" : ").strip unless val.publisher.text.strip.empty?
-        parts = val.children.select do |child|
-          ["dateIssued", "dateOther"].include?(child.name) and !child.attributes.has_key?("encoding")
-        end.map do |child|
-          child.text.strip unless child.text.strip.empty?
+        parts = ["dateIssued", "dateOther"].map do |date_field_name|
+          if val.respond_to?(date_field_name.to_sym)
+            parse_dates(val.send(date_field_name.to_sym))
+          end
+        end.flatten.map do |date|
+          date.strip unless date.strip.empty?
         end.compact.join(", ")
         edition = nil if edition.strip.empty?
         parts = nil if parts.strip.empty?
@@ -33,6 +35,9 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         unless [editionPlace, parts].compact.join(", ").strip.empty?
           return_values << ModsDisplay::Values.new(:label => displayLabel(val) || "Imprint", :values => [[editionPlace, parts].compact.join(", ")])
         end
+        if dates(val).length > 0
+          return_values.concat(dates(val))
+        end
         if other_pub_info(val).length > 0
           other_pub_info(val).each do |pub_info|
             return_values << ModsDisplay::Values.new(:label => displayLabel(val) || pub_info_labels[pub_info.name.to_sym], :values => [pub_info.text.strip])
@@ -42,7 +47,111 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     end
     return_values
   end
-
+  def dates(element)
+    date_field_keys.map do |date_field|
+      if element.respond_to?(date_field)
+        elements = element.send(date_field)
+        unless elements.empty?
+          ModsDisplay::Values.new(:label => displayLabel(element) || pub_info_labels[elements.first.name.to_sym], :values => parse_dates(elements))
+        end
+      end
+    end.compact
+  end
+  def parse_dates(date_field)
+    apply_date_qualifier_decoration dedup_dates join_date_ranges date_field
+  end
+  def join_date_ranges(date_fields)
+    if dates_are_range?(date_fields)
+      start_date = date_fields.find{|d| d.attributes["point"] && d.attributes["point"].value == "start"}
+      end_date = date_fields.find{|d| d.attributes["point"] && d.attributes["point"].value == "end"}
+      date_fields.map do |date|
+        date = date.clone # clone the date object so we don't append the same one
+        if normalize_date(date.text) == start_date.text
+          date.content = [start_date.text, end_date.text].join("-")
+          date
+        elsif normalize_date(date.text) != end_date.text
+          date
+        end
+      end.compact
+    elsif dates_are_open_range?(date_fields)
+      start_date = date_fields.find{|d| d.attributes["point"] && d.attributes["point"].value == "start"}
+      date_fields.map do |date|
+        date = date.clone # clone the date object so we don't append the same one
+        if date.text == start_date.text
+          date.content = "#{start_date.text}-"
+        end
+        date
+      end
+    else
+      date_fields
+    end
+  end
+  def apply_date_qualifier_decoration(date_fields)
+    return_fields = date_fields.map do |date|
+      date = date.clone
+      if date_is_approximate?(date)
+        date.content = "c#{date.text}"
+      elsif date_is_questionable?(date)
+        date.content = "[#{date.text}?]"
+      elsif date_is_inferred?(date)
+        date.content = "[#{date.text}]"
+      end
+      date
+    end
+    return_fields.map{|d| d.text }
+  end
+  def date_is_approximate?(date_field)
+    date_field.attributes["qualifier"] and
+    date_field.attributes["qualifier"].respond_to?(:value) and
+    date_field.attributes["qualifier"].value == "approximate"
+  end
+  def date_is_questionable?(date_field)
+    date_field.attributes["qualifier"] and
+    date_field.attributes["qualifier"].respond_to?(:value) and
+    date_field.attributes["qualifier"].value == "questionable"
+  end
+  def date_is_inferred?(date_field)
+    date_field.attributes["qualifier"] and
+    date_field.attributes["qualifier"].respond_to?(:value) and
+    date_field.attributes["qualifier"].value == "inferred"
+  end
+  def dates_are_open_range?(date_fields)
+    date_fields.any? do |field|
+      field.attributes["point"] and
+      field.attributes["point"].respond_to?(:value) and
+      field.attributes["point"].value == "start"
+    end and !date_fields.any? do |field|
+      field.attributes["point"] and
+      field.attributes["point"].respond_to?(:value) and
+      field.attributes["point"].value == "end"
+    end
+  end
+  def dates_are_range?(date_fields)
+    attributes = date_fields.map do |date|
+      if date.attributes["point"].respond_to?(:value)
+        date.attributes["point"].value
+      end
+    end
+    attributes.include?("start") and
+    attributes.include?("end")
+  end
+  def dedup_dates(date_fields)
+    date_text = date_fields.map{|d| normalize_date(d.text) }
+    if date_text != date_text.uniq
+      if date_fields.find{ |d| d.attributes["qualifier"].respond_to?(:value) }
+        [date_fields.find{ |d| d.attributes["qualifier"].respond_to?(:value) }]
+      elsif date_fields.find{ |d| !d.attributes["encoding"] }
+        [date_fields.find{ |d| !d.attributes["encoding"] }]
+      else
+        [date_fields.first]
+      end
+    else
+      date_fields
+    end
+  end
+  def normalize_date(date)
+    date.strip.gsub(/^\s*c\s*|\[|\]|\?/, "")
+  end
   def other_pub_info(element)
     element.children.select do |child|
       pub_info_parts.include?(child.name.to_sym)
@@ -59,7 +168,11 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   private
 
   def pub_info_parts
-    pub_info_labels.keys
+    [:issuance, :frequency]
+  end
+
+  def date_field_keys
+    [:dateCreated, :dateCaptured, :dateValid, :dateModified, :copyrightDate]
   end
 
   def pub_info_labels
