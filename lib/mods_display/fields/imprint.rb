@@ -2,26 +2,26 @@ class ModsDisplay::Imprint < ModsDisplay::Field
 
   def fields
     return_fields = []
-    @value.each do |val|
-      if imprint_display_form(val)
-        return_fields << imprint_display_form(val)
+    @values.each do |value|
+      if imprint_display_form(value)
+        return_fields << imprint_display_form(value)
       else
         edition = nil
         place = nil
         publisher = nil
         placePub = nil
-        edition = val.edition.map do |e|
+        edition = value.edition.map do |e|
           e.text unless e.text.strip.empty?
         end.compact.join(" ").strip
-        place = val.place.map do |p|
+        place = value.place.map do |p|
           p.text unless p.text.strip.empty?
-        end.compact.join(" : ").strip unless val.place.text.strip.empty?
-        publisher = val.publisher.map do |p|
+        end.compact.join(" : ").strip unless value.place.text.strip.empty?
+        publisher = value.publisher.map do |p|
           p.text unless p.text.strip.empty?
-        end.compact.join(" : ").strip unless val.publisher.text.strip.empty?
+        end.compact.join(" : ").strip unless value.publisher.text.strip.empty?
         parts = ["dateIssued", "dateOther"].map do |date_field_name|
-          if val.respond_to?(date_field_name.to_sym)
-            parse_dates(val.send(date_field_name.to_sym))
+          if value.respond_to?(date_field_name.to_sym)
+            parse_dates(value.send(date_field_name.to_sym))
           end
         end.flatten.map do |date|
           date.strip unless date.strip.empty?
@@ -33,14 +33,14 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         editionPlace = [edition, placePub].compact.join(" - ")
         editionPlace = nil if editionPlace.strip.empty?
         unless [editionPlace, parts].compact.join(", ").strip.empty?
-          return_fields << ModsDisplay::Values.new(:label => displayLabel(val) || "Imprint", :values => [[editionPlace, parts].compact.join(", ")])
+          return_fields << ModsDisplay::Values.new(:label => displayLabel(value) || "Imprint", :values => [[editionPlace, parts].compact.join(", ")])
         end
-        if dates(val).length > 0
-          return_fields.concat(dates(val))
+        if dates(value).length > 0
+          return_fields.concat(dates(value))
         end
-        if other_pub_info(val).length > 0
-          other_pub_info(val).each do |pub_info|
-            return_fields << ModsDisplay::Values.new(:label => displayLabel(val) || pub_info_labels[pub_info.name.to_sym], :values => [pub_info.text.strip])
+        if other_pub_info(value).length > 0
+          other_pub_info(value).each do |pub_info|
+            return_fields << ModsDisplay::Values.new(:label => displayLabel(value) || pub_info_labels[pub_info.name.to_sym], :values => [pub_info.text.strip])
           end
         end
       end

@@ -1,8 +1,8 @@
 class ModsDisplay::Note < ModsDisplay::Field
   
   def fields
-    return_fields = note_fields.map do |val|
-      ModsDisplay::Values.new(:label => displayLabel(val) || note_label(val), :values => [val.text])
+    return_fields = note_fields.map do |value|
+      ModsDisplay::Values.new(:label => displayLabel(value) || note_label(value), :values => [value.text])
     end
     collapse_fields(return_fields)
   end
@@ -11,10 +11,10 @@ class ModsDisplay::Note < ModsDisplay::Field
   private
 
   def note_fields
-    @value.select do |val|
-      (!val.attributes["type"].respond_to?(:value) or
-         (val.attributes["type"].respond_to?(:value) and
-            val.attributes["type"].value.downcase != "contact"))
+    @values.select do |value|
+      (!value.attributes["type"].respond_to?(:value) or
+         (value.attributes["type"].respond_to?(:value) and
+            value.attributes["type"].value.downcase != "contact"))
     end
   end
 

@@ -2,9 +2,9 @@ class ModsDisplay::Subject < ModsDisplay::Field
   
   def fields
     return_values = []
-    @value.each do |val|
+    @values.each do |value|
       return_text = []
-      selected_subjects(val).each do |child|
+      selected_subjects(value).each do |child|
         if self.respond_to?(:"process_#{child.name}")
           return_text << self.send(:"process_#{child.name}", child) unless self.send(:"process_#{child.name}", child).to_s.empty?
         else

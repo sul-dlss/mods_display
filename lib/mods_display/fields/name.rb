@@ -1,24 +1,24 @@
 class ModsDisplay::Name < ModsDisplay::Field
 
   def fields
-    return_fields = @value.map do |val|
+    return_fields = @values.map do |value|
       role = nil
       person = nil
-      if val.role.length > 0 and val.role.roleTerm.length > 0
-        role = val.role.roleTerm.find do |term|
+      if value.role.length > 0 and value.role.roleTerm.length > 0
+        role = value.role.roleTerm.find do |term|
           term.attributes["type"].respond_to?(:value) and
           term.attributes["type"].value == "text"
         end
       end
-      if val.displayForm.length > 0
-        person = ModsDisplay::Name::Person.new(:name => val.displayForm.text, :role => role)
+      if value.displayForm.length > 0
+        person = ModsDisplay::Name::Person.new(:name => value.displayForm.text, :role => role)
       else
-        name_parts = val.namePart.map do |name_part|
+        name_parts = value.namePart.map do |name_part|
           name_part.text
         end.join(", ")
         person = ModsDisplay::Name::Person.new(:name => name_parts, :role => role) unless name_parts.empty?
       end
-      ModsDisplay::Values.new(:label => displayLabel(val) || name_label(val), :values => [person]) if person
+      ModsDisplay::Values.new(:label => displayLabel(value) || name_label(value), :values => [person]) if person
     end.compact
     collapse_fields(return_fields)
   end

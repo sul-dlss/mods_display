@@ -1,9 +1,9 @@
 class ModsDisplay::Format < ModsDisplay::Field
 
   def fields
-    return [] if @value.text.strip.empty?
-    return_fields = @value.map do |val|
-      ModsDisplay::Values.new(:label => displayLabel(val) || "Format", :values => [displayForm(val) || val.text])
+    return [] if @values.text.strip.empty?
+    return_fields = @values.map do |value|
+      ModsDisplay::Values.new(:label => displayLabel(value) || "Format", :values => [displayForm(value) || value.text])
     end
     collapse_fields(return_fields)
   end

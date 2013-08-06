@@ -2,27 +2,27 @@ class ModsDisplay::Title < ModsDisplay::Field
 
   def fields
     return_values = []
-    @value.each do |val|
-      if displayForm(val)
-        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [displayForm(val)])
+    @values.each do |value|
+      if displayForm(value)
+        return_values << ModsDisplay::Values.new(:label => displayLabel(value) || title_label(value), :values => [displayForm(value)])
       else
         nonSort = nil
         title = nil
         subTitle = nil
-        nonSort = val.nonSort.text.strip unless val.nonSort.text.strip.empty?
-        title = val.title.text.strip unless val.title.text.strip.empty?
-        subTitle = val.subTitle.text unless val.subTitle.text.strip.empty?
+        nonSort = value.nonSort.text.strip unless value.nonSort.text.strip.empty?
+        title = value.title.text.strip unless value.title.text.strip.empty?
+        subTitle = value.subTitle.text unless value.subTitle.text.strip.empty?
         preSubTitle = [nonSort, title].compact.join(" ")
         preSubTitle = nil if preSubTitle.strip.empty?
         preParts = [preSubTitle, subTitle].compact.join(" : ")
         preParts = nil if preParts.strip.empty?
-        parts = val.children.select do |child|
+        parts = value.children.select do |child|
           ["partName", "partNumber"].include?(child.name)
         end.map do |child|
           child.text
-        end.compact.join(parts_delimiter(val))
+        end.compact.join(parts_delimiter(value))
         parts = nil if parts.strip.empty?
-        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [[preParts, parts].compact.join(". ")])
+        return_values << ModsDisplay::Values.new(:label => displayLabel(value) || title_label(value), :values => [[preParts, parts].compact.join(". ")])
       end
     end
     return_values

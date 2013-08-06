@@ -1,8 +1,8 @@
 class ModsDisplay::Description < ModsDisplay::Field
 
   def fields
-    return_fields = description_fields.map do |val|
-      ModsDisplay::Values.new(:label => description_label(val), :values => [val.text])
+    return_fields = description_fields.map do |value|
+      ModsDisplay::Values.new(:label => description_label(value), :values => [value.text])
     end
     collapse_fields(return_fields)
   end
@@ -14,7 +14,7 @@ class ModsDisplay::Description < ModsDisplay::Field
   private
 
   def description_fields
-    @value.children.select do |child|
+    @values.children.select do |child|
       labels.keys.include?(child.name.to_sym)
     end
   end

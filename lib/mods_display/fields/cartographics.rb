@@ -1,11 +1,11 @@
 class ModsDisplay::Cartographics < ModsDisplay::Field
 
   def fields
-    return nil if @value.nil?
+    return nil if @values.nil?
     return_fields = []
-    @value.each do |val|
-      if val.respond_to?(:cartographics)
-        val.cartographics.each do |field|
+    @values.each do |value|
+      if value.respond_to?(:cartographics)
+        value.cartographics.each do |field|
           scale = field.scale.empty? ? "Scale not given" : field.scale.text
           projection = field.projection.empty? ? nil : field.projection.text
           coordinates = field.coordinates.empty? ? nil : field.coordinates.text

@@ -1,21 +1,21 @@
 # encoding: utf-8
 class ModsDisplay::Field
-  def initialize(value, config, klass)
-    @value = value
+  def initialize(values, config, klass)
+    @values = values
     @config = config
     @klass = klass
   end
 
   def fields
-    return_fields = @value.map do |val|
-      ModsDisplay::Values.new(:label => displayLabel(val) || label, :values => [displayForm(@value) || val.text].flatten)
+    return_fields = @values.map do |value|
+      ModsDisplay::Values.new(:label => displayLabel(value) || label, :values => [displayForm(@values) || value.text].flatten)
     end
     collapse_fields(return_fields)
   end
 
   def label
-    return nil if @value.nil?
-    displayLabel(@value.first)
+    return nil if @values.nil?
+    displayLabel(@values.first)
   end
 
   def to_html

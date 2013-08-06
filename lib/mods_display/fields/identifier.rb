@@ -1,8 +1,8 @@
 class ModsDisplay::Identifier < ModsDisplay::Field
 
   def fields
-    return_fields = @value.map do |val|
-      ModsDisplay::Values.new(:label => displayLabel(val) || identifier_label(val), :values => [val.text])
+    return_fields = @values.map do |value|
+      ModsDisplay::Values.new(:label => displayLabel(value) || identifier_label(value), :values => [value.text])
     end
     collapse_fields(return_fields)
   end
