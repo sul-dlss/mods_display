@@ -7,44 +7,15 @@ class ModsDisplay::Field
   end
 
   def fields
-    return_values = []
-    current_label = nil
-    prev_label = nil
-    buffer = []
-    @value.each_with_index do |val, index|
-      current_label = displayLabel(val)
-      current_text = (text || val.text).strip
-      if @value.length == 1
-        return_values << ModsDisplay::Values.new(:label => current_label, :values => [current_text])
-      elsif index == (@value.length-1)
-        # need to deal w/ when we have a last element but we have separate labels in the buffer.
-        if current_label != prev_label
-          return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
-          return_values << ModsDisplay::Values.new(:label => current_label, :values => [current_text])
-        else
-          buffer << current_text
-          return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten)
-        end
-      elsif prev_label and (current_label != prev_label)
-        return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
-        buffer = []
-      end
-      buffer << current_text
-      prev_label = current_label
+    return_fields = @value.map do |val|
+      ModsDisplay::Values.new(:label => displayLabel(val) || label, :values => [displayForm(@value) || val.text].flatten)
     end
-    return_values
+    collapse_fields(return_fields)
   end
 
   def label
     return nil if @value.nil?
     displayLabel(@value.first)
-  end
-
-  def text
-    return nil if @value.nil?
-    if displayForm(@value)
-      displayForm(@value).text
-    end
   end
 
   def to_html
@@ -78,7 +49,9 @@ class ModsDisplay::Field
   end
 
   def displayForm(element)
-    element.children.find{|c| c.name == "displayForm"}
+    return element unless element # basically return nil
+    display = element.children.find{|c| c.name == "displayForm"}
+    return display.text if display
   end
 
   def displayLabel(element)
@@ -129,6 +102,35 @@ class ModsDisplay::Field
       end
     end
     val
+  end
+
+  def collapse_fields(display_fields)
+    return_values = []
+    current_label = nil
+    prev_label = nil
+    buffer = []
+    display_fields.each_with_index do |field, index|
+      current_label = field.label
+      current_values = field.values
+      if display_fields.length == 1
+        return_values << ModsDisplay::Values.new(:label => current_label, :values => current_values)
+      elsif index == (display_fields.length-1)
+        # need to deal w/ when we have a last element but we have separate labels in the buffer.
+        if current_label != prev_label
+          return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
+          return_values << ModsDisplay::Values.new(:label => current_label, :values => current_values)
+        else
+          buffer.concat(current_values)
+          return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten)
+        end
+      elsif prev_label and (current_label != prev_label)
+        return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten)
+        buffer = []
+      end
+      buffer.concat(current_values)
+      prev_label = current_label
+    end
+    return_values
   end
 
 end

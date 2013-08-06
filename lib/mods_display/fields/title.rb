@@ -1,11 +1,10 @@
 class ModsDisplay::Title < ModsDisplay::Field
 
-  
   def fields
     return_values = []
     @value.each do |val|
       if displayForm(val)
-        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [displayForm(val).text])
+        return_values << ModsDisplay::Values.new(:label => displayLabel(val) || title_label(val), :values => [displayForm(val)])
       else
         nonSort = nil
         title = nil

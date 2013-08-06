@@ -1,10 +1,10 @@
 class ModsDisplay::Imprint < ModsDisplay::Field
 
   def fields
-    return_values = []
+    return_fields = []
     @value.each do |val|
       if imprint_display_form(val)
-        return_values << imprint_display_form(val)
+        return_fields << imprint_display_form(val)
       else
         edition = nil
         place = nil
@@ -33,19 +33,19 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         editionPlace = [edition, placePub].compact.join(" - ")
         editionPlace = nil if editionPlace.strip.empty?
         unless [editionPlace, parts].compact.join(", ").strip.empty?
-          return_values << ModsDisplay::Values.new(:label => displayLabel(val) || "Imprint", :values => [[editionPlace, parts].compact.join(", ")])
+          return_fields << ModsDisplay::Values.new(:label => displayLabel(val) || "Imprint", :values => [[editionPlace, parts].compact.join(", ")])
         end
         if dates(val).length > 0
-          return_values.concat(dates(val))
+          return_fields.concat(dates(val))
         end
         if other_pub_info(val).length > 0
           other_pub_info(val).each do |pub_info|
-            return_values << ModsDisplay::Values.new(:label => displayLabel(val) || pub_info_labels[pub_info.name.to_sym], :values => [pub_info.text.strip])
+            return_fields << ModsDisplay::Values.new(:label => displayLabel(val) || pub_info_labels[pub_info.name.to_sym], :values => [pub_info.text.strip])
           end
         end
       end
     end
-    return_values
+    collapse_fields(return_fields)
   end
   def dates(element)
     date_field_keys.map do |date_field|

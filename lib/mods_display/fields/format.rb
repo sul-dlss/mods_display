@@ -1,14 +1,11 @@
 class ModsDisplay::Format < ModsDisplay::Field
 
   def fields
-    return [] if (text.nil? and @value.text.strip.empty?)
-    return_values = @value.map{|v| v.text }
-    return_values = [text] unless text.nil?
-    [ModsDisplay::Values.new(:label => label || 'Format', :values => return_values)]
-  end
-
-  def text
-    return super unless super.nil?
+    return [] if @value.text.strip.empty?
+    return_fields = @value.map do |val|
+      ModsDisplay::Values.new(:label => displayLabel(val) || "Format", :values => [displayForm(val) || val.text])
+    end
+    collapse_fields(return_fields)
   end
 
   def to_html

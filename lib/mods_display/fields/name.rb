@@ -1,14 +1,9 @@
 class ModsDisplay::Name < ModsDisplay::Field
 
   def fields
-    return_values = []
-    current_label = nil
-    prev_label = nil
-    buffer = []
-    @value.each_with_index do |val, index|
-      current_label = (displayLabel(val) || name_label(val))
-      people = []
+    return_fields = @value.map do |val|
       role = nil
+      person = nil
       if val.role.length > 0 and val.role.roleTerm.length > 0
         role = val.role.roleTerm.find do |term|
           term.attributes["type"].respond_to?(:value) and
@@ -16,32 +11,16 @@ class ModsDisplay::Name < ModsDisplay::Field
         end
       end
       if val.displayForm.length > 0
-        people << ModsDisplay::Name::Person.new(:name => val.displayForm.text, :role => role)
+        person = ModsDisplay::Name::Person.new(:name => val.displayForm.text, :role => role)
       else
         name_parts = val.namePart.map do |name_part|
           name_part.text
         end.join(", ")
-        people << ModsDisplay::Name::Person.new(:name => name_parts, :role => role) unless name_parts.empty?
+        person = ModsDisplay::Name::Person.new(:name => name_parts, :role => role) unless name_parts.empty?
       end
-      if @value.length == 1
-        return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten) unless people.empty?
-      elsif index == (@value.length-1)
-        # need to deal w/ when we have a last element but we have separate labels in the buffer.
-        if current_label != prev_label
-          return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten) unless buffer.flatten.empty?
-          return_values << ModsDisplay::Values.new(:label => current_label, :values => people.flatten) unless people.empty?
-        else
-          buffer << people
-          return_values << ModsDisplay::Values.new(:label => current_label, :values => buffer.flatten) unless buffer.flatten.empty?
-        end
-      elsif prev_label and (current_label != prev_label)
-        return_values << ModsDisplay::Values.new(:label => prev_label, :values => buffer.flatten) unless buffer.flatten.empty?
-        buffer = []
-      end
-      buffer << people
-      prev_label = current_label
-    end
-    return_values
+      ModsDisplay::Values.new(:label => displayLabel(val) || name_label(val), :values => [person]) if person
+    end.compact
+    collapse_fields(return_fields)
   end
 
   def to_html

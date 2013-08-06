@@ -42,7 +42,7 @@ describe ModsDisplay::Imprint do
       mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint", "Date captured", "Issuance"]
     end
     it "should use the displayLabel when available" do
-       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel", "IssuanceLabel", "IssuanceLabel"]
+       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel", "IssuanceLabel"]
     end
   end
 

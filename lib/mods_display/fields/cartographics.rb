@@ -2,7 +2,7 @@ class ModsDisplay::Cartographics < ModsDisplay::Field
 
   def fields
     return nil if @value.nil?
-    return_values = []
+    return_fields = []
     @value.each do |val|
       if val.respond_to?(:cartographics)
         val.cartographics.each do |field|
@@ -10,12 +10,12 @@ class ModsDisplay::Cartographics < ModsDisplay::Field
           projection = field.projection.empty? ? nil : field.projection.text
           coordinates = field.coordinates.empty? ? nil : field.coordinates.text
           post_scale = [projection, coordinates].compact.length > 0 ? [projection, coordinates].compact.join(" ") : nil
-          return_values << ModsDisplay::Values.new({:label => (displayLabel(field) || label || "Map data"),
+          return_fields << ModsDisplay::Values.new({:label => (displayLabel(field) || label || "Map data"),
                                                     :values => [[scale, post_scale].compact.join(" ; ")]})
         end
       end
     end
-    return_values
+    collapse_fields(return_fields)
   end
 
 end

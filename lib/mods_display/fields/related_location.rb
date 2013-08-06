@@ -1,13 +1,12 @@
 class ModsDisplay::RelatedLocation < ModsDisplay::Field
 
   def fields
-    return_values = []
-    @value.each do |val|
+    return_fields = @value.map do |val|
       if val.location.length > 0 and val.titleInfo.length < 1
-        return_values << ModsDisplay::Values.new(:label => displayLabel(val), :values => [val.location.text.strip])
+        ModsDisplay::Values.new(:label => displayLabel(val), :values => [val.location.text.strip])
       end
-    end
-    return_values
+    end.compact
+    collapse_fields(return_fields)
   end
 
   def displayLabel(element)
