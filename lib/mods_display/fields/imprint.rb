@@ -90,7 +90,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     return_fields = date_fields.map do |date|
       date = date.clone
       if date_is_approximate?(date)
-        date.content = "c#{date.text}"
+        date.content = "[ca. #{date.text}]"
       elsif date_is_questionable?(date)
         date.content = "[#{date.text}?]"
       elsif date_is_inferred?(date)

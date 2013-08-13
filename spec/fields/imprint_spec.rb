@@ -117,7 +117,7 @@ describe ModsDisplay::Imprint do
       it "should prepend a 'c' to approximate dates" do
         fields = mods_display_imprint(@approximate_date).fields
         fields.length.should == 1
-        fields.first.values.should == ["c1820"]
+        fields.first.values.should == ["[ca. 1820]"]
       end
       it "should append a '?' to a questionable dates and wrap them in square-brackets" do
         fields = mods_display_imprint(@questionable_date).fields
