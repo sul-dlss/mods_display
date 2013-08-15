@@ -20,6 +20,7 @@ describe ModsDisplay::Imprint do
     @open_date_range = Stanford::Mods::Record.new.from_str(open_date_range, false).origin_info
     @dup_qualified_date = Stanford::Mods::Record.new.from_str(dup_qualified_date, false).origin_info
     @dup_unencoded_date = Stanford::Mods::Record.new.from_str(dup_unencoded_date, false).origin_info
+    @dup_copyright_date = Stanford::Mods::Record.new.from_str(dup_copyright_date, false).origin_info
     @dup_date = Stanford::Mods::Record.new.from_str(dup_date, false).origin_info
     @approximate_date = Stanford::Mods::Record.new.from_str(approximate_date, false).origin_info
     @questionable_date = Stanford::Mods::Record.new.from_str(questionable_date, false).origin_info
@@ -106,6 +107,11 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(@dup_unencoded_date).fields
         fields.length.should == 1
         fields.first.values.should == ["[ca. 1820]"]
+      end
+      it "should handle copyright dates correctly" do
+        fields = mods_display_imprint(@dup_copyright_date).fields
+        fields.length.should == 1
+        fields.first.values.should == ["c1820"]
       end
       it "should only return one when no attributes are present" do
         fields = mods_display_imprint(@dup_date).fields

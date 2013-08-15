@@ -121,6 +121,16 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def dup_copyright_date
+    <<-MODS
+      <mods>
+        <originInfo>
+          <dateCreated encoding="marc">1820</dateCreated>
+          <dateCreated>c1820</dateCreated>
+        </originInfo>
+      </mods>
+    MODS
+  end
   def dup_date
     <<-MODS
       <mods>
