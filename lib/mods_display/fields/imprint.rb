@@ -150,7 +150,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     end
   end
   def normalize_date(date)
-    date.strip.gsub(/^\s*c\s*|\[|\]|\?/, "")
+    date.strip.gsub(/^\s*\[*ca\.\s*|\[|\]|\?/, "")
   end
   def other_pub_info(element)
     element.children.select do |child|

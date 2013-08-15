@@ -105,7 +105,7 @@ describe ModsDisplay::Imprint do
       it "should use the non-encoded date when prsent" do
         fields = mods_display_imprint(@dup_unencoded_date).fields
         fields.length.should == 1
-        fields.first.values.should == ["c1820"]
+        fields.first.values.should == ["[ca. 1820]"]
       end
       it "should only return one when no attributes are present" do
         fields = mods_display_imprint(@dup_date).fields

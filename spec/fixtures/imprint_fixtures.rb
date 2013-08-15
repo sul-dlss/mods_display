@@ -116,7 +116,7 @@ module ImprintFixtures
       <mods>
         <originInfo>
           <dateCreated encoding="marc">1820</dateCreated>
-          <dateCreated>c1820</dateCreated>
+          <dateCreated>[ca. 1820]</dateCreated>
         </originInfo>
       </mods>
     MODS
