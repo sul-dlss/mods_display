@@ -210,6 +210,12 @@ module ImprintFixtures
              <placeTerm type="text">[Amsterdam]</placeTerm>
            </place>
         </originInfo>
+        <originInfo>
+          <place>
+            <placeTerm type="code">us</placeTerm>
+            <placeTerm type="text">[United States]</placeTerm>
+          </place>
+        </originInfo>
       </mods>
     MODS
   end
