@@ -13,7 +13,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         edition = value.edition.map do |e|
           e.text unless e.text.strip.empty?
         end.compact.join(" ").strip
-        place = value.place.map do |p|
+        place = place_terms(value).map do |p|
           p.text unless p.text.strip.empty?
         end.compact.join(" : ").strip unless value.place.text.strip.empty?
         publisher = value.publisher.map do |p|
@@ -157,7 +157,15 @@ class ModsDisplay::Imprint < ModsDisplay::Field
       pub_info_parts.include?(child.name.to_sym)
     end
   end
-  
+  def place_terms(element)
+    return [] unless element.respond_to?(:place) and
+                     element.place.respond_to?(:placeTerm)
+    element.place.placeTerm.select do |term|
+      !term.attributes["type"] or
+      !term.attributes["type"].respond_to?(:value) or
+       term.attributes["type"].value != "code"
+    end.compact
+  end
   def imprint_display_form(element)
     display_form = element.children.find do |child|
       child.name == "displayForm"

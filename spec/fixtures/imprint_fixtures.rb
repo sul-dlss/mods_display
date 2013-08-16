@@ -4,7 +4,7 @@ module ImprintFixtures
       <mods>
         <originInfo>
           <edition>An edition</edition>
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <dateIssued>An Issue Date</dateIssued>
           <dateOther>Another Date</dateOther>
@@ -16,7 +16,7 @@ module ImprintFixtures
     <<-MODS
       <mods>
         <originInfo>
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <dateCreated>A Create Date</dateCreated>
           <dateIssued>An Issue Date</dateIssued>
@@ -42,7 +42,7 @@ module ImprintFixtures
     <<-MODS
       <mods>
         <originInfo>
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <issuance>The Issuance</issuance>
           <dateCaptured>The Capture Date</dateCaptured>
@@ -54,12 +54,12 @@ module ImprintFixtures
     <<-MODS
       <mods>
         <originInfo>
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <displayForm>The Display Form</displayForm>
         </originInfo>
         <originInfo displayLabel="TheLabel">
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <displayForm>The Display Form</displayForm>
         </originInfo>
@@ -71,11 +71,11 @@ module ImprintFixtures
       <mods>
         <originInfo displayLabel="TheLabel">
           <edition>The edition</edition>
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
         </originInfo>
         <originInfo displayLabel="IssuanceLabel">
-          <place>A Place</place>
+          <place><placeTerm>A Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <issuance>The Edition</issuance>
         </originInfo>
@@ -195,6 +195,20 @@ module ImprintFixtures
           <dateIssued>[1820]</dateIssued>
           <dateIssued point="start">1820</dateIssued>
           <dateIssued point="end">1825</dateIssued>
+        </originInfo>
+      </mods>
+    MODS
+  end
+  def encoded_place
+    <<-MODS
+      <mods>
+        <originInfo>
+          <place>
+             <placeTerm type="code">ne</placeTerm>
+           </place>
+           <place>
+             <placeTerm type="text">[Amsterdam]</placeTerm>
+           </place>
         </originInfo>
       </mods>
     MODS

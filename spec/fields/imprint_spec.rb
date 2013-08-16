@@ -28,6 +28,7 @@ describe ModsDisplay::Imprint do
     @three_imprint_dates = Stanford::Mods::Record.new.from_str(three_imprint_dates, false).origin_info
     @qualified_imprint_date = Stanford::Mods::Record.new.from_str(qualified_imprint_date, false).origin_info
     @imprint_date_range = Stanford::Mods::Record.new.from_str(imprint_date_range, false).origin_info
+    @encoded_place = Stanford::Mods::Record.new.from_str(encoded_place, false).origin_info
   end
 
   describe "labels" do
@@ -135,6 +136,13 @@ describe ModsDisplay::Imprint do
         fields.length.should == 1
         fields.first.values.should == ["[1820]"]
       end
+    end
+  end
+  describe "place processing" do
+    it "should exclude encoded places" do
+      fields = mods_display_imprint(@encoded_place).fields
+      fields.length.should == 1
+      fields.first.values.should == ["[Amsterdam]"]
     end
   end
   describe "to_html" do
