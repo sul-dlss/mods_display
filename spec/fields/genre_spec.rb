@@ -6,7 +6,8 @@ end
 
 describe ModsDisplay::Abstract do
   before(:all) do
-    @genre = Stanford::Mods::Record.new.from_str("<mods><genre>Map Data</abstract></genre>", false).genre
+    @genre = Stanford::Mods::Record.new.from_str("<mods><genre>Map Data</genre></mods>", false).genre
+    @downcase = Stanford::Mods::Record.new.from_str("<mods><genre>map data</genre></mods>", false).genre
     @display_label = Stanford::Mods::Record.new.from_str("<mods><genre displayLabel='Special label'>Catographic</genre></mods>", false).genre
   end
   describe "labels" do
@@ -19,6 +20,13 @@ describe ModsDisplay::Abstract do
       fields = mods_display_genre(@display_label).fields
       fields.length.should == 1
       fields.first.label.should == "Special label"
+    end
+  end
+  describe "fields" do
+    it "should capitalize the first letter in a genre" do
+      fields = mods_display_genre(@downcase).fields
+      fields.length.should == 1
+      fields.first.values.should == ["Map data"]
     end
   end
 end
