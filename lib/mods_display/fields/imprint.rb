@@ -58,11 +58,20 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     end.compact
   end
   def parse_dates(date_field)
-    apply_date_qualifier_decoration dedup_dates join_date_ranges ignore_bad_dates date_field
+    apply_date_qualifier_decoration dedup_dates join_date_ranges process_encoded_dates ignore_bad_dates date_field
   end
   def ignore_bad_dates(date_fields)
     date_fields.select do |date_field|
       date_field.text.strip != "9999"
+    end
+  end
+  def process_encoded_dates(date_fields)
+    date_fields.map do |date_field|
+      if date_is_w3cdtf?(date_field)
+        process_w3cdtf_date(date_field)
+      else
+        date_field
+      end
     end
   end
   def join_date_ranges(date_fields)
@@ -139,6 +148,22 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     end
     attributes.include?("start") and
     attributes.include?("end")
+  end
+  def date_is_w3cdtf?(date_field)
+    date_field.attributes["encoding"] and
+    date_field.attributes["encoding"].respond_to?(:value) and
+    date_field.attributes["encoding"].value.downcase == "w3cdtf"
+  end
+  def process_w3cdtf_date(date_field)
+    date_field = date_field.clone
+    date_field.content = if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
+      Date.parse(date_field.text).strftime(@config.full_date_format)
+    elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
+      Date.parse("#{date_field.text}-01").strftime(@config.short_date_format)
+    else
+      date_field.content
+    end
+    date_field
   end
   def dedup_dates(date_fields)
     date_text = date_fields.map{|d| normalize_date(d.text) }

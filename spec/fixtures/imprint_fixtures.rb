@@ -219,6 +219,18 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def encoded_dates
+    <<-MODS
+      <mods>
+        <originInfo>
+          <dateOther encoding="w3cDtF">2013</dateOther>
+          <dateCreated encoding="W3CdTf">2013-07-10</dateCreated>
+          <dateCaptured encoding="W3CDTF">2013-07</dateCaptured>
+          <dateModified encoding="w3cdtf">Jul. 22, 2013</dateModified>
+        </originInfo>
+      </mods>
+    MODS
+  end
   def bad_dates
     <<-MODS
       <mods>

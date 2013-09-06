@@ -4,7 +4,10 @@ require "fixtures/imprint_fixtures"
 include ImprintFixtures
 
 def mods_display_imprint(mods_record)
-  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new, mock("controller"))
+end
+def mods_display_format_date_imprint(mods_record)
+  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new{full_date_format "(%Y) %B, %d"; short_date_format "%B (%Y)"}, mock("controller"))
 end
 
 describe ModsDisplay::Imprint do
@@ -29,6 +32,7 @@ describe ModsDisplay::Imprint do
     @qualified_imprint_date = Stanford::Mods::Record.new.from_str(qualified_imprint_date, false).origin_info
     @imprint_date_range = Stanford::Mods::Record.new.from_str(imprint_date_range, false).origin_info
     @encoded_place = Stanford::Mods::Record.new.from_str(encoded_place, false).origin_info
+    @encoded_dates = Stanford::Mods::Record.new.from_str(encoded_dates, false).origin_info
     @bad_dates = Stanford::Mods::Record.new.from_str(bad_dates, false).origin_info
   end
 
@@ -136,6 +140,48 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(@inferred_date).fields
         fields.length.should == 1
         fields.first.values.should == ["[1820]"]
+      end
+    end
+    describe "encoded dates" do
+      describe "W3CDTF" do
+        it "should handle single year dates properly" do
+          fields = mods_display_imprint(@encoded_dates).fields
+          fields.length.should == 4
+          fields.find do |field|
+            field.label == "Imprint"
+          end.values.should == ["2013"]
+        end
+        it "should handle month+year dates properly" do
+          fields = mods_display_imprint(@encoded_dates).fields
+          fields.length.should == 4
+          fields.find do |field|
+            field.label == "Date captured"
+          end.values.should == ["July 2013"]
+        end
+        it "should handle full dates properly" do
+          fields = mods_display_imprint(@encoded_dates).fields
+          fields.length.should == 4
+          fields.find do |field|
+            field.label == "Date created"
+          end.values.should == ["July 10, 2013"]
+        end
+        it "should not try to handle dates we can't parse" do
+          fields = mods_display_imprint(@encoded_dates).fields
+          fields.length.should == 4
+          fields.find do |field|
+            field.label == "Date modified"
+          end.values.should == ["Jul. 22, 2013"]
+        end
+        it "should accept date configurations" do
+          fields = mods_display_format_date_imprint(@encoded_dates).fields
+          fields.length.should == 4
+          fields.find do |field|
+            field.label == "Date created"
+          end.values.should == ["(2013) July, 10"]
+          fields.find do |field|
+            field.label == "Date captured"
+          end.values.should == ["July (2013)"]
+        end
       end
     end
     describe "bad dates" do
