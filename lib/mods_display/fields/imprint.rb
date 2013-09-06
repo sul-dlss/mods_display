@@ -58,7 +58,12 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     end.compact
   end
   def parse_dates(date_field)
-    apply_date_qualifier_decoration dedup_dates join_date_ranges date_field
+    apply_date_qualifier_decoration dedup_dates join_date_ranges ignore_bad_dates date_field
+  end
+  def ignore_bad_dates(date_fields)
+    date_fields.select do |date_field|
+      date_field.text.strip != "9999"
+    end
   end
   def join_date_ranges(date_fields)
     if dates_are_range?(date_fields)

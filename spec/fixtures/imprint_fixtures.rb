@@ -219,4 +219,21 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def bad_dates
+    <<-MODS
+      <mods>
+        <originInfo>
+          <place>
+             <placeTerm>United States</placeTerm>
+           </place>
+           <dateIssued>
+             9999
+           </dateIssued>
+           <dateModified>
+             9999
+           </dateModified>
+        </originInfo>
+      </mods>
+    MODS
+  end
 end

@@ -29,6 +29,7 @@ describe ModsDisplay::Imprint do
     @qualified_imprint_date = Stanford::Mods::Record.new.from_str(qualified_imprint_date, false).origin_info
     @imprint_date_range = Stanford::Mods::Record.new.from_str(imprint_date_range, false).origin_info
     @encoded_place = Stanford::Mods::Record.new.from_str(encoded_place, false).origin_info
+    @bad_dates = Stanford::Mods::Record.new.from_str(bad_dates, false).origin_info
   end
 
   describe "labels" do
@@ -135,6 +136,15 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(@inferred_date).fields
         fields.length.should == 1
         fields.first.values.should == ["[1820]"]
+      end
+    end
+    describe "bad dates" do
+      it "should ignore date values" do
+        fields = mods_display_imprint(@bad_dates).fields
+        fields.length.should == 2
+        fields.each do |field|
+          field.values.join.should_not include "9999"
+        end
       end
     end
   end
