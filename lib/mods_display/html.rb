@@ -2,7 +2,8 @@ class ModsDisplay::HTML
   attr_reader :title, :body
   def initialize(config, xml, klass)
     @config = config
-    @xml = xml
+    @stanford_mods = xml
+    @xml = xml.mods_ng_xml
     @klass = klass
   end
   
@@ -21,7 +22,8 @@ class ModsDisplay::HTML
     body_fields = mods_display_fields.dup
     body_fields[0] = :subTitle
     body_fields.each do |field_key|
-      unless mods_field(@xml, field_key).to_html.nil?
+      field = mods_field(@xml, field_key)
+      unless field.nil? or field.to_html.nil?
         output << mods_field(@xml, field_key).to_html
       end
     end
@@ -31,8 +33,9 @@ class ModsDisplay::HTML
   def to_html
     output = "<dl>"
     mods_display_fields.each do |field_key|
-      unless mods_field(@xml, field_key).to_html.nil?
-        output << mods_field(@xml, field_key).to_html
+      field = mods_field(@xml, field_key)
+      unless field.nil? or field.to_html.nil?
+        output << field.to_html
       end
     end
     output << "</dl>"
@@ -52,6 +55,8 @@ class ModsDisplay::HTML
     if xml.respond_to?(mods_display_field_mapping[field_key])
       field = xml.send(mods_display_field_mapping[field_key])
       ModsDisplay.const_get("#{field_key.slice(0,1).upcase}#{field_key.slice(1..-1)}").new(field, field_config(field_key), @klass)
+    else @stanford_mods.respond_to?(field_key)
+      ModsDisplay.const_get("#{field_key.slice(0,1).upcase}#{field_key.slice(1..-1)}").new(@stanford_mods, field_config(field_key), @klass)
     end
   end
   
@@ -64,7 +69,7 @@ class ModsDisplay::HTML
   end
   
   def mods_display_fields
-    [:title, :name, :language, :imprint, :resourceType, :genre, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location, :accessCondition]
+    [:title, :name, :language, :imprint, :resourceType, :genre, :format, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location, :accessCondition]
   end
   
   def mods_display_field_mapping
@@ -73,6 +78,7 @@ class ModsDisplay::HTML
     :name            => :plain_name,
     :resourceType    => :typeOfResource,
     :genre           => :genre,
+    :format          => :format,
     :imprint         => :origin_info,
     :language        => :language,
     :description     => :physical_description,

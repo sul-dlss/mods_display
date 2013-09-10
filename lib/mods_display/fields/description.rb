@@ -20,9 +20,7 @@ class ModsDisplay::Description < ModsDisplay::Field
   end
 
   def labels
-    {:form          => "Form",
-     :extent        => "Extent",
-     :digitalOrigin => "Digital origin",
+    {:digitalOrigin => "Digital origin",
      :note          => "Note"
      }
   end

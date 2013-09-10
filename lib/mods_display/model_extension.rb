@@ -8,6 +8,7 @@ module ModsDisplay::ModelExtension
         return if xml.nil?
         mods = Stanford::Mods::Record.new
         mods.from_str(xml, false)
+        mods
       end
     end
   end

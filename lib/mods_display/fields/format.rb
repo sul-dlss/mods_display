@@ -1,28 +1,35 @@
 class ModsDisplay::Format < ModsDisplay::Field
 
   def fields
-    return [] if @values.text.strip.empty?
-    return_fields = @values.map do |value|
-      ModsDisplay::Values.new(:label => displayLabel(value) || "Format", :values => [displayForm(value) || value.text])
+    return_fields = []
+    # if @values.respond_to?(:format) and
+    #    !@values.format.nil? and
+    #    !@values.format.empty?
+    #      return_fields << ModsDisplay::Values.new(:label => "Format",
+    #                                               :values => [decorate_formats(@values.format).join(", ")])
+    # end
+    unless @values.physical_description.nil?
+      @values.physical_description.each do |description|
+        unless description.form.nil? or description.form.empty?
+          return_fields << ModsDisplay::Values.new(:label => displayLabel(description) || "Format",
+                                                   :values => description.form.map{|f| f.text.strip }.uniq)
+        end
+        unless description.extent.nil? or description.extent.empty?
+          return_fields << ModsDisplay::Values.new(:label => displayLabel(description) || "Format",
+                                                   :values => [description.extent.text])
+        end
+      end
     end
     collapse_fields(return_fields)
   end
 
-  def to_html
-    return nil if @config.ignore?
-    output = ""
-    fields.each do |field|
-      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
-      output << "<dd#{value_class}>"
-        field.values.map do |val|
-          output << "<span class='#{self.class.format_class(val)}'>#{val}</span>"
-        end.join(@config.delimiter)
-      output << "</dd>"
-    end
-    output
-  end
-
   private
+
+  def decorate_formats(formats)
+    formats.map do |format|
+      "<span data-mods-display-format='#{self.class.format_class(format)}'>#{format}</span>"
+    end
+  end
 
   def self.format_class(format)
     return format if format.nil?
