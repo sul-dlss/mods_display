@@ -22,15 +22,15 @@ class ModsDisplay::Configuration
   end
 
   def genre &genre
-    @genre ||= ModsDisplay::Configuration::Base.new(&genre || Proc.new{})
+    @genre ||= ModsDisplay::Configuration::Genre.new(&genre || Proc.new{})
   end
 
   def format &format
-    @format ||= ModsDisplay::Configuration::Base.new(&format || Proc.new{})
+    @format ||= ModsDisplay::Configuration::Format.new(&format || Proc.new{})
   end
 
   def imprint &imprint
-    @imprint ||= ModsDisplay::Configuration::Base.new(&imprint || Proc.new{})
+    @imprint ||= ModsDisplay::Configuration::Imprint.new(&imprint || Proc.new{})
   end
 
   def language &language
@@ -87,5 +87,9 @@ class ModsDisplay::Configuration
 
   def location &location
     @location ||= ModsDisplay::Configuration::Base.new(&location || Proc.new{})
+  end
+
+  def access_condition &access_condition
+    @access_condition ||= ModsDisplay::Configuration::AccessCondition.new(&access_condition || Proc.new{})
   end
 end
