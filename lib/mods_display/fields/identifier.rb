@@ -27,6 +27,7 @@ class ModsDisplay::Identifier < ModsDisplay::Field
      "ismn"                      => "ISMN",
      "issue number"              => "Issue number",
      "lccn"                      => "LCCN",
+     "oclc"                      => "OCLC",
      "matrix number"             => "Matrix number",
      "music publisher"           => "Music publisher",
      "music plate"               => "Music plate",
