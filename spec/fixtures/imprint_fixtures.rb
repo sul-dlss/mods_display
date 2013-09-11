@@ -204,16 +204,21 @@ module ImprintFixtures
       <mods>
         <originInfo>
           <place>
-             <placeTerm type="code">ne</placeTerm>
+             <placeTerm type="code" authority="marccountry">ne</placeTerm>
            </place>
            <place>
-             <placeTerm type="text">[Amsterdam]</placeTerm>
+             <placeTerm type="text" authority="marccountry">[Amsterdam]</placeTerm>
            </place>
         </originInfo>
         <originInfo>
           <place>
             <placeTerm type="code">us</placeTerm>
             <placeTerm type="text">[United States]</placeTerm>
+          </place>
+        </originInfo>
+        <originInfo>
+          <place>
+            <placeTerm type="code" authority="marccountry">ne</placeTerm>
           </place>
         </originInfo>
       </mods>

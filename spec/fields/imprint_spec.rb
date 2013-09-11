@@ -198,7 +198,12 @@ describe ModsDisplay::Imprint do
     it "should exclude encoded places" do
       fields = mods_display_imprint(@encoded_place).fields
       fields.length.should == 1
-      fields.first.values.should == ["[Amsterdam]", "[United States]"]
+      fields.first.values.should == ["[Amsterdam]", "[United States]", "Netherlands"]
+    end
+    it "should translate encoded place if there isn't a text (or non-typed) value available" do
+      fields = mods_display_imprint(@encoded_place).fields
+      fields.length.should == 1
+      fields.first.values.should include "Netherlands"
     end
   end
   describe "to_html" do

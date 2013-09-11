@@ -1,5 +1,5 @@
 class ModsDisplay::Imprint < ModsDisplay::Field
-
+  include ModsDisplay::CountryCodes
   def fields
     return_fields = []
     @values.each do |value|
@@ -190,11 +190,30 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   def place_terms(element)
     return [] unless element.respond_to?(:place) and
                      element.place.respond_to?(:placeTerm)
-    element.place.placeTerm.select do |term|
-      !term.attributes["type"] or
+    if unencoded_place_terms?(element)
+      element.place.placeTerm.select do |term|
+        !term.attributes["type"].respond_to?(:value) or
+         term.attributes["type"].value == "text"
+      end.compact
+    else
+      element.place.placeTerm.map do |term|
+        if term.attributes["type"].respond_to?(:value) and
+           term.attributes["type"].value == "code" and
+           term.attributes["authority"].respond_to?(:value) and
+           term.attributes["authority"].value == "marccountry" and
+           country_codes.include?(term.text.strip)
+             term = term.clone
+             term.content = country_codes[term.text.strip]
+             term
+        end
+      end.compact
+    end
+  end
+  def unencoded_place_terms?(element)
+    element.place.placeTerm.any? do |term|
       !term.attributes["type"].respond_to?(:value) or
-       term.attributes["type"].value != "code"
-    end.compact
+             term.attributes["type"].value == "text"
+    end
   end
   def imprint_display_form(element)
     display_form = element.children.find do |child|
