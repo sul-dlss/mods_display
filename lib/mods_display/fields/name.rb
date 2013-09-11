@@ -1,15 +1,9 @@
 class ModsDisplay::Name < ModsDisplay::Field
-
+  include ModsDisplay::RelatorCodes
   def fields
     return_fields = @values.map do |value|
-      role = nil
+      role = process_role(value)
       person = nil
-      if value.role.length > 0 and value.role.roleTerm.length > 0
-        role = value.role.roleTerm.find do |term|
-          term.attributes["type"].respond_to?(:value) and
-          term.attributes["type"].value == "text"
-        end
-      end
       if value.displayForm.length > 0
         person = ModsDisplay::Name::Person.new(:name => value.displayForm.text, :role => role)
       else
@@ -61,6 +55,36 @@ class ModsDisplay::Name < ModsDisplay::Field
       ["author", "aut", "creator", "cre", ""].include?(element.role.roleTerm.text.downcase)
     rescue
       false
+    end
+  end
+
+  def process_role(element)
+    if element.role.length > 0 and element.role.roleTerm.length > 0
+      if unencoded_role_term?(element)
+        element.role.roleTerm.find do |term|
+          !term.attributes["type"].respond_to?(:value) or
+           term.attributes["type"].value == "text"
+        end
+      else
+        element.role.roleTerm.map do |term|
+          if term.attributes["type"].respond_to?(:value) and
+             term.attributes["type"].value == "code" and
+             term.attributes["authority"].respond_to?(:value) and
+             term.attributes["authority"].value == "marcrelator" and
+             relator_codes.include?(term.text.strip)
+               term = term.clone
+               term.content = relator_codes[term.text.strip]
+               term
+          end
+        end.compact.first
+      end
+    end
+  end
+
+  def unencoded_role_term?(element)
+    element.role.roleTerm.any? do |term|
+      !term.attributes["type"].respond_to?(:value) or
+       term.attributes["type"].value == "text"
     end
   end
 

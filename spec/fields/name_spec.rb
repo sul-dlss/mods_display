@@ -19,6 +19,7 @@ describe ModsDisplay::Language do
     @blank_name = Stanford::Mods::Record.new.from_str("<mods><name><namePart/><role><roleTerm></roleTerm></role></name></mods>", false).plain_name
     @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name
     @contributor = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm>lithographer</roleTerm></role></name></mods>", false).plain_name
+    @encoded_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='code' authority='marcrelator'>ltg</roleTerm></role></name></mods>", false).plain_name
     @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name
     @collapse_label = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name></mods>", false).plain_name
     @complex_labels = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name><name type='conference'><namePart>John Dough</namePart></name><name><namePart>Jane Dough</namePart></name></mods>", false).plain_name
@@ -50,6 +51,12 @@ describe ModsDisplay::Language do
       fields.first.values.length.should == 1
       fields.first.values.first.should be_a(ModsDisplay::Name::Person)
       fields.first.values.first.role.should == "Depicted"
+    end
+    it "should decode encoded roleTerms when no text (or non-typed) roleTerm is available" do
+      fields = mods_display_name(@encoded_role).fields
+      fields.length.should == 1
+      fields.first.values.length.should == 1
+      fields.first.values.first.to_s.should == "John Doe (Lithographer)"
     end
     it "should not add blank names" do
       mods_display_name(@blank_name).fields.should == []
