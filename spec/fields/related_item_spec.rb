@@ -10,12 +10,20 @@ describe ModsDisplay::RelatedItem do
     @linked_item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>A Related Item</titleInfo><location><url>http://library.stanford.edu/</url></location></relatedItem></mods>", false).related_item
     @collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>This is a Collection</titleInfo><typeOfResource collection='yes' /></relatedItem></mods>", false).related_item
     @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Item'><titleInfo>A Related Item</titleInfo></relatedItem></mods>", false).related_item
+    @location = Stanford::Mods::Record.new.from_str("<mods><relatedItem><location>The Location</location></relatedItem></mods>", false).related_item
+    @reference = Stanford::Mods::Record.new.from_str("<mods><relatedItem type='isReferencedBy'><titleInfo>The title</titleInfo><note>124</note><originInfo><dateOther>DATE</dateOther></originInfo></relatedItem></mods>", false).related_item
     @blank_item = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo><title></title></titleInfo><location><url></url></location></relatedItem></mods>", false).related_item
     @multi_items = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo><title>Library</title></titleInfo><location><url>http://library.stanford.edu</url></location></relatedItem><relatedItem><titleInfo><title>SDR</title></titleInfo><location><url>http://purl.stanford.edu</url></location></relatedItem></mods>", false).related_item
   end
   describe "label" do
     it "should default to Related Item" do
       mods_display_item(@item).fields.first.label.should == "Related item"
+    end
+    it "should get the location label" do
+      mods_display_item(@location).fields.first.label.should == "Location"
+    end
+    it "should get the reference label" do
+      mods_display_item(@reference).fields.first.label.should == "Referenced by"
     end
     it "should get the displayLabel if available" do
       mods_display_item(@display_label).fields.first.label.should == "Special Item"
@@ -37,6 +45,11 @@ describe ModsDisplay::RelatedItem do
     end
     it "should not return empty links when there is no title or link" do
       mods_display_item(@blank_item).fields.should == []
+    end
+    it "should concat the isReferencedBy related item title with other metadata" do
+      fields = mods_display_item(@reference).fields
+      fields.length.should == 1
+      fields.first.values.should == ["The title DATE 124"]
     end
     it "should collapse labels down into the same record" do
       fields = mods_display_item(@multi_items).fields

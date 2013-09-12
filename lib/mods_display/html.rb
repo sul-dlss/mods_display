@@ -69,7 +69,7 @@ class ModsDisplay::HTML
   end
   
   def mods_display_fields
-    [:title, :name, :language, :imprint, :resourceType, :genre, :format, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedLocation, :relatedItem, :subject, :identifier, :location, :accessCondition]
+    [:title, :name, :language, :imprint, :resourceType, :genre, :format, :description, :cartographics, :abstract, :contents, :audience, :note, :contact, :collection, :relatedItem, :subject, :identifier, :location, :accessCondition]
   end
   
   def mods_display_field_mapping
@@ -89,7 +89,6 @@ class ModsDisplay::HTML
     :note            => :note,
     :contact         => :note,
     :collection      => :related_item,
-    :relatedLocation => :related_item,
     :relatedItem     => :related_item,
     :subject         => :subject,
     :identifier      => :identifier,
@@ -100,7 +99,6 @@ class ModsDisplay::HTML
   def field_key_translation
     {:subTitle        => :sub_title,
      :resourceType    => :resource_type,
-     :relatedLocation => :related_location,
      :relatedItem     => :related_item,
      :accessCondition => :access_condition
     }
