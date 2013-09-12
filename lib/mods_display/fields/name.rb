@@ -6,11 +6,8 @@ class ModsDisplay::Name < ModsDisplay::Field
       person = nil
       if value.displayForm.length > 0
         person = ModsDisplay::Name::Person.new(:name => value.displayForm.text, :role => role)
-      else
-        name_parts = value.namePart.map do |name_part|
-          name_part.text
-        end.join(", ")
-        person = ModsDisplay::Name::Person.new(:name => name_parts, :role => role) unless name_parts.empty?
+      elsif !name_parts(value).empty?
+        person = ModsDisplay::Name::Person.new(:name => name_parts(value), :role => role)
       end
       ModsDisplay::Values.new(:label => displayLabel(value) || name_label(value), :values => [person]) if person
     end.compact
@@ -55,6 +52,48 @@ class ModsDisplay::Name < ModsDisplay::Field
       ["author", "aut", "creator", "cre", ""].include?(element.role.roleTerm.text.downcase)
     rescue
       false
+    end
+  end
+
+  def name_parts(element)
+    output = ""
+    output << [unqualified_name_parts(element),
+               qualified_name_parts(element, "family"),
+               qualified_name_parts(element, "given")].flatten.compact.join(", ")
+    terms = qualified_name_parts(element, "termsOfAddress") 
+    unless terms.empty?
+      term_delimiter = ", "
+      if name_part_begins_with_roman_numeral?(terms.first)
+        term_delimiter = " "
+      end
+      output = [output, terms.join(", ")].flatten.compact.join(term_delimiter)
+    end
+    dates = qualified_name_parts(element, "date")
+    unless dates.empty?
+      output = [output, qualified_name_parts(element, "date")].flatten.compact.join(", ")
+    end
+    output
+  end
+
+  def unqualified_name_parts(element)
+    element.namePart.map do |part|
+      part.text unless part.attributes["type"]
+    end.compact
+  end
+
+  def qualified_name_parts(element, type)
+    element.namePart.map do |part|
+      if part.attributes["type"].respond_to?(:value) and
+         part.attributes["type"].value == type
+           part.text
+      end
+    end.compact
+  end
+
+  def name_part_begins_with_roman_numeral?(part)
+    first_part = part.split(/\s|,/).first.strip
+    first_part.chars.all? do |char|
+      ["I", "X", "C", "L", "V"].include? char
     end
   end
 

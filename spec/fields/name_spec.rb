@@ -20,6 +20,8 @@ describe ModsDisplay::Language do
     @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name
     @contributor = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm>lithographer</roleTerm></role></name></mods>", false).plain_name
     @encoded_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='code' authority='marcrelator'>ltg</roleTerm></role></name></mods>", false).plain_name
+    @numeral_toa = Stanford::Mods::Record.new.from_str("<mods><name><namePart>Unqualfieid</namePart><namePart type='termsOfAddress'>XVII, ToA</namePart><namePart type='date'>date1-date2</namePart><namePart type='given'>Given Name</namePart><namePart type='family'>Family Name</namePart></name></mods>", false).plain_name
+    @simple_toa = Stanford::Mods::Record.new.from_str("<mods><name><namePart>Unqualfieid</namePart><namePart type='termsOfAddress'>Ier, empereur</namePart><namePart type='date'>date1-date2</namePart><namePart type='given'>Given Name</namePart><namePart type='family'>Family Name</namePart></name></mods>", false).plain_name
     @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name
     @collapse_label = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name></mods>", false).plain_name
     @complex_labels = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name><name type='conference'><namePart>John Dough</namePart></name><name><namePart>Jane Dough</namePart></name></mods>", false).plain_name
@@ -60,6 +62,20 @@ describe ModsDisplay::Language do
     end
     it "should not add blank names" do
       mods_display_name(@blank_name).fields.should == []
+    end
+    it "should not delimit given name and termsOfAddress (that begin w/ roman numerals) with a comma" do
+      fields = mods_display_name(@numeral_toa).fields
+      fields.length.should == 1
+      fields.first.values.length.should == 1
+      fields.first.values.first.to_s.should_not match /Given Name, XVII/
+      fields.first.values.first.to_s.should match /Given Name XVII/
+    end
+    it "should delimit given name and termsOfAddress (that DO NOT begin w/ roman numerals) with a comma" do
+      fields = mods_display_name(@simple_toa).fields
+      fields.length.should == 1
+      fields.first.values.length.should == 1
+      fields.first.values.first.to_s.should match /Given Name, Ier, empereur/
+      fields.first.values.first.to_s.should_not match /Given Name Ier, empereur/
     end
     it "should collapse adjacent matching labels" do
       fields = mods_display_name(@collapse_label).fields
