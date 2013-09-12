@@ -25,7 +25,7 @@ module ModsDisplay::ControllerExtension
     end
 
     def mods_display_config
-      @mods_display_config 
+      @mods_display_config || ModsDisplay::Configuration.new{}
     end
   end
 
