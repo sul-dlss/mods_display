@@ -11,12 +11,12 @@ class ModsDisplay::Format < ModsDisplay::Field
     unless @values.physical_description.nil?
       @values.physical_description.each do |description|
         unless description.form.nil? or description.form.empty?
-          return_fields << ModsDisplay::Values.new(:label => displayLabel(description) || "Format",
-                                                   :values => description.form.map{|f| f.text.strip }.uniq)
+          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || "Format",
+                                                   :values => [description.form.map{|f| f.text.strip }.uniq.join(", ")])
         end
         unless description.extent.nil? or description.extent.empty?
-          return_fields << ModsDisplay::Values.new(:label => displayLabel(description) || "Format",
-                                                   :values => [description.extent.text])
+          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || "Format",
+                                                   :values => [description.extent.map{|e| e.text }.join(", ")])
         end
       end
     end
