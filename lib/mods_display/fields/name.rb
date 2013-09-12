@@ -100,10 +100,7 @@ class ModsDisplay::Name < ModsDisplay::Field
   def process_role(element)
     if element.role.length > 0 and element.role.roleTerm.length > 0
       if unencoded_role_term?(element)
-        element.role.roleTerm.find do |term|
-          !term.attributes["type"].respond_to?(:value) or
-           term.attributes["type"].value == "text"
-        end
+        unencoded_role_term(element)
       else
         element.role.roleTerm.map do |term|
           if term.attributes["type"].respond_to?(:value) and
@@ -117,6 +114,15 @@ class ModsDisplay::Name < ModsDisplay::Field
           end
         end.compact.first
       end
+    end
+  end
+
+  def unencoded_role_term(element)
+    element.role.roleTerm.find do |term|
+      term.attributes["type"].respond_to?(:value) and
+      term.attributes["type"].value == "text"
+    end || element.role.roleTerm.find do |term|
+      !term.attributes["type"].respond_to?(:value)
     end
   end
 

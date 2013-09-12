@@ -20,6 +20,7 @@ describe ModsDisplay::Language do
     @conf_name = Stanford::Mods::Record.new.from_str("<mods><name type='conference'><namePart>John Doe</namePart></name></mods>", false).plain_name
     @contributor = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm>lithographer</roleTerm></role></name></mods>", false).plain_name
     @encoded_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='code' authority='marcrelator'>ltg</roleTerm></role></name></mods>", false).plain_name
+    @mixed_role = Stanford::Mods::Record.new.from_str("<mods><name><role><roleTerm>publisher</roleTerm></role><namePart>John Doe</namePart><role><roleTerm type='text' authority='marcrelator'>engraver</roleTerm></role></name></mods>", false).plain_name
     @numeral_toa = Stanford::Mods::Record.new.from_str("<mods><name><namePart>Unqualfieid</namePart><namePart type='termsOfAddress'>XVII, ToA</namePart><namePart type='date'>date1-date2</namePart><namePart type='given'>Given Name</namePart><namePart type='family'>Family Name</namePart></name></mods>", false).plain_name
     @simple_toa = Stanford::Mods::Record.new.from_str("<mods><name><namePart>Unqualfieid</namePart><namePart type='termsOfAddress'>Ier, empereur</namePart><namePart type='date'>date1-date2</namePart><namePart type='given'>Given Name</namePart><namePart type='family'>Family Name</namePart></name></mods>", false).plain_name
     @display_form = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>", false).plain_name
@@ -59,6 +60,12 @@ describe ModsDisplay::Language do
       fields.length.should == 1
       fields.first.values.length.should == 1
       fields.first.values.first.to_s.should == "John Doe (Lithographer)"
+    end
+    it "should get the type='text' role before an untyped role" do
+      fields = mods_display_name(@mixed_role).fields
+      fields.length.should == 1
+      fields.first.values.length.should == 1
+      fields.first.values.first.role.should == "engraver"
     end
     it "should not add blank names" do
       mods_display_name(@blank_name).fields.should == []
