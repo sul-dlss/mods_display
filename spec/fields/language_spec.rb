@@ -1,7 +1,7 @@
 require "spec_helper"
 
 def mods_display_language(mods_record)
-  ModsDisplay::Language.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Language.new(mods_record, ModsDisplay::Configuration::Base.new, double("controller"))
 end
 
 describe ModsDisplay::Language do

@@ -4,10 +4,10 @@ require "fixtures/imprint_fixtures"
 include ImprintFixtures
 
 def mods_display_imprint(mods_record)
-  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new, mock("controller"))
+  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new, double("controller"))
 end
 def mods_display_format_date_imprint(mods_record)
-  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new{full_date_format "(%Y) %B, %d"; short_date_format "%B (%Y)"}, mock("controller"))
+  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new{full_date_format "(%Y) %B, %d"; short_date_format "%B (%Y)"}, double("controller"))
 end
 
 describe ModsDisplay::Imprint do

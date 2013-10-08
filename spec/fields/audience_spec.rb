@@ -1,7 +1,7 @@
 require "spec_helper"
 
 def mods_display_audience(mods_record)
-  ModsDisplay::Audience.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Audience.new(mods_record, ModsDisplay::Configuration::Base.new, double("controller"))
 end
 
 describe ModsDisplay::Contents do
