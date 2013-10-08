@@ -144,14 +144,27 @@ Once installed, the class that included the `ControllerExtension` (`MyController
 The basic render call will return the top-level ModsDisplay::HTML class object.  Any String method (e.g. #html_safe) you call on this top-level object will be sent down to the #to_html method which will return the HTML for all the metadata in the MODS document.
 
     render_mods_display(@model).to_html
-    
-You can abstract the main title by calling #title on the top-level HTML method
+
+You can abstract the main (first) title by calling #title on the top-level HTML method
 
     render_mods_display(@model).title
-    
-When getting JUST the main title out of the metadata, it will be useful to get the rest of the metadata without the main title.  You can accomplish this by calling #body on the top-level HTML object.
+
+When getting JUST the main (first) title out of the metadata, it will be useful to get the rest of the metadata without the main title.  You can accomplish this by calling #body on the top-level HTML object.
 
     render_mods_display(@model).body
+
+## Advanced Usage
+
+You can also access the array of ModsDisplay::Values objects for a given class directly by calling the name of the class. The class names are not always intuitive for public consumption so you may want to check the code the particular method to call.
+
+    render_mods_display(@model).abstract
+    => [#<ModsDisplay::Values @label="Abstract", @values=["Hey. I'm an abstract."]>]
+
+Given that this semantics that we're concerned with here are more about titles and data construction rather than XML it may be required that you find something by the label. A common example of this is the imprint class.  The imprint class can retun other publication data that is not the imprint statement.  You'll want to select (using your favorite enumerable method) the element in the array that is an imprint.
+
+    imprint = render_mods_display(@model).imprint.find do |data|
+      data.label == "Imprint"
+    end.values
 
 ## Contributing
 
