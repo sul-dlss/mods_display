@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["jessie.keck@gmail.com"]
   gem.description   = %q{MODS Display is a gem to centralize the display logic of MODS medadata.}
   gem.summary       = %q{The MODS Display gem allows implementers to configure a customized display of MODS metadata.  This display implements the specifications defined at Stanford for how to display MODS.}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/sul-dlss/mods_display"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
