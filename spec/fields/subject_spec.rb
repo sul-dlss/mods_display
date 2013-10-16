@@ -25,8 +25,8 @@ describe ModsDisplay::Subject do
     @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject
     @name_subject = Stanford::Mods::Record.new.from_str(name_subjects, false).subject
     @complex_subject = Stanford::Mods::Record.new.from_str(complex_subjects, false).subject
+    @display_label = Stanford::Mods::Record.new.from_str(display_label_subjects, false).subject
   end
-
   describe "fields" do
     it "should split individual child elments of subject into separate parts" do
       fields = mods_display_subject(@subject).fields
@@ -42,6 +42,16 @@ describe ModsDisplay::Subject do
       fields = mods_display_subject(@geo_subject).fields
       fields.length.should == 1
       fields.first.values.should == [["United States", "California", "Stanford"]]
+    end
+    it "should handle display labels properly" do
+      fields = mods_display_subject(@display_label).fields
+      fields.length.should == 3
+      fields.first.label.should  == "Subject"
+      fields.first.values.should == [["A Subject", "Another Subject"], ["B Subject", "Another B Subject"]]
+      fields[1].label.should     == "Subject Heading"
+      fields[1].values.should    == [["Jazz", "Japan", "History and criticism"]]
+      fields.last.label.should   == "Subject"
+      fields.last.values.should  == [["Bay Area", "Stanford"]]
     end
     it "should handle blank subjects properly" do
       mods_display_subject(@blank_subject).fields.should == []
@@ -87,6 +97,12 @@ describe ModsDisplay::Subject do
       html.scan(/<dd>/).length.should == 1
       html.scan(/<br\/>/).length.should == 1
       html.scan(/ &gt; /).length.should == 3
+    end
+    it "should handle complex display labels" do
+      html = mods_display_subject(@display_label).to_html
+      html.scan(/<dt title='Subject'>Subject:<\/dt>/).length.should eq 2
+      html.scan(/<dt title='Subject Heading'>Subject Heading:<\/dt>/).length.should eq 1
+      html.scan(/<dd>/).length.should == 3
     end
   end
 
