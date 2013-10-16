@@ -1,6 +1,6 @@
 require "spec_helper"
 def mods_display_format(mods)
-  ModsDisplay::Format.new(mods, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Format.new(mods, ModsDisplay::Configuration::Base.new, double("controller"))
 end
 
 describe ModsDisplay::Format do

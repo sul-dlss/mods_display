@@ -10,7 +10,7 @@ def mods_display_name_link(mods_record)
 end
 
 def mods_display_name(mods_record)
-  ModsDisplay::Name.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Name.new(mods_record, ModsDisplay::Configuration::Base.new, double("controller"))
 end
 
 describe ModsDisplay::Language do

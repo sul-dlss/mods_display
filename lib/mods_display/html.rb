@@ -44,6 +44,8 @@ class ModsDisplay::HTML
   def method_missing(method_name, *args, &block)
     if self.to_s.respond_to?(method_name)
       self.to_html.send(method_name, *args, &block)
+    elsif mods_display_fields.include?(method_name)
+      mods_field(@xml, method_name).fields
     else
       super
     end

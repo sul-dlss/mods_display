@@ -1,13 +1,13 @@
 require "spec_helper"
 
 def mods_display_access_condition(mods_record)
-  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new, mock("controller"))
+  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new, double("controller"))
 end
 def mods_display_versioned_access_condition(mods_record, version)
-  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new{cc_license_version version}, mock("controller"))
+  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new{cc_license_version version}, double("controller"))
 end
 def mods_display_non_ignore_access_condition(mods_record)
-  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new{display!}, mock("controller"))
+  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new{display!}, double("controller"))
 end
 
 describe ModsDisplay::AccessCondition do
