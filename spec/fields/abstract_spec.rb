@@ -1,7 +1,7 @@
 require "spec_helper"
 
 def mods_display_abstract(mods_record)
-  ModsDisplay::Abstract.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Abstract.new(mods_record, ModsDisplay::Configuration::Base.new, double("controller"))
 end
 
 describe ModsDisplay::Abstract do

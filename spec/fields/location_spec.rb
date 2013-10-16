@@ -1,7 +1,7 @@
 require "spec_helper"
 
 def mods_display_location(mods_record)
-  ModsDisplay::Location.new(mods_record, ModsDisplay::Configuration::Base.new, mock("controller"))
+  ModsDisplay::Location.new(mods_record, ModsDisplay::Configuration::Base.new, double("controller"))
 end
 
 describe ModsDisplay::Note do
