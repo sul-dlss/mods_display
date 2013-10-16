@@ -76,5 +76,27 @@ module SubjectsFixtures
       </mods>
     XML
   end
-
+  def display_label_subjects
+    <<-XML
+      <mods>
+        <subject>
+          <topic>A Subject</topic>
+          <geographical>Another Subject</geographical>
+        </subject>
+        <subject>
+          <topic>B Subject</topic>
+          <geographical>Another B Subject</geographical>
+        </subject>
+        <subject displayLabel="Subject Heading">
+          <topic>Jazz</topic>
+          <geographical>Japan</geographical>
+          <topic>History and criticism</topic>
+        </subject>
+        <subject>
+          <topic>Bay Area</topic>
+          <geographical>Stanford</geographical>
+        </subject>
+      </mods>
+    XML
+  end
 end
