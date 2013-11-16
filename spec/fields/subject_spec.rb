@@ -64,7 +64,7 @@ describe ModsDisplay::Subject do
       fields.length.should == 1
       fields.first.values.first.first.should be_a(ModsDisplay::Name::Person)
       fields.first.values.first.first.name.should == "John Doe"
-      fields.first.values.first.first.role.should == "Depicted"
+      fields.first.values.first.first.roles.should == ["Depicted"]
     end
     it "should link the name (and not the role) correctly" do
       html = mods_display_subject(@name_subject).to_html

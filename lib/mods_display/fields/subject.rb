@@ -47,7 +47,7 @@ class ModsDisplay::Subject < ModsDisplay::Field
             if @config.link and @config.hierarchical_link
               if val.is_a?(ModsDisplay::Name::Person)
                 txt = link_to_value(val.name, buffer.join(' '))
-                txt << " (#{val.role})" if val.role
+                txt << " (#{val.roles.join(', ')})" if val.roles
                 sub_parts << txt
               else
                 sub_parts << link_to_value(val, buffer.join(' '))
@@ -55,7 +55,7 @@ class ModsDisplay::Subject < ModsDisplay::Field
             elsif @config.link
               if val.is_a?(ModsDisplay::Name::Person)
                 txt = link_to_value(val.name)
-                txt << " (#{val.role})" if val.role
+                txt << " (#{val.roles.join(', ')})" if val.roles
                 sub_parts << txt
               else
                 sub_parts << link_to_value(val.to_s)

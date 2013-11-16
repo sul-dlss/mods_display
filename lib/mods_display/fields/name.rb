@@ -2,12 +2,12 @@ class ModsDisplay::Name < ModsDisplay::Field
   include ModsDisplay::RelatorCodes
   def fields
     return_fields = @values.map do |value|
-      role = process_role(value)
+      roles = process_role(value)
       person = nil
       if value.displayForm.length > 0
-        person = ModsDisplay::Name::Person.new(:name => value.displayForm.text, :role => role)
+        person = ModsDisplay::Name::Person.new(:name => value.displayForm.text, :roles => roles)
       elsif !name_parts(value).empty?
-        person = ModsDisplay::Name::Person.new(:name => name_parts(value), :role => role)
+        person = ModsDisplay::Name::Person.new(:name => name_parts(value), :roles => roles)
       end
       ModsDisplay::Values.new(:label => displayLabel(value) || name_label(value), :values => [person]) if person
     end.compact
@@ -23,7 +23,7 @@ class ModsDisplay::Name < ModsDisplay::Field
         output << field.values.map do |val|
           if @config.link
             txt = link_to_value(val.name)
-            txt << " (#{val.role})" if val.role
+            txt << " (#{val.roles.join(', ')})" if val.roles
             txt
           else
             val.to_s
@@ -37,17 +37,23 @@ class ModsDisplay::Name < ModsDisplay::Field
   private
 
   def name_label(element)
-    if name_is_main_author?(element)
-      if element.attributes.has_key?("type") && name_labels.has_key?(element.attributes["type"].value)
-        return name_labels[element.attributes["type"].value]
-      end
+    if !has_role?(element) || is_primary?(element) || has_author_or_creator_roles?(element)
       "Author/Creator"
     else
       "Contributor"
     end
   end
-  
-  def name_is_main_author?(element)
+
+  def has_role?(element)
+    element.respond_to?(:role) and !element.role.empty?
+  end
+
+  def is_primary?(element)
+    element.attributes["usage"].respond_to?(:value) and
+    element.attributes["usage"].value == "primary"
+  end
+
+  def has_author_or_creator_roles?(element)
     begin
       ["author", "aut", "creator", "cre", ""].include?(element.role.roleTerm.text.downcase)
     rescue
@@ -108,22 +114,26 @@ class ModsDisplay::Name < ModsDisplay::Field
              term.attributes["authority"].respond_to?(:value) and
              term.attributes["authority"].value == "marcrelator" and
              relator_codes.include?(term.text.strip)
-               term = term.clone
-               term.content = relator_codes[term.text.strip]
-               term
+               relator_codes[term.text.strip]
           end
-        end.compact.first
+        end.compact
       end
     end
   end
 
   def unencoded_role_term(element)
-    element.role.roleTerm.find do |term|
-      term.attributes["type"].respond_to?(:value) and
-      term.attributes["type"].value == "text"
-    end || element.role.roleTerm.find do |term|
-      !term.attributes["type"].respond_to?(:value)
-    end
+    roles = element.role.map do |role|
+      role.roleTerm.find do |term|
+        term.attributes["type"].respond_to?(:value) and
+        term.attributes["type"].value == "text"
+      end
+    end.compact
+    roles = element.role.map do |role|
+      role.roleTerm.find do |term|
+        !term.attributes["type"].respond_to?(:value)
+      end
+    end.compact if roles.empty?
+    roles.map{|t| t.text.strip }
   end
 
   def unencoded_role_term?(element)
@@ -141,15 +151,15 @@ class ModsDisplay::Name < ModsDisplay::Field
   end
   
   class Person
-    attr_accessor :name, :role
+    attr_accessor :name, :roles
     def initialize(data)
-      @name = data[:name]
-      @role = data[:role] ? data[:role].text : nil
+      @name =  data[:name]
+      @roles = data[:roles] && !data[:roles].empty? ? data[:roles] : nil
     end
     
     def to_s
       text = @name.dup
-      text << " (#{@role})" if @role
+      text << " (#{@roles.join(', ')})" if @roles
       text
     end
   end
