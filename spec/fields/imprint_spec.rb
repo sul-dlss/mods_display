@@ -29,6 +29,7 @@ describe ModsDisplay::Imprint do
     @questionable_date = Stanford::Mods::Record.new.from_str(questionable_date, false).origin_info
     @inferred_date = Stanford::Mods::Record.new.from_str(inferred_date, false).origin_info
     @three_imprint_dates = Stanford::Mods::Record.new.from_str(three_imprint_dates, false).origin_info
+    @xx_country_code = Stanford::Mods::Record.new.from_str(xx_country_code, false).origin_info
     @qualified_imprint_date = Stanford::Mods::Record.new.from_str(qualified_imprint_date, false).origin_info
     @imprint_date_range = Stanford::Mods::Record.new.from_str(imprint_date_range, false).origin_info
     @encoded_place = Stanford::Mods::Record.new.from_str(encoded_place, false).origin_info
@@ -204,6 +205,11 @@ describe ModsDisplay::Imprint do
       fields = mods_display_imprint(@encoded_place).fields
       fields.length.should == 1
       fields.first.values.should include "Netherlands"
+    end
+    it "should ignore 'xx' country codes" do
+      fields = mods_display_imprint(@xx_country_code).fields
+      fields.length.should == 1
+      fields.first.values.should == ["1994"]
     end
   end
   describe "to_html" do

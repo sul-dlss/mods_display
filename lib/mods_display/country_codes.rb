@@ -371,7 +371,8 @@ module ModsDisplay::CountryCodes
     "xra" => "South Australia",
     "xs" => "South Georgia and the South Sandwich Islands",
     "xv" => "Slovenia",
-    "xx" => "No place, unknown, or undetermined",
+    # Removing per METADOR-32
+    #"xx" => "No place, unknown, or undetermined",
     "xxc" => "Canada",
     "xxk" => "United Kingdom",
     "xxr" => "Soviet Union",

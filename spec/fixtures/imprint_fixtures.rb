@@ -224,6 +224,18 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def xx_country_code
+    <<-MODS
+      <mods>
+        <originInfo>
+          <place>
+            <placeTerm type="code" authority="marccountry">xx</placeTerm>
+          </place>
+          <dateIssued>1994</dateIssued>
+        </originInfo>
+      </mods>
+    MODS
+  end
   def encoded_dates
     <<-MODS
       <mods>
