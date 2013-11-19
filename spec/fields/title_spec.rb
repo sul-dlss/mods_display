@@ -11,6 +11,7 @@ describe ModsDisplay::Title do
     @reverse_title_parts = Stanford::Mods::Record.new.from_str("<mods><titleInfo><nonSort>The</nonSort><title>Title</title><subTitle>For</subTitle><partNumber>Part 62</partNumber><partName>Something</partName></titleInfo></mods>", false).title_info
     @display_label = Stanford::Mods::Record.new.from_str("<mods><titleInfo displayLabel='MyTitle'><title>Title</title></titleInfo></mods>", false).title_info
     @display_form = Stanford::Mods::Record.new.from_str("<mods><titleInfo><title>Title</title><displayForm>The Title of This Item</displayForm></titleInfo></mods>", false).title_info
+    @multi_label = Stanford::Mods::Record.new.from_str("<mods><titleInfo><title>Main Title</title></titleInfo><titleInfo type='alternative'><title>Alt Title</title></titleInfo><titleInfo type='uniform'><title>Uniform Title</title></titleInfo><titleInfo type='alternative'><title>Another Alt Title</title></titleInfo><titleInfo type='alternative'><title>Yet Another Alt Title</title></titleInfo></mods>", false).title_info
     @alt_title = Stanford::Mods::Record.new.from_str("<mods><titleInfo type='alternative'><title>Title</title></titleInfo></mods>", false).title_info
   end
   describe "labels" do
@@ -22,6 +23,15 @@ describe ModsDisplay::Title do
     end
     it "should return the label held in the displayLabel attribute of the titleInfo element when available" do
       mods_display_title(@display_label).fields.first.label.should == "MyTitle"
+    end
+    it "should collapse adjacent identical labels" do
+      fields = mods_display_title(@multi_label).fields
+      fields.length.should == 4
+      fields[0].label.should == "Title"
+      fields[1].label.should == "Alternative title"
+      fields[2].label.should == "Uniform title"
+      fields[3].label.should == "Alternative title"
+      fields[3].values.should == ["Another Alt Title", "Yet Another Alt Title"]
     end
   end
   describe "fields" do

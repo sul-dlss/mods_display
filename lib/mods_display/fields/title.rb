@@ -25,7 +25,7 @@ class ModsDisplay::Title < ModsDisplay::Field
         return_values << ModsDisplay::Values.new(:label => displayLabel(value) || title_label(value), :values => [[preParts, parts].compact.join(". ")])
       end
     end
-    return_values
+    collapse_fields(return_values)
   end
 
   private
