@@ -135,6 +135,16 @@ This can be accomplished by setting the hierarchical_link configuration option t
 
 NOTE: The default delimiter is set to > for subjects.
 
+### Special Access Condition Configuration
+
+The access condition statement is set to be ignored by default (same as ignore! configuration option).  If you would like the access condition statement to display you have to pass the access condition specific display! configuration option.
+
+    configure_mods_display do
+      access_condition do
+        display!
+      end
+    end
+
 ## Usage
 
 Once installed, the class that included the `ControllerExtension` (`MyController`) will have the `render_mods_display` method available.  This method takes one argument which is an instance of the class that included the `ModelExtension` (`MyClass`).
