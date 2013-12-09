@@ -142,13 +142,6 @@ class ModsDisplay::Name < ModsDisplay::Field
        term.attributes["type"].value == "text"
     end
   end
-
-  def name_labels
-    {"personal"   => "Author/Creator",
-     "corporate"  => "Corporate author",
-     "conference" => "Meeting",
-     "family"     => "Family author"}
-  end
   
   class Person
     attr_accessor :name, :roles
