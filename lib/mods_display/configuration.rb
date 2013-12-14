@@ -17,8 +17,8 @@ class ModsDisplay::Configuration
     @name ||= ModsDisplay::Configuration::Name.new(&name || Proc.new{})
   end
 
-  def type_of_resource &type_of_resource
-    @type_of_resource ||= ModsDisplay::Configuration::Base.new(&type_of_resource || Proc.new{})
+  def resource_type &resource_type
+    @type_of_resource ||= ModsDisplay::Configuration::Base.new(&resource_type || Proc.new{})
   end
 
   def genre &genre
@@ -67,10 +67,6 @@ class ModsDisplay::Configuration
 
   def collection &collection
     @collection ||= ModsDisplay::Configuration::Base.new(&collection || Proc.new{})
-  end
-
-  def related_location &related_location
-    @related_location ||= ModsDisplay::Configuration::Base.new(&related_location || Proc.new{})
   end
 
   def related_item &related_item
