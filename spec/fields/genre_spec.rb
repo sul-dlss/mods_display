@@ -14,12 +14,12 @@ describe ModsDisplay::Abstract do
     it "should return a default 'Genre' label" do
       fields = mods_display_genre(@genre).fields
       fields.length.should == 1
-      fields.first.label.should == "Genre"
+      fields.first.label.should == "Genre:"
     end
     it "should use a display label when one is available" do
       fields = mods_display_genre(@display_label).fields
       fields.length.should == 1
-      fields.first.label.should == "Special label"
+      fields.first.label.should == "Special label:"
     end
   end
   describe "fields" do

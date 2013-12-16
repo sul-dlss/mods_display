@@ -2,7 +2,7 @@ class ModsDisplay::Audience < ModsDisplay::Field
 
   private
   def displayLabel(element)
-    super(element) || "Target audience"
+    super(element) || I18n.t('mods_display.target_audience')
   end
 
 end

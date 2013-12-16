@@ -46,14 +46,14 @@ class ModsDisplay::Title < ModsDisplay::Field
         title_labels.has_key?(element.attributes["type"].value))
       return title_labels[element.attributes["type"].value]
     end
-    "Title"
+    I18n.t('mods_display.title')
   end
 
   def title_labels
-    {"abbreviated" => "Abbreviated title",
-     "translated"  => "Translated title",
-     "alternative" => "Alternative title",
-     "uniform"     => "Uniform title"}
+    {"abbreviated" => I18n.t('mods_display.abbreviated_title'),
+     "translated"  => I18n.t('mods_display.translated_title'),
+     "alternative" => I18n.t('mods_display.alternative_title'),
+     "uniform"     => I18n.t('mods_display.uniform_title')}
   end
 
 end

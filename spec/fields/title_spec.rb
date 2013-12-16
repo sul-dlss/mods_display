@@ -16,21 +16,21 @@ describe ModsDisplay::Title do
   end
   describe "labels" do
     it "should return a default label of Title if nothing else is available" do
-      mods_display_title(@title).fields.first.label.should == "Title"
+      mods_display_title(@title).fields.first.label.should == "Title:"
     end
     it "should return an appropriate label from the type attribute" do
-      mods_display_title(@alt_title).fields.first.label.should == "Alternative title"
+      mods_display_title(@alt_title).fields.first.label.should == "Alternative title:"
     end
     it "should return the label held in the displayLabel attribute of the titleInfo element when available" do
-      mods_display_title(@display_label).fields.first.label.should == "MyTitle"
+      mods_display_title(@display_label).fields.first.label.should == "MyTitle:"
     end
     it "should collapse adjacent identical labels" do
       fields = mods_display_title(@multi_label).fields
       fields.length.should == 4
-      fields[0].label.should == "Title"
-      fields[1].label.should == "Alternative title"
-      fields[2].label.should == "Uniform title"
-      fields[3].label.should == "Alternative title"
+      fields[0].label.should == "Title:"
+      fields[1].label.should == "Alternative title:"
+      fields[2].label.should == "Uniform title:"
+      fields[3].label.should == "Alternative title:"
       fields[3].values.should == ["Another Alt Title", "Yet Another Alt Title"]
     end
   end
@@ -39,7 +39,7 @@ describe ModsDisplay::Title do
       values = mods_display_title(@display_label).fields
       values.length.should == 1
       values.first.should be_a ModsDisplay::Values
-      values.first.label.should == "MyTitle"
+      values.first.label.should == "MyTitle:"
       values.first.values.should == ["Title"]
     end
   end

@@ -8,7 +8,7 @@ class ModsDisplay::Description < ModsDisplay::Field
   end
 
   def description_label(element)
-    label || displayLabel(element) || labels[element.name.to_sym] || "Physical description"
+    label || displayLabel(element) || labels[element.name.to_sym] || I18n.t('mods_display.physical_description')
   end
 
   private
@@ -20,8 +20,8 @@ class ModsDisplay::Description < ModsDisplay::Field
   end
 
   def labels
-    {:digitalOrigin => "Digital origin",
-     :note          => "Note"
+    {:digitalOrigin => I18n.t('mods_display.digital_origin'),
+     :note          => I18n.t('mods_display.note')
      }
   end
 

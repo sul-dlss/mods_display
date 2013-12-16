@@ -46,11 +46,11 @@ describe ModsDisplay::Subject do
     it "should handle display labels properly" do
       fields = mods_display_subject(@display_label).fields
       fields.length.should == 3
-      fields.first.label.should  == "Subject"
+      fields.first.label.should  == "Subject:"
       fields.first.values.should == [["A Subject", "Another Subject"], ["B Subject", "Another B Subject"]]
-      fields[1].label.should     == "Subject Heading"
+      fields[1].label.should     == "Subject Heading:"
       fields[1].values.should    == [["Jazz", "Japan", "History and criticism"]]
-      fields.last.label.should   == "Subject"
+      fields.last.label.should   == "Subject:"
       fields.last.values.should  == [["Bay Area", "Stanford"]]
     end
     it "should handle blank subjects properly" do

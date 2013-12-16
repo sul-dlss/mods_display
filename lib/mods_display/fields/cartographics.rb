@@ -10,7 +10,7 @@ class ModsDisplay::Cartographics < ModsDisplay::Field
           projection = field.projection.empty? ? nil : field.projection.text
           coordinates = field.coordinates.empty? ? nil : field.coordinates.text
           post_scale = [projection, coordinates].compact.length > 0 ? [projection, coordinates].compact.join(" ") : nil
-          return_fields << ModsDisplay::Values.new({:label => (displayLabel(field) || label || "Map data"),
+          return_fields << ModsDisplay::Values.new({:label => (displayLabel(field) || label || I18n.t('mods_display.map_data')),
                                                     :values => [[scale, post_scale].compact.join(" ; ")]})
         end
       end

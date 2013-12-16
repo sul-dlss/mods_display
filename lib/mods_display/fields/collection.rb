@@ -1,7 +1,7 @@
 class ModsDisplay::Collection < ModsDisplay::Field
 
   def label
-    super || "Collection"
+    super || I18n.t('mods_display.collection')
   end
 
   def fields

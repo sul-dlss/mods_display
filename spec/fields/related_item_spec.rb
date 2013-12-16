@@ -17,16 +17,16 @@ describe ModsDisplay::RelatedItem do
   end
   describe "label" do
     it "should default to Related Item" do
-      mods_display_item(@item).fields.first.label.should == "Related item"
+      mods_display_item(@item).fields.first.label.should == "Related item:"
     end
     it "should get the location label" do
-      mods_display_item(@location).fields.first.label.should == "Location"
+      mods_display_item(@location).fields.first.label.should == "Location:"
     end
     it "should get the reference label" do
-      mods_display_item(@reference).fields.first.label.should == "Referenced by"
+      mods_display_item(@reference).fields.first.label.should == "Referenced by:"
     end
     it "should get the displayLabel if available" do
-      mods_display_item(@display_label).fields.first.label.should == "Special Item"
+      mods_display_item(@display_label).fields.first.label.should == "Special Item:"
     end
   end
   describe "fields" do
@@ -54,7 +54,7 @@ describe ModsDisplay::RelatedItem do
     it "should collapse labels down into the same record" do
       fields = mods_display_item(@multi_items).fields
       fields.length.should == 1
-      fields.first.label.should == "Related item"
+      fields.first.label.should == "Related item:"
       fields.first.values.length.should == 2
       fields.first.values.first.should =~ /<a href=.*>Library<\/a>/ or
       fields.first.values.last.should =~ /<a href=.*>SDR<\/a>/

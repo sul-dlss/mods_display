@@ -12,10 +12,10 @@ describe ModsDisplay::Collection do
   end
   describe "label" do
     it "should default to Collection" do
-      mods_display_collection(@collection).label.should == "Collection"
+      mods_display_collection(@collection).label.should == "Collection:"
     end
     it "should get the displayLabel if available" do
-      mods_display_collection(@display_label).label.should == "Special Collection"
+      mods_display_collection(@display_label).label.should == "Special Collection:"
     end
   end
   describe "fields" do

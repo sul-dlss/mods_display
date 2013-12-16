@@ -11,11 +11,11 @@ class ModsDisplay::Format < ModsDisplay::Field
     unless @values.physical_description.nil?
       @values.physical_description.each do |description|
         unless description.form.nil? or description.form.empty?
-          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || "Format",
+          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || format_label,
                                                    :values => [description.form.map{|f| f.text.strip }.uniq.join(", ")])
         end
         unless description.extent.nil? or description.extent.empty?
-          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || "Format",
+          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || format_label,
                                                    :values => [description.extent.map{|e| e.text }.join(", ")])
         end
       end
@@ -36,4 +36,7 @@ class ModsDisplay::Format < ModsDisplay::Field
     format.strip.downcase.gsub(/\/|\\|\s+/, "_")
   end
 
+  def format_label
+    I18n.t('mods_display.format')
+  end
 end

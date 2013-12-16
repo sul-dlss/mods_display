@@ -11,10 +11,10 @@ describe ModsDisplay::Contents do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_audience(@audience).label.should == "Target audience"
+      mods_display_audience(@audience).label.should == "Target audience:"
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_audience(@display_label).label.should == "Special Label"
+      mods_display_audience(@display_label).label.should == "Special Label:"
     end
   end  
   

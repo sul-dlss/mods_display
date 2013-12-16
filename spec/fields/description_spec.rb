@@ -13,16 +13,16 @@ describe ModsDisplay::Description do
   end
   describe "labels" do
     it "should use the displayLabel if one is provided" do
-      mods_display_description(@display_label).fields.first.label.should == "SpecialLabel"
+      mods_display_description(@display_label).fields.first.label.should == "SpecialLabel:"
     end
     it "should get the default label for a child element" do
-      mods_display_description(@form).fields.first.label.should == "Note"
+      mods_display_description(@form).fields.first.label.should == "Note:"
     end
     it "should get multiple lables for mixed content" do
-      mods_display_description(@mixed).fields.map{|v| v.label }.should == ["Note", "Digital origin"]
+      mods_display_description(@mixed).fields.map{|v| v.label }.should == ["Note:", "Digital origin:"]
     end
     it "should get the display label from child elements" do
-      mods_display_description(@child_display_label).fields.map{|f| f.label }.should == ["Note Label"]
+      mods_display_description(@child_display_label).fields.map{|f| f.label }.should == ["Note Label:"]
     end
   end
   

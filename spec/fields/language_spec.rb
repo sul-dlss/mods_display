@@ -18,7 +18,7 @@ describe ModsDisplay::Language do
       values = mods_display_language(@display_label).fields
       values.length.should == 1
       values.first.should be_a ModsDisplay::Values
-      values.first.label.should == "Lang"
+      values.first.label.should == "Lang:"
       values.first.values.should == ["English"]
     end
     it "should not return any non type='code' languageTerms from the XML" do

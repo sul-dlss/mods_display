@@ -15,16 +15,16 @@ describe ModsDisplay::Note do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_note(@note).fields.first.label.should == "Note"
+      mods_display_note(@note).fields.first.label.should == "Note:"
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_note(@display_label).fields.first.label.should == "Special Label"
+      mods_display_note(@display_label).fields.first.label.should == "Special Label:"
     end
     it "should use get a label from a list of translations" do
-      mods_display_note(@sor_label).fields.first.label.should == "Statement of responsibility"
+      mods_display_note(@sor_label).fields.first.label.should == "Statement of responsibility:"
     end
     it "should use use the capitalized type attribute if one is present" do
-      mods_display_note(@type_label).fields.first.label.should == "Some other type"
+      mods_display_note(@type_label).fields.first.label.should == "Some other type:"
     end
   end
   
@@ -37,7 +37,7 @@ describe ModsDisplay::Note do
     it "should handle complex grouping" do
       fields = mods_display_note(@complex_label).fields
       fields.length.should == 3
-      fields.first.label.should == "Note"
+      fields.first.label.should == "Note:"
       fields.first.values.length == 2
       fields.first.values.should == ["Note Field", "2nd Note Field"]
       
@@ -45,7 +45,7 @@ describe ModsDisplay::Note do
       fields[1].values.length == 1
       fields[1].values.should == ["SoR"]
       
-      fields.last.label.should == "Note"
+      fields.last.label.should == "Note:"
       fields.last.values.length == 1
       fields.last.values.should == ["Another Note"]
     end

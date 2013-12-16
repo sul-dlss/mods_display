@@ -2,7 +2,7 @@ class ModsDisplay::Abstract < ModsDisplay::Field
 
   private
   def displayLabel(element)
-    super(element) || "Abstract"
+    super(element) || I18n.t('mods_display.abstract')
   end
 
 end

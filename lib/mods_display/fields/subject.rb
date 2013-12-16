@@ -4,7 +4,7 @@ class ModsDisplay::Subject < ModsDisplay::Field
     return_fields = []
     @values.each do |value|
       return_values = []
-      label = displayLabel(value) || "Subject"
+      label = displayLabel(value) || I18n.t('mods_display.subject')
       return_text = []
       selected_subjects(value).each do |child|
         if self.respond_to?(:"process_#{child.name}")
@@ -32,7 +32,7 @@ class ModsDisplay::Subject < ModsDisplay::Field
     return nil if fields.empty? or @config.ignore?
     output = ""
     fields.each do |field|
-      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
+      output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
       output << "<dd#{value_class}>"
         subs = []
         field.values.each do |subjects|

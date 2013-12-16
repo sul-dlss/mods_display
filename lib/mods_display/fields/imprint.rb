@@ -33,7 +33,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
         editionPlace = [edition, placePub].compact.join(" - ")
         editionPlace = nil if editionPlace.strip.empty?
         unless [editionPlace, parts].compact.join(", ").strip.empty?
-          return_fields << ModsDisplay::Values.new(:label => displayLabel(value) || "Imprint", :values => [[editionPlace, parts].compact.join(", ")])
+          return_fields << ModsDisplay::Values.new(:label => displayLabel(value) || I18n.t('mods_display.imprint'), :values => [[editionPlace, parts].compact.join(", ")])
         end
         if dates(value).length > 0
           return_fields.concat(dates(value))
@@ -219,7 +219,7 @@ class ModsDisplay::Imprint < ModsDisplay::Field
     display_form = element.children.find do |child|
       child.name == "displayForm"
     end
-    ModsDisplay::Values.new(:label => displayLabel(element) || "Imprint", :values => [display_form.text]) if display_form
+    ModsDisplay::Values.new(:label => displayLabel(element) || I18n.t('mods_display.imprint'), :values => [display_form.text]) if display_form
   end
 
   private
@@ -233,13 +233,13 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   end
 
   def pub_info_labels
-    {:dateCreated   => "Date created",
-     :dateCaptured  => "Date captured",
-     :dateValid     => "Date valid",
-     :dateModified  => "Date modified",
-     :copyrightDate => "Copyright date",
-     :issuance      => "Issuance",
-     :frequency     => "Frequency"
+    {:dateCreated   => I18n.t('mods_display.date_created'),
+     :dateCaptured  => I18n.t('mods_display.date_captured'),
+     :dateValid     => I18n.t('mods_display.date_valid'),
+     :dateModified  => I18n.t('mods_display.date_modified'),
+     :copyrightDate => I18n.t('mods_display.copyright_date'),
+     :issuance      => I18n.t('mods_display.issuance'),
+     :frequency     => I18n.t('mods_display.frequency')
     }
   end
 

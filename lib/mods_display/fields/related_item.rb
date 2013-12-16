@@ -74,11 +74,11 @@ class ModsDisplay::RelatedItem < ModsDisplay::Field
     else
       case
       when related_item_is_a_location?(item)
-        return "Location"
+        return I18n.t('mods_display.location')
       when related_item_is_a_reference?(item)
-        return "Referenced by"
+        return I18n.t('mods_display.referenced_by')
       end
-      "Related item"
+      I18n.t('mods_display.related_item')
     end
   end
 end

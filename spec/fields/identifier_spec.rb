@@ -14,16 +14,16 @@ describe ModsDisplay::Note do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_id(@id).fields.first.label.should == "Identifier"
+      mods_display_id(@id).fields.first.label.should == "Identifier:"
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_id(@display_label).fields.first.label.should == "Special Label"
+      mods_display_id(@display_label).fields.first.label.should == "Special Label:"
     end
     it "should use get a label from a list of translations" do
-      mods_display_id(@issue_label).fields.first.label.should == "Issue number"
+      mods_display_id(@issue_label).fields.first.label.should == "Issue number:"
     end
     it "should use use the raw type attribute if one is present" do
-      mods_display_id(@type_label).fields.first.label.should == "Some other Type"
+      mods_display_id(@type_label).fields.first.label.should == "Some other Type:"
     end
   end
   
@@ -32,15 +32,15 @@ describe ModsDisplay::Note do
       fields = mods_display_id(@complex_label).fields
       fields.length.should == 3
       
-      fields.first.label.should == "Identifier"
+      fields.first.label.should == "Identifier:"
       fields.first.values.length.should == 2
       fields.first.values.should == ["12345", "54321"]
       
-      fields[1].label.should == "Issue number"
+      fields[1].label.should == "Issue number:"
       fields[1].values.length.should == 1
       fields[1].values.should == ["12345"]
       
-      fields.last.label.should == "Identifier"
+      fields.last.label.should == "Identifier:"
       fields.last.values.length.should == 1
       fields.last.values.should == ["98765"]
     end

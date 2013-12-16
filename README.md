@@ -168,13 +168,21 @@ When getting JUST the main (first) title out of the metadata, it will be useful 
 You can also access the array of ModsDisplay::Values objects for a given class directly by calling the name of the class. The class names are not always intuitive for public consumption so you may want to check the code the particular method to call.
 
     render_mods_display(@model).abstract
-    => [#<ModsDisplay::Values @label="Abstract", @values=["Hey. I'm an abstract."]>]
+    => [#<ModsDisplay::Values @label="Abstract:", @values=["Hey. I'm an abstract."]>]
 
 Given that this semantics that we're concerned with here are more about titles and data construction rather than XML it may be required that you find something by the label. A common example of this is the imprint class.  The imprint class can retun other publication data that is not the imprint statement.  You'll want to select (using your favorite enumerable method) the element in the array that is an imprint.
 
     imprint = render_mods_display(@model).imprint.find do |data|
-      data.label == "Imprint"
+      data.label == "Imprint:"
     end.values
+
+## Release/Upgrade Notes
+
+#### v0.3.0
+
+Labels now have internationalization support.  We have added colons to the english labels due to certain languages' punctuation rules requiring different spacing between the label and colon.
+
+Given that fact, you will want to update any pre 0.3.0 code that searches for elements by label in a way that would fail with the presence of a colon.
 
 ## Contributing
 

@@ -11,7 +11,7 @@ describe ModsDisplay::SubTitle do
   it "omit the main title and only return sub titles" do
     fields = mods_display_sub_title(@title).fields
     fields.length.should == 1
-    fields.first.label.should == "Title"
+    fields.first.label.should == "Title:"
     fields.first.values.should == ["Sub Title"]
     
   end

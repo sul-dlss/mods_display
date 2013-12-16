@@ -11,10 +11,10 @@ describe ModsDisplay::Contents do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_contents(@contents).label.should == "Table of contents"
+      mods_display_contents(@contents).label.should == "Table of contents:"
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_contents(@display_label).label.should == "Special Label"
+      mods_display_contents(@display_label).label.should == "Special Label:"
     end
   end  
   

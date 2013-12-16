@@ -13,16 +13,16 @@ describe ModsDisplay::Note do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_location(@location).fields.first.label.should == "Location"
+      mods_display_location(@location).fields.first.label.should == "Location:"
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_location(@display_label).fields.first.label.should == "Special Label"
+      mods_display_location(@display_label).fields.first.label.should == "Special Label:"
     end
     it "should handle the URL labels correctly" do
-      mods_display_location(@urls).fields.map{|f| f.label}.should == ["Location", "PURL"]
+      mods_display_location(@urls).fields.map{|f| f.label}.should == ["Location:", "PURL:"]
     end
     it "should use get a label from a list of translations" do
-      mods_display_location(@repository_label).fields.first.label.should == "Repository"
+      mods_display_location(@repository_label).fields.first.label.should == "Repository:"
     end
   end  
   describe "fields" do
@@ -30,13 +30,13 @@ describe ModsDisplay::Note do
       it "should link and use the displayLabel as text" do
         fields = mods_display_location(@urls).fields
         fields.length.should == 2
-        field = fields.find{|f| f.label == "Location"}
+        field = fields.find{|f| f.label == "Location:"}
         field.values.should == ["<a href='http://library.stanford.edu'>Stanford University Library</a>"]
       end
       it "should link the URL itself in the absence of a displayLabel on the url element" do
         fields = mods_display_location(@urls).fields
         fields.length.should == 2
-        field = fields.find{|f| f.label == "PURL"}
+        field = fields.find{|f| f.label == "PURL:"}
         field.values.should == ["<a href='http://purl.stanford.edu'>http://purl.stanford.edu</a>"]
       end
     end

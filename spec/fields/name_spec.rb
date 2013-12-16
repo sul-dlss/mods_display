@@ -32,13 +32,13 @@ describe ModsDisplay::Language do
   end
   describe "label" do
     it "should default Author/Creator when no role is available" do
-      mods_display_name(@name).fields.first.label.should == "Author/Creator"
+      mods_display_name(@name).fields.first.label.should == "Author/Creator:"
     end
     it "should label 'Author/Creator' for primary authors" do
-      mods_display_name(@primary_name).fields.first.label.should == "Author/Creator"
+      mods_display_name(@primary_name).fields.first.label.should == "Author/Creator:"
     end
     it "should apply contributor labeling to all non blank/author/creator roles" do
-      mods_display_name(@contributor).fields.first.label.should == "Contributor"
+      mods_display_name(@contributor).fields.first.label.should == "Contributor:"
     end
   end
   
@@ -70,7 +70,7 @@ describe ModsDisplay::Language do
     it "should collapse adjacent matching labels" do
       fields = mods_display_name(@collapse_label).fields
       fields.length.should == 1
-      fields.first.label.should == "Author/Creator"
+      fields.first.label.should == "Author/Creator:"
       fields.first.values.each do |val|
         ["John Doe", "Jane Doe"].should include val.to_s
       end
@@ -79,16 +79,16 @@ describe ModsDisplay::Language do
       fields = mods_display_name(@complex_labels).fields
 
       fields.length.should == 3
-      fields.first.label.should == "Author/Creator"
+      fields.first.label.should == "Author/Creator:"
       fields.first.values.length.should == 1
       fields.first.values.first.to_s.should == "John Doe"
       
-      fields[1].label.should == "Contributor"
+      fields[1].label.should == "Contributor:"
       fields[1].values.length.should == 1
       fields[1].values.first.name.should == "Jane Doe"
       fields[1].values.first.roles.should == ["lithographer"]
 
-      fields.last.label.should == "Author/Creator"
+      fields.last.label.should == "Author/Creator:"
       fields.last.values.length.should == 2
       fields.last.values.each do |val|
         ["Jane Dough", "John Dough"].should include val.to_s

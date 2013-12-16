@@ -14,7 +14,7 @@ describe ModsDisplay::Abstract do
     it "should get a default 'Abstract' label" do
       fields = mods_display_abstract(@link).fields
       fields.length.should == 1
-      fields.first.label.should == "Abstract"
+      fields.first.label.should == "Abstract:"
     end
   end
 

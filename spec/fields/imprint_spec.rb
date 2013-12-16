@@ -39,18 +39,18 @@ describe ModsDisplay::Imprint do
 
   describe "labels" do
     it "should get the Imprint label by default" do
-      mods_display_imprint(@imprint).fields.first.label.should == "Imprint"
+      mods_display_imprint(@imprint).fields.first.label.should == "Imprint:"
     end
     it "should get the label from non-imprint origin info fields" do
       fields = mods_display_imprint(@edition_and_date).fields
-      fields.first.label.should == "Date valid"
-      fields.last.label.should == "Issuance"
+      fields.first.label.should == "Date valid:"
+      fields.last.label.should == "Issuance:"
     end
     it "should get multiple labels when we have mixed content" do
-      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint", "Date captured", "Issuance"]
+      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint:", "Date captured:", "Issuance:"]
     end
     it "should use the displayLabel when available" do
-       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel", "IssuanceLabel"]
+       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel:", "IssuanceLabel:"]
     end
   end
 
@@ -149,38 +149,38 @@ describe ModsDisplay::Imprint do
           fields = mods_display_imprint(@encoded_dates).fields
           fields.length.should == 4
           fields.find do |field|
-            field.label == "Imprint"
+            field.label == "Imprint:"
           end.values.should == ["2013"]
         end
         it "should handle month+year dates properly" do
           fields = mods_display_imprint(@encoded_dates).fields
           fields.length.should == 4
           fields.find do |field|
-            field.label == "Date captured"
+            field.label == "Date captured:"
           end.values.should == ["July 2013"]
         end
         it "should handle full dates properly" do
           fields = mods_display_imprint(@encoded_dates).fields
           fields.length.should == 4
           fields.find do |field|
-            field.label == "Date created"
+            field.label == "Date created:"
           end.values.should == ["July 10, 2013"]
         end
         it "should not try to handle dates we can't parse" do
           fields = mods_display_imprint(@encoded_dates).fields
           fields.length.should == 4
           fields.find do |field|
-            field.label == "Date modified"
+            field.label == "Date modified:"
           end.values.should == ["Jul. 22, 2013"]
         end
         it "should accept date configurations" do
           fields = mods_display_format_date_imprint(@encoded_dates).fields
           fields.length.should == 4
           fields.find do |field|
-            field.label == "Date created"
+            field.label == "Date created:"
           end.values.should == ["(2013) July, 10"]
           fields.find do |field|
-            field.label == "Date captured"
+            field.label == "Date captured:"
           end.values.should == ["July (2013)"]
         end
       end

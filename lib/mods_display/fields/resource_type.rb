@@ -9,6 +9,6 @@ class ModsDisplay::ResourceType < ModsDisplay::Field
 
   private
   def displayLabel(element)
-    super(element) || "Type of resource"
+    super(element) || I18n.t('mods_display.type_of_resource')
   end
 end

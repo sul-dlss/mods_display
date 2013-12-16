@@ -23,7 +23,7 @@ class ModsDisplay::Field
     output = ""
     fields.each do |field|
       if field.values.any?{|f| f && !f.empty? }
-        output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
+        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
         output << "<dd#{value_class}>"
           output << field.values.map do |val|
             @config.link ? link_to_value(val.to_s) : link_urls_and_email(val.to_s)
@@ -57,8 +57,12 @@ class ModsDisplay::Field
   def displayLabel(element)
     if (element.respond_to?(:attributes) and
         element.attributes["displayLabel"].respond_to?(:value))
-      element.attributes["displayLabel"].value
+      "#{element.attributes["displayLabel"].value}:"
     end
+  end
+
+  def sanitized_field_title(label)
+    "title='#{label.gsub(/:$/,'').strip}'"
   end
 
   def replace_tokens(object, value)

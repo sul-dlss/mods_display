@@ -10,6 +10,6 @@ class ModsDisplay::Genre < ModsDisplay::Field
   private
 
   def displayLabel(element)
-    super(element) || "Genre"
+    super(element) || I18n.t('mods_display.genre')
   end
 end

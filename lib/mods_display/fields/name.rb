@@ -18,7 +18,7 @@ class ModsDisplay::Name < ModsDisplay::Field
     return nil if fields.empty? or @config.ignore?
     output = ""
     fields.each do |field|
-      output << "<dt#{label_class} title='#{field.label}'>#{field.label}:</dt>"
+      output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
       output << "<dd#{value_class}>"
         output << field.values.map do |val|
           if @config.link
@@ -38,9 +38,9 @@ class ModsDisplay::Name < ModsDisplay::Field
 
   def name_label(element)
     if !has_role?(element) || is_primary?(element) || has_author_or_creator_roles?(element)
-      "Author/Creator"
+      I18n.t('mods_display.author_creator')
     else
-      "Contributor"
+      I18n.t('mods_display.contributor')
     end
   end
 

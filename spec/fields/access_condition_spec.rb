@@ -23,7 +23,7 @@ describe ModsDisplay::AccessCondition do
     it "should normalize types and assign proper labels" do
       fields = mods_display_access_condition(@restrict_condition).fields
       fields.length.should == 1
-      fields.first.label.should == "Restriction on access"
+      fields.first.label.should == "Restriction on access:"
       fields.first.values.each_with_index do |value, index|
         value.should match /^Restrict Access Note#{index+1}/
       end

@@ -52,7 +52,7 @@ class ModsDisplay::AccessCondition < ModsDisplay::Field
     if access_labels.has_key?(type)
       return access_labels[type]
     end
-    "Access condition"
+    I18n.t('mods_display.access_condition')
   end
 
   def normalize_type(element)
@@ -64,10 +64,10 @@ class ModsDisplay::AccessCondition < ModsDisplay::Field
   end
 
   def access_labels
-    {"useandreproduction"  => "Use and reproduction",
-     "restrictiononaccess" => "Restriction on access",
-     "copyright"           => "Copyright",
-     "license"             => "License"
+    {"useandreproduction"  => I18n.t('mods_display.use_and_reproduction'),
+     "restrictiononaccess" => I18n.t('mods_display.restriction_on_access'),
+     "copyright"           => I18n.t('mods_display.copyright'),
+     "license"             => I18n.t('mods_display.license')
      }
   end
 end
