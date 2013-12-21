@@ -42,5 +42,4 @@ require "i18n"
 require "i18n/backend/fallbacks" 
 I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
 I18n.load_path += Dir["#{File.expand_path('../..', __FILE__)}/config/locales/*.yml"]
-I18n.default_locale = :en
 I18n.backend.load_translations
