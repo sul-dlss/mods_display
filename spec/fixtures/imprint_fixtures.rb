@@ -265,4 +265,16 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def invalid_dates
+    <<-MODS
+      <mods>
+        <originInfo>
+          <place>
+             <placeTerm>United States</placeTerm>
+           </place>
+           <dateModified encoding="w3cdtf">1920-09-00</dateModified>
+        </originInfo>
+      </mods>
+    MODS
+  end
 end

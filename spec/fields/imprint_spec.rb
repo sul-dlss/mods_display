@@ -35,6 +35,7 @@ describe ModsDisplay::Imprint do
     @encoded_place = Stanford::Mods::Record.new.from_str(encoded_place, false).origin_info
     @encoded_dates = Stanford::Mods::Record.new.from_str(encoded_dates, false).origin_info
     @bad_dates = Stanford::Mods::Record.new.from_str(bad_dates, false).origin_info
+    @invalid_dates = Stanford::Mods::Record.new.from_str(invalid_dates, false).origin_info
   end
 
   describe "labels" do
@@ -192,6 +193,11 @@ describe ModsDisplay::Imprint do
         fields.each do |field|
           field.values.join.should_not include "9999"
         end
+      end
+      it "should handle invalid dates by returning the original value" do
+        fields = mods_display_imprint(@invalid_dates).fields
+        fields.length.should == 2
+        fields.last.values.should == ["1920-09-00"]
       end
     end
   end

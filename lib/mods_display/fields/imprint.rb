@@ -156,11 +156,15 @@ class ModsDisplay::Imprint < ModsDisplay::Field
   end
   def process_w3cdtf_date(date_field)
     date_field = date_field.clone
-    date_field.content = if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
-      Date.parse(date_field.text).strftime(@config.full_date_format)
-    elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
-      Date.parse("#{date_field.text}-01").strftime(@config.short_date_format)
-    else
+    date_field.content = begin
+      if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
+        Date.parse(date_field.text).strftime(@config.full_date_format)
+      elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
+        Date.parse("#{date_field.text}-01").strftime(@config.short_date_format)
+      else
+        date_field.content
+      end
+    rescue
       date_field.content
     end
     date_field
