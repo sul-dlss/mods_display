@@ -80,10 +80,10 @@ class ModsDisplay::Imprint < ModsDisplay::Field
       end_date = date_fields.find{|d| d.attributes["point"] && d.attributes["point"].value == "end"}
       date_fields.map do |date|
         date = date.clone # clone the date object so we don't append the same one
-        if normalize_date(date.text) == start_date.text
+        if normalize_date(date.text) == normalize_date(start_date.text)
           date.content = [start_date.text, end_date.text].join("-")
           date
-        elsif normalize_date(date.text) != end_date.text
+        elsif normalize_date(date.text) != normalize_date(end_date.text)
           date
         end
       end.compact

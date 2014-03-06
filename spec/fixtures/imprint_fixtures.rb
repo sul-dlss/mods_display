@@ -101,6 +101,16 @@ module ImprintFixtures
       </mods>
     MODS
   end
+  def encoded_date_range
+    <<-MODS
+      <mods>
+        <originInfo>
+          <dateCreated encoding="w3cdtf" keyDate="yes" point="start">2008-02-01</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2009-12-02</dateCreated>
+        </originInfo>
+      </mods>
+    MODS
+  end
   def dup_qualified_date
     <<-MODS
       <mods>

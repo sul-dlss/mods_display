@@ -21,6 +21,7 @@ describe ModsDisplay::Imprint do
     @display_label = Stanford::Mods::Record.new.from_str(display_label, false).origin_info
     @date_range = Stanford::Mods::Record.new.from_str(date_range, false).origin_info
     @open_date_range = Stanford::Mods::Record.new.from_str(open_date_range, false).origin_info
+    @encoded_date_range = Stanford::Mods::Record.new.from_str(encoded_date_range, false).origin_info
     @dup_qualified_date = Stanford::Mods::Record.new.from_str(dup_qualified_date, false).origin_info
     @dup_unencoded_date = Stanford::Mods::Record.new.from_str(dup_unencoded_date, false).origin_info
     @dup_copyright_date = Stanford::Mods::Record.new.from_str(dup_copyright_date, false).origin_info
@@ -103,6 +104,11 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(@imprint_date_range).fields
         fields.length.should == 1
         fields.first.values.should == ["1820-1825"]
+      end
+      it "should handle encoded dates properly" do
+        fields = mods_display_imprint(@encoded_date_range).fields
+        fields.length.should eq 1
+        fields.first.values.should eq ["February 01, 2008-December 02, 2009"]
       end
     end
     describe "duplication" do
