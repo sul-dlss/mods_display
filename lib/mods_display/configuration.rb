@@ -6,11 +6,11 @@ class ModsDisplay::Configuration
   end
 
   def title &title
-    @title ||= ModsDisplay::Configuration::Base.new(&title || Proc.new{})
+    @title ||= ModsDisplay::Configuration::Title.new(&title || Proc.new{})
   end
 
   def sub_title &sub_title
-    @sub_title ||= ModsDisplay::Configuration::Base.new(&sub_title || Proc.new{})
+    @sub_title ||= ModsDisplay::Configuration::Title.new(&sub_title || Proc.new{})
   end
 
   def name &name
