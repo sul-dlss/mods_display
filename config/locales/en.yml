@@ -35,6 +35,7 @@ en:
     issue_number: "Issue number:"
     language: "Language:"
     lccn: "LCCN:"
+    license: "License:"
     location: "Location:"
     map_data: "Map data:"
     matrix_number: "Matric number:"
