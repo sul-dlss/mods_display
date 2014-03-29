@@ -4,6 +4,10 @@
 
 A gem for displaying MODS Metadata in a configurable way.
 
+## Demo
+
+You can experiment with the output of the latest release of the gem in the [demo app](http://mods-display.herokuapp.com/).
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -170,7 +174,7 @@ You can also access the array of ModsDisplay::Values objects for a given class d
     render_mods_display(@model).abstract
     => [#<ModsDisplay::Values @label="Abstract:", @values=["Hey. I'm an abstract."]>]
 
-Given that this semantics that we're concerned with here are more about titles and data construction rather than XML it may be required that you find something by the label. A common example of this is the imprint class.  The imprint class can retun other publication data that is not the imprint statement.  You'll want to select (using your favorite enumerable method) the element in the array that is an imprint.
+Given that this semantics that we're concerned with here are more about titles and data construction rather than XML it may be required that you find something by the label. A common example of this is the imprint class.  The imprint class can return other publication data that is not the imprint statement.  You'll want to select (using your favorite enumerable method) the element in the array that is an imprint.
 
     imprint = render_mods_display(@model).imprint.find do |data|
       data.label == "Imprint:"
