@@ -39,6 +39,8 @@ require "mods_display/fields/sub_title"
 require "mods_display/fields/title"
 require "mods_display/fields/values"
 
+require 'stanford-mods'
+
 require "i18n"
 require "i18n/backend/fallbacks" 
 I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
