@@ -2,12 +2,12 @@ class ModsDisplay::Format < ModsDisplay::Field
 
   def fields
     return_fields = []
-    # if @values.respond_to?(:format) and
-    #    !@values.format.nil? and
-    #    !@values.format.empty?
-    #      return_fields << ModsDisplay::Values.new(:label => "Format",
-    #                                               :values => [decorate_formats(@values.format).join(", ")])
-    # end
+    if @values.respond_to?(:format) and
+       !@values.format.nil? and
+       !@values.format.empty?
+         return_fields << ModsDisplay::Values.new(:label => format_label,
+                                                  :values => [decorate_formats(@values.format).join(", ")])
+    end
     unless @values.physical_description.nil?
       @values.physical_description.each do |description|
         unless description.form.nil? or description.form.empty?
