@@ -13,25 +13,25 @@ describe ModsDisplay::Description do
   end
   describe "labels" do
     it "should use the displayLabel if one is provided" do
-      mods_display_description(@display_label).fields.first.label.should == "SpecialLabel:"
+      expect(mods_display_description(@display_label).fields.first.label).to eq("SpecialLabel:")
     end
     it "should get the default label for a child element" do
-      mods_display_description(@form).fields.first.label.should == "Note:"
+      expect(mods_display_description(@form).fields.first.label).to eq("Note:")
     end
     it "should get multiple lables for mixed content" do
-      mods_display_description(@mixed).fields.map{|v| v.label }.should == ["Note:", "Digital origin:"]
+      expect(mods_display_description(@mixed).fields.map{|v| v.label }).to eq(["Note:", "Digital origin:"])
     end
     it "should get the display label from child elements" do
-      mods_display_description(@child_display_label).fields.map{|f| f.label }.should == ["Note Label:"]
+      expect(mods_display_description(@child_display_label).fields.map{|f| f.label }).to eq(["Note Label:"])
     end
   end
   
   describe "fields" do
     it "should get the value from a field in physicalDescription" do
-      mods_display_description(@form).fields.first.values.should == ["Description Note"]
+      expect(mods_display_description(@form).fields.first.values).to eq(["Description Note"])
     end
     it "should get multiple values for mixed content" do
-      mods_display_description(@mixed).fields.map{|v| v.values }.should == [["Description Note"], ["Digital Origin Note"]]
+      expect(mods_display_description(@mixed).fields.map{|v| v.values }).to eq([["Description Note"], ["Digital Origin Note"]])
     end
   end
 end

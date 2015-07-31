@@ -22,10 +22,10 @@ describe ModsDisplay::AccessCondition do
   describe "labels" do
     it "should normalize types and assign proper labels" do
       fields = mods_display_access_condition(@restrict_condition).fields
-      fields.length.should == 1
-      fields.first.label.should == "Restriction on access:"
+      expect(fields.length).to eq(1)
+      expect(fields.first.label).to eq("Restriction on access:")
       fields.first.values.each_with_index do |value, index|
-        value.should match /^Restrict Access Note#{index+1}/
+        expect(value).to match /^Restrict Access Note#{index+1}/
       end
     end
   end
@@ -33,59 +33,59 @@ describe ModsDisplay::AccessCondition do
     describe "copyright" do
       it "should replace instances of '(c) copyright' with the HTML copyright entity" do
         fields = mods_display_access_condition(@copyright_note).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should == "This is a &copy; Note.  Single instances of &copy; should also be replaced in these notes."
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to eq("This is a &copy; Note.  Single instances of &copy; should also be replaced in these notes.")
       end
     end
     describe "licenses" do
       it "should add the appropriate classes to the html around the license" do
         fields = mods_display_access_condition(@no_link_license_note).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should match /^<div class='unknown-something'>.*<\/div>$/
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to match /^<div class='unknown-something'>.*<\/div>$/
       end
       it "should itentify and link CreativeCommons licenses properly" do
         fields = mods_display_access_condition(@cc_license_note).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should include("<a href='http://creativecommons.org/licenses/by-sa/3.0/'>This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License</a>")
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to include("<a href='http://creativecommons.org/licenses/by-sa/3.0/'>This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License</a>")
       end
       it "should itentify and link OpenDataCommons licenses properly" do
         fields = mods_display_access_condition(@odc_license_note).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should include("<a href='http://opendatacommons.org/licenses/pddl'>This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)</a>")
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to include("<a href='http://opendatacommons.org/licenses/pddl'>This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)</a>")
       end
       it "should have a configurable version for CC licenses" do
         fields = mods_display_versioned_access_condition(@cc_license_note, "4.0").fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should include("http://creativecommons.org/licenses/by-sa/4.0/")
-        fields.first.values.first.should_not include("http://creativecommons.org/licenses/by-sa/3.0/")
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to include("http://creativecommons.org/licenses/by-sa/4.0/")
+        expect(fields.first.values.first).not_to include("http://creativecommons.org/licenses/by-sa/3.0/")
       end
       it "should not apply configured version to NON-CC licenses" do
         fields = mods_display_versioned_access_condition(@odc_license_note, "4.0").fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should_not include("/4.0/")
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).not_to include("/4.0/")
       end
       it "should not attempt unknown license types" do
         fields = mods_display_access_condition(@no_link_license_note).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should     include("This work is licensed under an Unknown License and will not be linked")
-        fields.first.values.first.should_not include("<a.*>")
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to     include("This work is licensed under an Unknown License and will not be linked")
+        expect(fields.first.values.first).not_to include("<a.*>")
       end
     end
   end
   describe "to_html" do
     it "should ignore access conditions by default" do
-      mods_display_access_condition(@access_condition).to_html.should be_nil
+      expect(mods_display_access_condition(@access_condition).to_html).to be_nil
     end
     it "should not ignore the access condition when ignore is set to false" do
       html = mods_display_non_ignore_access_condition(@access_condition).to_html
-      html.should match /<dt.*>Access condition:<\/dt><dd>Access Condition Note<\/dd>/
+      expect(html).to match /<dt.*>Access condition:<\/dt><dd>Access Condition Note<\/dd>/
     end
   end
 end

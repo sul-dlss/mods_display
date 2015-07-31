@@ -16,20 +16,20 @@ describe ModsDisplay::Language do
   describe "fields" do
     it "should return an array with a label/values object" do
       values = mods_display_language(@display_label).fields
-      values.length.should == 1
-      values.first.should be_a ModsDisplay::Values
-      values.first.label.should == "Lang:"
-      values.first.values.should == ["English"]
+      expect(values.length).to eq(1)
+      expect(values.first).to be_a ModsDisplay::Values
+      expect(values.first.label).to eq("Lang:")
+      expect(values.first.values).to eq(["English"])
     end
     it "should not return any non type='code' languageTerms from the XML" do
       values = mods_display_language(@mixed).fields
-      values.length.should == 1
-      values.first.values.should == ["English"]
+      expect(values.length).to eq(1)
+      expect(values.first.values).to eq(["English"])
     end
     it "should handle multiple languages correctly" do
       values = mods_display_language(@multi).fields
-      values.length.should == 1
-      values.first.values.should == ["German", "English"]
+      expect(values.length).to eq(1)
+      expect(values.first.values).to eq(["German", "English"])
     end
   end
 end

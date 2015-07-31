@@ -32,105 +32,105 @@ describe ModsDisplay::Language do
   end
   describe "label" do
     it "should default Author/Creator when no role is available" do
-      mods_display_name(@name).fields.first.label.should == "Author/Creator:"
+      expect(mods_display_name(@name).fields.first.label).to eq("Author/Creator:")
     end
     it "should label 'Author/Creator' for primary authors" do
-      mods_display_name(@primary_name).fields.first.label.should == "Author/Creator:"
+      expect(mods_display_name(@primary_name).fields.first.label).to eq("Author/Creator:")
     end
     it "should apply contributor labeling to all non blank/author/creator roles" do
-      mods_display_name(@contributor).fields.first.label.should == "Contributor:"
+      expect(mods_display_name(@contributor).fields.first.label).to eq("Contributor:")
     end
   end
   
   describe "fields" do
     it "should use the display form when available" do
       fields = mods_display_name(@display_form).fields
-      fields.length.should == 1
-      fields.first.values.length.should == 1
-      fields.first.values.first.should be_a(ModsDisplay::Name::Person)
-      fields.first.values.first.name.should == "Mr. John Doe"
+      expect(fields.length).to eq(1)
+      expect(fields.first.values.length).to eq(1)
+      expect(fields.first.values.first).to be_a(ModsDisplay::Name::Person)
+      expect(fields.first.values.first.name).to eq("Mr. John Doe")
     end
     it "should not add blank names" do
-      mods_display_name(@blank_name).fields.should == []
+      expect(mods_display_name(@blank_name).fields).to eq([])
     end
     it "should not delimit given name and termsOfAddress (that begin w/ roman numerals) with a comma" do
       fields = mods_display_name(@numeral_toa).fields
-      fields.length.should == 1
-      fields.first.values.length.should == 1
-      fields.first.values.first.to_s.should_not match /Given Name, XVII/
-      fields.first.values.first.to_s.should match /Given Name XVII/
+      expect(fields.length).to eq(1)
+      expect(fields.first.values.length).to eq(1)
+      expect(fields.first.values.first.to_s).not_to match /Given Name, XVII/
+      expect(fields.first.values.first.to_s).to match /Given Name XVII/
     end
     it "should delimit given name and termsOfAddress (that DO NOT begin w/ roman numerals) with a comma" do
       fields = mods_display_name(@simple_toa).fields
-      fields.length.should == 1
-      fields.first.values.length.should == 1
-      fields.first.values.first.to_s.should match /Given Name, Ier, empereur/
-      fields.first.values.first.to_s.should_not match /Given Name Ier, empereur/
+      expect(fields.length).to eq(1)
+      expect(fields.first.values.length).to eq(1)
+      expect(fields.first.values.first.to_s).to match /Given Name, Ier, empereur/
+      expect(fields.first.values.first.to_s).not_to match /Given Name Ier, empereur/
     end
     it "should collapse adjacent matching labels" do
       fields = mods_display_name(@collapse_label).fields
-      fields.length.should == 1
-      fields.first.label.should == "Author/Creator:"
+      expect(fields.length).to eq(1)
+      expect(fields.first.label).to eq("Author/Creator:")
       fields.first.values.each do |val|
-        ["John Doe", "Jane Doe"].should include val.to_s
+        expect(["John Doe", "Jane Doe"]).to include val.to_s
       end
     end
     it "should perseve order and separation of non-adjesent matching labels" do
       fields = mods_display_name(@complex_labels).fields
 
-      fields.length.should == 3
-      fields.first.label.should == "Author/Creator:"
-      fields.first.values.length.should == 1
-      fields.first.values.first.to_s.should == "John Doe"
+      expect(fields.length).to eq(3)
+      expect(fields.first.label).to eq("Author/Creator:")
+      expect(fields.first.values.length).to eq(1)
+      expect(fields.first.values.first.to_s).to eq("John Doe")
       
-      fields[1].label.should == "Contributor:"
-      fields[1].values.length.should == 1
-      fields[1].values.first.name.should == "Jane Doe"
-      fields[1].values.first.roles.should == ["lithographer"]
+      expect(fields[1].label).to eq("Contributor:")
+      expect(fields[1].values.length).to eq(1)
+      expect(fields[1].values.first.name).to eq("Jane Doe")
+      expect(fields[1].values.first.roles).to eq(["lithographer"])
 
-      fields.last.label.should == "Author/Creator:"
-      fields.last.values.length.should == 2
+      expect(fields.last.label).to eq("Author/Creator:")
+      expect(fields.last.values.length).to eq(2)
       fields.last.values.each do |val|
-        ["Jane Dough", "John Dough"].should include val.to_s
+        expect(["Jane Dough", "John Dough"]).to include val.to_s
       end
     end
     describe "roles" do
       it "should get the role when present" do
         fields = mods_display_name(@name_with_role).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.should be_a(ModsDisplay::Name::Person)
-        fields.first.values.first.roles.should == ["Depicted"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to be_a(ModsDisplay::Name::Person)
+        expect(fields.first.values.first.roles).to eq(["Depicted"])
       end
       it "should decode encoded roleTerms when no text (or non-typed) roleTerm is available" do
         fields = mods_display_name(@encoded_role).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.to_s.should == "John Doe (Lithographer)"
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first.to_s).to eq("John Doe (Lithographer)")
       end
       it "should get the type='text' role before an untyped role" do
         fields = mods_display_name(@mixed_role).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.roles.should == ["engraver"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first.roles).to eq(["engraver"])
       end
       it "should be handled correctly when there are more than one" do
         fields = mods_display_name(@multiple_roles).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.roles.should == ["Depicted", "Artist"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first.roles).to eq(["Depicted", "Artist"])
       end
       it "should handle code and text roleTerms together correctly" do
         fields = mods_display_name(@complex_roles).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.roles.should == ["Depicted"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first.roles).to eq(["Depicted"])
       end
       it "should comma seperate multiple roles" do
         fields = mods_display_name(@multiple_roles).fields
-        fields.length.should == 1
-        fields.first.values.length.should == 1
-        fields.first.values.first.to_s.should == "John Doe (Depicted, Artist)"
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first.to_s).to eq("John Doe (Depicted, Artist)")
       end
     end
   end
@@ -138,11 +138,11 @@ describe ModsDisplay::Language do
   describe "to_html" do
     it "should add the role to the name in parens" do
       html = mods_display_name(@name_with_role).to_html
-      html.should match(/<dd>John Doe \(Depicted\)<\/dd>/)
+      expect(html).to match(/<dd>John Doe \(Depicted\)<\/dd>/)
     end
     it "should linke the name and not the role if requested" do
       html = mods_display_name_link(@name_with_role).to_html
-      html.should match(/<dd><a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)<\/dd>/)
+      expect(html).to match(/<dd><a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)<\/dd>/)
     end
   end
   

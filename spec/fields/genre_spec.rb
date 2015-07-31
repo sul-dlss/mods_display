@@ -13,20 +13,20 @@ describe ModsDisplay::Abstract do
   describe "labels" do
     it "should return a default 'Genre' label" do
       fields = mods_display_genre(@genre).fields
-      fields.length.should == 1
-      fields.first.label.should == "Genre:"
+      expect(fields.length).to eq(1)
+      expect(fields.first.label).to eq("Genre:")
     end
     it "should use a display label when one is available" do
       fields = mods_display_genre(@display_label).fields
-      fields.length.should == 1
-      fields.first.label.should == "Special label:"
+      expect(fields.length).to eq(1)
+      expect(fields.first.label).to eq("Special label:")
     end
   end
   describe "fields" do
     it "should capitalize the first letter in a genre" do
       fields = mods_display_genre(@downcase).fields
-      fields.length.should == 1
-      fields.first.values.should == ["Map data"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["Map data"])
     end
   end
 end

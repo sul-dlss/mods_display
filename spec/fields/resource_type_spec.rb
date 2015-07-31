@@ -12,17 +12,17 @@ describe ModsDisplay::ResourceType do
   end
   it "should default to a label of 'Type of resource'" do
     fields = mods_display_resource_type(@type).fields
-    fields.length.should == 1
-    fields.first.label.should == "Type of resource:"
+    expect(fields.length).to eq(1)
+    expect(fields.first.label).to eq("Type of resource:")
   end
   it "should use the displayLabel attribute when present" do
     fields = mods_display_resource_type(@display_label).fields
-    fields.length.should == 1
-    fields.first.label.should == "Special label:"
+    expect(fields.length).to eq(1)
+    expect(fields.first.label).to eq("Special label:")
   end
   it "should capitalize the first letter of the values" do
     fields = mods_display_resource_type(@downcase).fields
-    fields.length.should == 1
-    fields.first.values.should == ["Resource type"]
+    expect(fields.length).to eq(1)
+    expect(fields.first.values).to eq(["Resource type"])
   end
 end

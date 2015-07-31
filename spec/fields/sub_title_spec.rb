@@ -10,9 +10,9 @@ describe ModsDisplay::SubTitle do
   end
   it "omit the main title and only return sub titles" do
     fields = mods_display_sub_title(@title).fields
-    fields.length.should == 1
-    fields.first.label.should == "Title:"
-    fields.first.values.should == ["Sub Title"]
+    expect(fields.length).to eq(1)
+    expect(fields.first.label).to eq("Title:")
+    expect(fields.first.values).to eq(["Sub Title"])
     
   end
 end

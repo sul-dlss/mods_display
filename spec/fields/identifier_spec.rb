@@ -14,35 +14,35 @@ describe ModsDisplay::Note do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_id(@id).fields.first.label.should == "Identifier:"
+      expect(mods_display_id(@id).fields.first.label).to eq("Identifier:")
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_id(@display_label).fields.first.label.should == "Special Label:"
+      expect(mods_display_id(@display_label).fields.first.label).to eq("Special Label:")
     end
     it "should use get a label from a list of translations" do
-      mods_display_id(@issue_label).fields.first.label.should == "Issue number:"
+      expect(mods_display_id(@issue_label).fields.first.label).to eq("Issue number:")
     end
     it "should use use the raw type attribute if one is present" do
-      mods_display_id(@type_label).fields.first.label.should == "Some other Type:"
+      expect(mods_display_id(@type_label).fields.first.label).to eq("Some other Type:")
     end
   end
   
   describe "fields" do
     it "should handle matching adjacent labels" do
       fields = mods_display_id(@complex_label).fields
-      fields.length.should == 3
+      expect(fields.length).to eq(3)
       
-      fields.first.label.should == "Identifier:"
-      fields.first.values.length.should == 2
-      fields.first.values.should == ["12345", "54321"]
+      expect(fields.first.label).to eq("Identifier:")
+      expect(fields.first.values.length).to eq(2)
+      expect(fields.first.values).to eq(["12345", "54321"])
       
-      fields[1].label.should == "Issue number:"
-      fields[1].values.length.should == 1
-      fields[1].values.should == ["12345"]
+      expect(fields[1].label).to eq("Issue number:")
+      expect(fields[1].values.length).to eq(1)
+      expect(fields[1].values).to eq(["12345"])
       
-      fields.last.label.should == "Identifier:"
-      fields.last.values.length.should == 1
-      fields.last.values.should == ["98765"]
+      expect(fields.last.label).to eq("Identifier:")
+      expect(fields.last.values.length).to eq(1)
+      expect(fields.last.values).to eq(["98765"])
     end
   end
   

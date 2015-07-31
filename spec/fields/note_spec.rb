@@ -15,44 +15,44 @@ describe ModsDisplay::Note do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_note(@note).fields.first.label.should == "Note:"
+      expect(mods_display_note(@note).fields.first.label).to eq("Note:")
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_note(@display_label).fields.first.label.should == "Special Label:"
+      expect(mods_display_note(@display_label).fields.first.label).to eq("Special Label:")
     end
     it "should use get a label from a list of translations" do
-      mods_display_note(@sor_label).fields.first.label.should == "Statement of responsibility:"
+      expect(mods_display_note(@sor_label).fields.first.label).to eq("Statement of responsibility:")
     end
     it "should use use the capitalized type attribute if one is present" do
-      mods_display_note(@type_label).fields.first.label.should == "Some other type:"
+      expect(mods_display_note(@type_label).fields.first.label).to eq("Some other type:")
     end
   end
   
   describe "fields" do
     it "should handle single values" do
       fields = mods_display_note(@note).fields
-      fields.length.should == 1
-      fields.first.values.should == ["Note Field"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["Note Field"])
     end
     it "should handle complex grouping" do
       fields = mods_display_note(@complex_label).fields
-      fields.length.should == 3
-      fields.first.label.should == "Note:"
+      expect(fields.length).to eq(3)
+      expect(fields.first.label).to eq("Note:")
       fields.first.values.length == 2
-      fields.first.values.should == ["Note Field", "2nd Note Field"]
+      expect(fields.first.values).to eq(["Note Field", "2nd Note Field"])
       
       fields[1].label == "Statement of responsibility"
       fields[1].values.length == 1
-      fields[1].values.should == ["SoR"]
+      expect(fields[1].values).to eq(["SoR"])
       
-      fields.last.label.should == "Note:"
+      expect(fields.last.label).to eq("Note:")
       fields.last.values.length == 1
-      fields.last.values.should == ["Another Note"]
+      expect(fields.last.values).to eq(["Another Note"])
     end
     it "should not include any contact fields" do
       fields = mods_display_note(@contact_note).fields
-      fields.length.should == 1
-      fields.first.values.should == ["Note Field"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["Note Field"])
     end
   end
   

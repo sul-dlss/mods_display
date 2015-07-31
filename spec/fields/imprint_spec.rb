@@ -41,204 +41,204 @@ describe ModsDisplay::Imprint do
 
   describe "labels" do
     it "should get the Imprint label by default" do
-      mods_display_imprint(@imprint).fields.first.label.should == "Imprint:"
+      expect(mods_display_imprint(@imprint).fields.first.label).to eq("Imprint:")
     end
     it "should get the label from non-imprint origin info fields" do
       fields = mods_display_imprint(@edition_and_date).fields
-      fields.first.label.should == "Date valid:"
-      fields.last.label.should == "Issuance:"
+      expect(fields.first.label).to eq("Date valid:")
+      expect(fields.last.label).to eq("Issuance:")
     end
     it "should get multiple labels when we have mixed content" do
-      mods_display_imprint(@mixed).fields.map{|val| val.label }.should == ["Imprint:", "Date captured:", "Issuance:"]
+      expect(mods_display_imprint(@mixed).fields.map{|val| val.label }).to eq(["Imprint:", "Date captured:", "Issuance:"])
     end
     it "should use the displayLabel when available" do
-       mods_display_imprint(@display_label).fields.map{|val| val.label }.should == ["TheLabel:", "IssuanceLabel:"]
+       expect(mods_display_imprint(@display_label).fields.map{|val| val.label }).to eq(["TheLabel:", "IssuanceLabel:"])
     end
   end
 
   describe "fields" do
     it "should return various parts of the imprint" do
-      mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ").should == "An edition - A Place : A Publisher, An Issue Date, Another Date"
+      expect(mods_display_imprint(@imprint).fields.map{|val| val.values }.join(" ")).to eq("An edition - A Place : A Publisher, An Issue Date, Another Date")
     end
     it "should handle the punctuation when the edition is missing" do
       values = mods_display_imprint(@no_edition).fields.map{|val| val.values }.join(" ")
-      values.strip.should_not match(/^-/)
-      values.should match(/^A Place/)
+      expect(values.strip).not_to match(/^-/)
+      expect(values).to match(/^A Place/)
     end
     it "should get the text for non-imprint origin info fields" do
       fields = mods_display_imprint(@edition_and_date).fields
-      fields.first.values.should == ["A Valid Date"]
-      fields.last.values.should == ["The Issuance"]
+      expect(fields.first.values).to eq(["A Valid Date"])
+      expect(fields.last.values).to eq(["The Issuance"])
     end
     it "should handle mixed mods properly" do
       values = mods_display_imprint(@mixed).fields
-      values.length.should == 3
-      values.map{|val| val.values}.should include(["A Place : A Publisher"])
-      values.map{|val| val.values}.should include(["The Issuance"])
-      values.map{|val| val.values}.should include(["The Capture Date"])
+      expect(values.length).to eq(3)
+      expect(values.map{|val| val.values}).to include(["A Place : A Publisher"])
+      expect(values.map{|val| val.values}).to include(["The Issuance"])
+      expect(values.map{|val| val.values}).to include(["The Capture Date"])
     end
   end
   describe "date processing" do
     describe "ranges" do
       it "should join start and end point ranges with a '-'" do
         fields = mods_display_imprint(@date_range).fields
-        fields.length.should == 1
-        fields.first.values.should == ["1820-1825"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["1820-1825"])
       end
       it "should handle open ranges properly" do
         fields = mods_display_imprint(@open_date_range).fields
-        fields.length.should == 1
-        fields.first.values.should == ["1820-"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["1820-"])
       end
       it "should handle when there are more than 3 of the same date w/i a range" do
         fields = mods_display_imprint(@three_imprint_dates).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[1820-1825?]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[1820-1825?]"])
       end
       it "should apply the qualifier decoration in the imprints" do
         fields = mods_display_imprint(@qualified_imprint_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[1820?]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[1820?]"])
       end
       it "should handle date ranges in imprints" do
         fields = mods_display_imprint(@imprint_date_range).fields
-        fields.length.should == 1
-        fields.first.values.should == ["1820-1825"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["1820-1825"])
       end
       it "should handle encoded dates properly" do
         fields = mods_display_imprint(@encoded_date_range).fields
-        fields.length.should eq 1
-        fields.first.values.should eq ["February 01, 2008-December 02, 2009"]
+        expect(fields.length).to eq 1
+        expect(fields.first.values).to eq ["February 01, 2008-December 02, 2009"]
       end
     end
     describe "duplication" do
       it "should only return the qualified date when present" do
         fields = mods_display_imprint(@dup_qualified_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[1820?]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[1820?]"])
       end
       it "should use the non-encoded date when prsent" do
         fields = mods_display_imprint(@dup_unencoded_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[ca. 1820]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[ca. 1820]"])
       end
       it "should handle copyright dates correctly" do
         fields = mods_display_imprint(@dup_copyright_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["c1820"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["c1820"])
       end
       it "should only return one when no attributes are present" do
         fields = mods_display_imprint(@dup_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["1820"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["1820"])
       end
     end
     describe "qualifier decoration" do
       it "should prepend a 'c' to approximate dates" do
         fields = mods_display_imprint(@approximate_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[ca. 1820]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[ca. 1820]"])
       end
       it "should append a '?' to a questionable dates and wrap them in square-brackets" do
         fields = mods_display_imprint(@questionable_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[1820?]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[1820?]"])
       end
       it "should wrap inferred dates in square-brackets" do
         fields = mods_display_imprint(@inferred_date).fields
-        fields.length.should == 1
-        fields.first.values.should == ["[1820]"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["[1820]"])
       end
     end
     describe "encoded dates" do
       describe "W3CDTF" do
         it "should handle single year dates properly" do
           fields = mods_display_imprint(@encoded_dates).fields
-          fields.length.should == 4
-          fields.find do |field|
+          expect(fields.length).to eq(4)
+          expect(fields.find do |field|
             field.label == "Imprint:"
-          end.values.should == ["2013"]
+          end.values).to eq(["2013"])
         end
         it "should handle month+year dates properly" do
           fields = mods_display_imprint(@encoded_dates).fields
-          fields.length.should == 4
-          fields.find do |field|
+          expect(fields.length).to eq(4)
+          expect(fields.find do |field|
             field.label == "Date captured:"
-          end.values.should == ["July 2013"]
+          end.values).to eq(["July 2013"])
         end
         it "should handle full dates properly" do
           fields = mods_display_imprint(@encoded_dates).fields
-          fields.length.should == 4
-          fields.find do |field|
+          expect(fields.length).to eq(4)
+          expect(fields.find do |field|
             field.label == "Date created:"
-          end.values.should == ["July 10, 2013"]
+          end.values).to eq(["July 10, 2013"])
         end
         it "should not try to handle dates we can't parse" do
           fields = mods_display_imprint(@encoded_dates).fields
-          fields.length.should == 4
-          fields.find do |field|
+          expect(fields.length).to eq(4)
+          expect(fields.find do |field|
             field.label == "Date modified:"
-          end.values.should == ["Jul. 22, 2013"]
+          end.values).to eq(["Jul. 22, 2013"])
         end
         it "should accept date configurations" do
           fields = mods_display_format_date_imprint(@encoded_dates).fields
-          fields.length.should == 4
-          fields.find do |field|
+          expect(fields.length).to eq(4)
+          expect(fields.find do |field|
             field.label == "Date created:"
-          end.values.should == ["(2013) July, 10"]
-          fields.find do |field|
+          end.values).to eq(["(2013) July, 10"])
+          expect(fields.find do |field|
             field.label == "Date captured:"
-          end.values.should == ["July (2013)"]
+          end.values).to eq(["July (2013)"])
         end
       end
     end
     describe "bad dates" do
       it "should ignore date values" do
         fields = mods_display_imprint(@bad_dates).fields
-        fields.length.should == 2
+        expect(fields.length).to eq(2)
         fields.each do |field|
-          field.values.join.should_not include "9999"
+          expect(field.values.join).not_to include "9999"
         end
       end
       it "should handle invalid dates by returning the original value" do
         fields = mods_display_imprint(@invalid_dates).fields
-        fields.length.should == 2
-        fields.last.values.should == ["1920-09-00"]
+        expect(fields.length).to eq(2)
+        expect(fields.last.values).to eq(["1920-09-00"])
       end
     end
   end
   describe "place processing" do
     it "should exclude encoded places" do
       fields = mods_display_imprint(@encoded_place).fields
-      fields.length.should == 1
-      fields.first.values.should == ["[Amsterdam]", "[United States]", "Netherlands"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["[Amsterdam]", "[United States]", "Netherlands"])
     end
     it "should translate encoded place if there isn't a text (or non-typed) value available" do
       fields = mods_display_imprint(@encoded_place).fields
-      fields.length.should == 1
-      fields.first.values.should include "Netherlands"
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to include "Netherlands"
     end
     it "should ignore 'xx' country codes" do
       fields = mods_display_imprint(@xx_country_code).fields
-      fields.length.should == 1
-      fields.first.values.should == ["1994"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["1994"])
     end
   end
   describe "to_html" do
     it "should return the display form if one is available" do
       html = mods_display_imprint(@display_form).to_html
-      html.scan(/<dd>/).length.should == 2
-      html.scan(/<dd>The Display Form<\/dd>/).length.should == 2
+      expect(html.scan(/<dd>/).length).to eq(2)
+      expect(html.scan(/<dd>The Display Form<\/dd>/).length).to eq(2)
     end
     it "should return the displayLabel when present if we're using the displayForm" do
-      mods_display_imprint(@display_form_with_label).to_html.should match(/<dt title='TheLabel'>TheLabel:<\/dt>/)
+      expect(mods_display_imprint(@display_form_with_label).to_html).to match(/<dt title='TheLabel'>TheLabel:<\/dt>/)
     end
     it "should have individual dt/dd pairs for mixed content" do
       html = mods_display_imprint(@mixed).to_html
-      html.scan(/<dt title='Imprint'>Imprint:<\/dt>/).length.should == 1
-      html.scan(/<dt title='Issuance'>Issuance:<\/dt>/).length.should == 1
-      html.scan(/<dt title='Date captured'>Date captured:<\/dt>/).length.should == 1
-      html.scan(/<dd>/).length.should == 3
+      expect(html.scan(/<dt title='Imprint'>Imprint:<\/dt>/).length).to eq(1)
+      expect(html.scan(/<dt title='Issuance'>Issuance:<\/dt>/).length).to eq(1)
+      expect(html.scan(/<dt title='Date captured'>Date captured:<\/dt>/).length).to eq(1)
+      expect(html.scan(/<dd>/).length).to eq(3)
     end
   end
 

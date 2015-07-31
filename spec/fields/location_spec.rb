@@ -13,31 +13,31 @@ describe ModsDisplay::Note do
   end
   describe "label" do
     it "should have a default label" do
-      mods_display_location(@location).fields.first.label.should == "Location:"
+      expect(mods_display_location(@location).fields.first.label).to eq("Location:")
     end
     it "should use the displayLabel attribute when one is available" do
-      mods_display_location(@display_label).fields.first.label.should == "Special Label:"
+      expect(mods_display_location(@display_label).fields.first.label).to eq("Special Label:")
     end
     it "should handle the URL labels correctly" do
-      mods_display_location(@urls).fields.map{|f| f.label}.should == ["Location:", "PURL:"]
+      expect(mods_display_location(@urls).fields.map{|f| f.label}).to eq(["Location:", "PURL:"])
     end
     it "should use get a label from a list of translations" do
-      mods_display_location(@repository_label).fields.first.label.should == "Repository:"
+      expect(mods_display_location(@repository_label).fields.first.label).to eq("Repository:")
     end
   end  
   describe "fields" do
     describe "URLs" do
       it "should link and use the displayLabel as text" do
         fields = mods_display_location(@urls).fields
-        fields.length.should == 2
+        expect(fields.length).to eq(2)
         field = fields.find{|f| f.label == "Location:"}
-        field.values.should == ["<a href='http://library.stanford.edu'>Stanford University Library</a>"]
+        expect(field.values).to eq(["<a href='http://library.stanford.edu'>Stanford University Library</a>"])
       end
       it "should link the URL itself in the absence of a displayLabel on the url element" do
         fields = mods_display_location(@urls).fields
-        fields.length.should == 2
+        expect(fields.length).to eq(2)
         field = fields.find{|f| f.label == "PURL:"}
-        field.values.should == ["<a href='http://purl.stanford.edu'>http://purl.stanford.edu</a>"]
+        expect(field.values).to eq(["<a href='http://purl.stanford.edu'>http://purl.stanford.edu</a>"])
       end
     end
   end
