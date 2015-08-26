@@ -10,12 +10,12 @@ describe ModsDisplay::Contact do
   end
   it "should only get contact fields" do
     fields = mods_display_contact(@contact_note).fields
-    fields.length.should == 1
-    fields.first.values.should include("jdoe@example.com")
+    expect(fields.length).to eq(1)
+    expect(fields.first.values).to include("jdoe@example.com")
   end
   it "should not get any non-contact fields" do
     fields = mods_display_contact(@contact_note).fields
-    fields.length.should == 1
-    fields.first.values.should_not include("Note Field")
+    expect(fields.length).to eq(1)
+    expect(fields.first.values).not_to include("Note Field")
   end
 end

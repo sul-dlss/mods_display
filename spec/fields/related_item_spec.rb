@@ -17,47 +17,47 @@ describe ModsDisplay::RelatedItem do
   end
   describe "label" do
     it "should default to Related Item" do
-      mods_display_item(@item).fields.first.label.should == "Related item:"
+      expect(mods_display_item(@item).fields.first.label).to eq("Related item:")
     end
     it "should get the location label" do
-      mods_display_item(@location).fields.first.label.should == "Location:"
+      expect(mods_display_item(@location).fields.first.label).to eq("Location:")
     end
     it "should get the reference label" do
-      mods_display_item(@reference).fields.first.label.should == "Referenced by:"
+      expect(mods_display_item(@reference).fields.first.label).to eq("Referenced by:")
     end
     it "should get the displayLabel if available" do
-      mods_display_item(@display_label).fields.first.label.should == "Special Item:"
+      expect(mods_display_item(@display_label).fields.first.label).to eq("Special Item:")
     end
   end
   describe "fields" do
     it "should get a location if it is available" do
       fields = mods_display_item(@item).fields
-      fields.length.should == 1
-      fields.first.values.should == ["A Related Item"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["A Related Item"])
     end
     it "should return a link if there is a location/url present" do
       fields = mods_display_item(@linked_item).fields
-      fields.length.should == 1
-      fields.first.values.should == ["<a href='http://library.stanford.edu/'>A Related Item</a>"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["<a href='http://library.stanford.edu/'>A Related Item</a>"])
     end
     it "should not return any fields if the described related item is a collection" do
-      mods_display_item(@collection).fields.should == []
+      expect(mods_display_item(@collection).fields).to eq([])
     end
     it "should not return empty links when there is no title or link" do
-      mods_display_item(@blank_item).fields.should == []
+      expect(mods_display_item(@blank_item).fields).to eq([])
     end
     it "should concat the isReferencedBy related item title with other metadata" do
       fields = mods_display_item(@reference).fields
-      fields.length.should == 1
-      fields.first.values.should == ["The title DATE 124"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["The title DATE 124"])
     end
     it "should collapse labels down into the same record" do
       fields = mods_display_item(@multi_items).fields
-      fields.length.should == 1
-      fields.first.label.should == "Related item:"
-      fields.first.values.length.should == 2
-      fields.first.values.first.should =~ /<a href=.*>Library<\/a>/ or
-      fields.first.values.last.should =~ /<a href=.*>SDR<\/a>/
+      expect(fields.length).to eq(1)
+      expect(fields.first.label).to eq("Related item:")
+      expect(fields.first.values.length).to eq(2)
+      expect(fields.first.values.first).to match(/<a href=.*>Library<\/a>/) or
+      expect(fields.first.values.last).to match(/<a href=.*>SDR<\/a>/)
     end
   end
 end

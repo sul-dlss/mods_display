@@ -13,17 +13,17 @@ describe ModsDisplay::Abstract do
   describe "labels" do
     it "should get a default 'Abstract' label" do
       fields = mods_display_abstract(@link).fields
-      fields.length.should == 1
-      fields.first.label.should == "Abstract:"
+      expect(fields.length).to eq(1)
+      expect(fields.first.label).to eq("Abstract:")
     end
   end
 
   describe "links" do
     it "should turn URLs into links" do
-      mods_display_abstract(@link).to_html.should match(/A link to the library \(<a href='http:\/\/library.stanford.edu'>http:\/\/library.stanford.edu<\/a>\) should appear here/)
+      expect(mods_display_abstract(@link).to_html).to match(/A link to the library \(<a href='http:\/\/library.stanford.edu'>http:\/\/library.stanford.edu<\/a>\) should appear here/)
     end
     it "should turn email addresses into mailto links" do
-      mods_display_abstract(@email).to_html.should match(/A link to an email address <a href='mailto:jdoe@example.com'>jdoe@example.com<\/a> should appear here/)
+      expect(mods_display_abstract(@email).to_html).to match(/A link to an email address <a href='mailto:jdoe@example.com'>jdoe@example.com<\/a> should appear here/)
     end
   end
 end

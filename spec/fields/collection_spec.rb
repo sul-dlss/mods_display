@@ -12,20 +12,20 @@ describe ModsDisplay::Collection do
   end
   describe "label" do
     it "should default to Collection" do
-      mods_display_collection(@collection).label.should == "Collection:"
+      expect(mods_display_collection(@collection).label).to eq("Collection:")
     end
     it "should get the displayLabel if available" do
-      mods_display_collection(@display_label).label.should == "Special Collection:"
+      expect(mods_display_collection(@display_label).label).to eq("Special Collection:")
     end
   end
   describe "fields" do
     it "should get a collection title if there is an appropriate typeOfResource field with the collection attribute" do
       fields = mods_display_collection(@collection).fields
-      fields.length.should == 1
-      fields.first.values.should == ["The Collection"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq(["The Collection"])
     end
     it "should not return anything if the there is not an appropriate typeOfResource field with the collection attribute" do
-      mods_display_collection(@non_collection).fields.should == []
+      expect(mods_display_collection(@non_collection).fields).to eq([])
     end
   end
 end

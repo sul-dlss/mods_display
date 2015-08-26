@@ -30,79 +30,79 @@ describe ModsDisplay::Subject do
   describe "fields" do
     it "should split individual child elments of subject into separate parts" do
       fields = mods_display_subject(@subject).fields
-      fields.length.should == 1
-      fields.first.values.should == [["Jazz", "Japan", "History and criticism"]]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq([["Jazz", "Japan", "History and criticism"]])
     end
     it "should split horizontalized subjects split with an emdash into separate parts" do
       fields = mods_display_subject(@emdash_subject).fields
-      fields.length.should == 1
-      fields.first.values.should == [["Jazz", "Japan", "History and criticism"]]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq([["Jazz", "Japan", "History and criticism"]])
     end
     it "should handle hierarchicalGeogaphic subjects properly" do
       fields = mods_display_subject(@geo_subject).fields
-      fields.length.should == 1
-      fields.first.values.should == [["United States", "California", "Stanford"]]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to eq([["United States", "California", "Stanford"]])
     end
     it "should handle display labels properly" do
       fields = mods_display_subject(@display_label).fields
-      fields.length.should == 3
-      fields.first.label.should  == "Subject:"
-      fields.first.values.should == [["A Subject", "Another Subject"], ["B Subject", "Another B Subject"]]
-      fields[1].label.should     == "Subject Heading:"
-      fields[1].values.should    == [["Jazz", "Japan", "History and criticism"]]
-      fields.last.label.should   == "Subject:"
-      fields.last.values.should  == [["Bay Area", "Stanford"]]
+      expect(fields.length).to eq(3)
+      expect(fields.first.label).to  eq("Subject:")
+      expect(fields.first.values).to eq([["A Subject", "Another Subject"], ["B Subject", "Another B Subject"]])
+      expect(fields[1].label).to     eq("Subject Heading:")
+      expect(fields[1].values).to    eq([["Jazz", "Japan", "History and criticism"]])
+      expect(fields.last.label).to   eq("Subject:")
+      expect(fields.last.values).to  eq([["Bay Area", "Stanford"]])
     end
     it "should handle blank subjects properly" do
-      mods_display_subject(@blank_subject).fields.should == []
+      expect(mods_display_subject(@blank_subject).fields).to eq([])
     end
   end
 
   describe "name subjects" do
     it "should handle name subjects properly" do
       fields = mods_display_subject(@name_subject).fields
-      fields.length.should == 1
-      fields.first.values.first.first.should be_a(ModsDisplay::Name::Person)
-      fields.first.values.first.first.name.should == "John Doe"
-      fields.first.values.first.first.roles.should == ["Depicted"]
+      expect(fields.length).to eq(1)
+      expect(fields.first.values.first.first).to be_a(ModsDisplay::Name::Person)
+      expect(fields.first.values.first.first.name).to eq("John Doe")
+      expect(fields.first.values.first.first.roles).to eq(["Depicted"])
     end
     it "should link the name (and not the role) correctly" do
       html = mods_display_subject(@name_subject).to_html
-      html.should match(/<a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)/)
-      html.should match(/<a href='.*\?Anonymous People'>Anonymous People<\/a>/)
+      expect(html).to match(/<a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)/)
+      expect(html).to match(/<a href='.*\?Anonymous People'>Anonymous People<\/a>/)
     end
     it "should linke the name (and not the role) correctly when linking hierarchicaly" do
       html = mods_display_hierarchical_subject(@name_subject).to_html
-      html.should match(/<a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)/)
-      html.should match(/<a href='.*\?John Doe Anonymous People'>Anonymous People<\/a>/)
+      expect(html).to match(/<a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)/)
+      expect(html).to match(/<a href='.*\?John Doe Anonymous People'>Anonymous People<\/a>/)
     end
   end
 
   describe "to_html" do
     it "should link the values when requested" do
       html = mods_display_subject(@subject).to_html
-      html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz'>Jazz<\/a>/)
-      html.should match(/<a href='http:\/\/library.stanford.edu\?Japan'>Japan<\/a>/)
-      html.should match(/<a href='http:\/\/library.stanford.edu\?History and criticism'>History and criticism<\/a>/)
+      expect(html).to match(/<a href='http:\/\/library.stanford.edu\?Jazz'>Jazz<\/a>/)
+      expect(html).to match(/<a href='http:\/\/library.stanford.edu\?Japan'>Japan<\/a>/)
+      expect(html).to match(/<a href='http:\/\/library.stanford.edu\?History and criticism'>History and criticism<\/a>/)
     end
     it "does something" do
       html = mods_display_hierarchical_subject(@subject).to_html
-      html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz'>Jazz<\/a>/)
-      html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz Japan'>Japan<\/a>/)
-      html.should match(/<a href='http:\/\/library.stanford.edu\?Jazz Japan History and criticism'>History and criticism<\/a>/)
+      expect(html).to match(/<a href='http:\/\/library.stanford.edu\?Jazz'>Jazz<\/a>/)
+      expect(html).to match(/<a href='http:\/\/library.stanford.edu\?Jazz Japan'>Japan<\/a>/)
+      expect(html).to match(/<a href='http:\/\/library.stanford.edu\?Jazz Japan History and criticism'>History and criticism<\/a>/)
     end
     it "should collapse fields into the same label" do
       html = mods_display_subject(@complex_subject).to_html
-      html.scan(/<dt title='Subject'>Subject:<\/dt>/).length.should == 1
-      html.scan(/<dd>/).length.should == 1
-      html.scan(/<br\/>/).length.should == 1
-      html.scan(/ &gt; /).length.should == 3
+      expect(html.scan(/<dt title='Subject'>Subject:<\/dt>/).length).to eq(1)
+      expect(html.scan(/<dd>/).length).to eq(1)
+      expect(html.scan(/<br\/>/).length).to eq(1)
+      expect(html.scan(/ &gt; /).length).to eq(3)
     end
     it "should handle complex display labels" do
       html = mods_display_subject(@display_label).to_html
-      html.scan(/<dt title='Subject'>Subject:<\/dt>/).length.should eq 2
-      html.scan(/<dt title='Subject Heading'>Subject Heading:<\/dt>/).length.should eq 1
-      html.scan(/<dd>/).length.should == 3
+      expect(html.scan(/<dt title='Subject'>Subject:<\/dt>/).length).to eq 2
+      expect(html.scan(/<dt title='Subject Heading'>Subject Heading:<\/dt>/).length).to eq 1
+      expect(html.scan(/<dd>/).length).to eq(3)
     end
   end
 

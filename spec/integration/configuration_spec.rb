@@ -33,22 +33,22 @@ describe "Configuration" do
     @html = @config_controller.render_mods_display(model)
   end
   it "should apply the label class" do
-    @html.should match(/<dt class='label-class' title=/)
+    expect(@html).to match(/<dt class='label-class' title=/)
   end
   it "should apply the value class" do
-    @html.scan(/<dd class='value-class'>/).length.should == 1
+    expect(@html.scan(/<dd class='value-class'>/).length).to eq(1)
   end
   it "should apply the link" do
     @html.scan(/<a href='\/path\/to\/title\?The Title of this Item'>The Title of this Item<\a>/)
   end
   it "should ignore fields if requested" do
-    @html.scan(/jdoe@example\.com/).length.should == 0
+    expect(@html.scan(/jdoe@example\.com/).length).to eq(0)
   end
   it "should get overriden configurations" do
-    @no_config_controller.mods_display_config.contact.ignore?.should be_false
-    @config_controller.mods_display_config.contact.ignore?.should be_true
+    expect(@no_config_controller.mods_display_config.contact.ignore?).to be false
+    expect(@config_controller.mods_display_config.contact.ignore?).to be true
   end
   it "should get default configurations when no controller configuration is supplied" do
-    @no_config_controller.mods_display_config.note.delimiter.should == "<br/>"
+    expect(@no_config_controller.mods_display_config.note.delimiter).to eq("<br/>")
   end
 end

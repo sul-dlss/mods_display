@@ -13,18 +13,18 @@ describe ModsDisplay::Format do
   end
   describe "format_class" do
     it "should remove any spaces" do
-      ModsDisplay::Format.send(:format_class, "Mixed Materials").should == "mixed_materials"
+      expect(ModsDisplay::Format.send(:format_class, "Mixed Materials")).to eq("mixed_materials")
     end
     it "should replace any slashes" do
-      ModsDisplay::Format.send(:format_class, "Manuscript/Archive").should == "manuscript_archive"
+      expect(ModsDisplay::Format.send(:format_class, "Manuscript/Archive")).to eq("manuscript_archive")
     end
   end
   describe "fields" do
     describe "form" do
       it "should remove duplicate values" do
         fields = mods_display_format(@duplicate_forms).fields
-        fields.length.should == 1
-        fields.first.values.should == ["Map"]
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq(["Map"])
       end
     end
   end
