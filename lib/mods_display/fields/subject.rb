@@ -77,7 +77,9 @@ class ModsDisplay::Subject < ModsDisplay::Field
   end
   
   def process_name(element)
-    ModsDisplay::Name.new([element], @config, @klass).fields.first.values.first
+    name = ModsDisplay::Name.new([element], @config, @klass).fields.first
+
+    name.values.first if name
   end
   
   private
