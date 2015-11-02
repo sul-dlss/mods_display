@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'tzinfo'
 module ModsDisplay::CountryCodes
   def country_codes
     @country_codes ||= begin
