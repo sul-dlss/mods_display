@@ -61,6 +61,18 @@ module SubjectsFixtures
     XML
   end
 
+  def blank_name_subject
+    <<-XML
+      <mods>
+        <subject>
+          <name>
+            <namePart />
+          </name>
+        </subject>
+      </mods>
+    XML
+  end
+
   def complex_subjects
     <<-XML
       <mods>
