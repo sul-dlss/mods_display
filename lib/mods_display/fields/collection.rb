@@ -3,8 +3,8 @@ module ModsDisplay
   #  Collection class to parse collection data out of Mods relatedItem fields
   ###
   class Collection < Field
-    def label
-      super || I18n.t('mods_display.collection')
+    def collection_label(value)
+      displayLabel(value) || I18n.t('mods_display.collection')
     end
 
     def fields
@@ -12,7 +12,7 @@ module ModsDisplay
       @values.each do |value|
         next unless related_item_is_a_collection?(value)
         return_fields << ModsDisplay::Values.new(
-          label: label,
+          label: collection_label(value),
           values: [value.titleInfo.text.strip]
         )
       end
