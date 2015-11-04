@@ -16,10 +16,11 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ["lib"]
-  
+
   gem.add_dependency 'stanford-mods'
   gem.add_dependency 'i18n'
-  
+
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3.0'
+  gem.add_development_dependency 'rubocop'
 end

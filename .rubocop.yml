@@ -1,0 +1,12 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'vendor/**/*'
+
+Metrics/LineLength:
+  Max: 120
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
