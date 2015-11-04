@@ -7,10 +7,23 @@ end
 describe ModsDisplay::Note do
   before(:all) do
     @id = Stanford::Mods::Record.new.from_str('<mods><identifier>12345</identifier></mods>', false).identifier
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><identifier displayLabel='Special Label'>54321</identifier></mods>", false).identifier
-    @issue_label = Stanford::Mods::Record.new.from_str("<mods><identifier type='issue number'>Issue 1</identifier></mods>", false).identifier
-    @type_label = Stanford::Mods::Record.new.from_str("<mods><identifier type='Some other Type'>98765</identifier></mods>", false).identifier
-    @complex_label = Stanford::Mods::Record.new.from_str("<mods><identifier>12345</identifier><identifier>54321</identifier><identifier type='issue number'>12345</identifier><identifier>98765</identifier></mods>", false).identifier
+    @display_label = Stanford::Mods::Record.new.from_str(
+      "<mods><identifier displayLabel='Special Label'>54321</identifier></mods>", false
+    ).identifier
+    @issue_label = Stanford::Mods::Record.new.from_str(
+      "<mods><identifier type='issue number'>Issue 1</identifier></mods>", false
+    ).identifier
+    @type_label = Stanford::Mods::Record.new.from_str(
+      "<mods><identifier type='Some other Type'>98765</identifier></mods>", false
+    ).identifier
+    @complex_label = Stanford::Mods::Record.new.from_str(
+      "<mods>
+        <identifier>12345</identifier>
+        <identifier>54321</identifier>
+        <identifier type='issue number'>12345</identifier>
+        <identifier>98765</identifier>
+      </mods>", false
+    ).identifier
   end
   describe 'label' do
     it 'should have a default label' do

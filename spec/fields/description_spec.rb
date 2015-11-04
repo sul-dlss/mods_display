@@ -6,10 +6,26 @@ end
 
 describe ModsDisplay::Description do
   before(:all) do
-    @form = Stanford::Mods::Record.new.from_str('<mods><physicalDescription><note>Description Note</note></physicalDescription></mods>', false).physical_description
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription displayLabel='SpecialLabel'><note>Description Note</note></physicalDescription></mods>", false).physical_description
-    @child_display_label = Stanford::Mods::Record.new.from_str("<mods><physicalDescription><note displayLabel='Note Label'>Description Note</note></physicalDescription></mods>", false).physical_description
-    @mixed = Stanford::Mods::Record.new.from_str('<mods><physicalDescription><note>Description Note</note><digitalOrigin>Digital Origin Note</digitalOrigin></physicalDescription></mods>', false).physical_description
+    @form = Stanford::Mods::Record.new.from_str(
+      '<mods><physicalDescription><note>Description Note</note></physicalDescription></mods>', false
+    ).physical_description
+    @display_label = Stanford::Mods::Record.new.from_str(
+      "<mods>
+        <physicalDescription displayLabel='SpecialLabel'><note>Description Note</note></physicalDescription>
+       </mods>", false
+    ).physical_description
+    @child_display_label = Stanford::Mods::Record.new.from_str(
+      "<mods><physicalDescription><note displayLabel='Note Label'>Description Note</note></physicalDescription></mods>",
+      false
+    ).physical_description
+    @mixed = Stanford::Mods::Record.new.from_str(
+      '<mods>
+        <physicalDescription>
+          <note>Description Note</note>
+          <digitalOrigin>Digital Origin Note</digitalOrigin>
+        </physicalDescription>
+       </mods>', false
+    ).physical_description
   end
   describe 'labels' do
     it 'should use the displayLabel if one is provided' do
@@ -31,7 +47,9 @@ describe ModsDisplay::Description do
       expect(mods_display_description(@form).fields.first.values).to eq(['Description Note'])
     end
     it 'should get multiple values for mixed content' do
-      expect(mods_display_description(@mixed).fields.map(&:values)).to eq([['Description Note'], ['Digital Origin Note']])
+      expect(mods_display_description(@mixed).fields.map(&:values)).to eq(
+        [['Description Note'], ['Digital Origin Note']]
+      )
     end
   end
 end

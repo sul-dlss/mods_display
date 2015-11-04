@@ -6,10 +6,26 @@ end
 
 describe ModsDisplay::Note do
   before(:all) do
-    @location = Stanford::Mods::Record.new.from_str('<mods><location><physicalLocation>The Location</physicalLocation></location></mods>', false).location
-    @urls = Stanford::Mods::Record.new.from_str("<mods><location><url displayLabel='Stanford University Library'>http://library.stanford.edu</url></location><location displayLabel='PURL'><url>http://purl.stanford.edu</url></location></mods>", false).location
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><location displayLabel='Special Label'><shelfLocation>On Shelf A</shelfLocation></location></mods>", false).location
-    @repository_label = Stanford::Mods::Record.new.from_str("<mods><location><physicalLocation type='repository'>Location Field</physicalLocation></location></mods>", false).location
+    @location = Stanford::Mods::Record.new.from_str(
+      '<mods><location><physicalLocation>The Location</physicalLocation></location></mods>', false
+    ).location
+    @urls = Stanford::Mods::Record.new.from_str(
+      "<mods>
+        <location>
+          <url displayLabel='Stanford University Library'>http://library.stanford.edu</url>
+        </location>
+        <location displayLabel='PURL'>
+          <url>http://purl.stanford.edu</url>
+        </location>
+      </mods>",
+      false
+    ).location
+    @display_label = Stanford::Mods::Record.new.from_str(
+      "<mods><location displayLabel='Special Label'><shelfLocation>On Shelf A</shelfLocation></location></mods>", false
+    ).location
+    @repository_label = Stanford::Mods::Record.new.from_str(
+      "<mods><location><physicalLocation type='repository'>Location Field</physicalLocation></location></mods>", false
+    ).location
   end
   describe 'label' do
     it 'should have a default label' do

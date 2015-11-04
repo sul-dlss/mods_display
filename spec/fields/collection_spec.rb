@@ -11,7 +11,11 @@ end
 describe ModsDisplay::Collection do
   let(:collection) do
     Stanford::Mods::Record.new.from_str(
-      '<mods><relatedItem><titleInfo><title>The Collection</title></titleInfo><typeOfResource collection="yes" /></relatedItem></mods>',
+      '<mods>
+        <relatedItem>
+          <titleInfo><title>The Collection</title></titleInfo><typeOfResource collection="yes" />
+        </relatedItem>
+      </mods>',
       false
     ).related_item
   end
@@ -23,15 +27,23 @@ describe ModsDisplay::Collection do
   end
   let(:display_label) do
     Stanford::Mods::Record.new.from_str(
-      '<mods><relatedItem displayLabel="Special Collection"><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>',
+      '<mods>
+         <relatedItem displayLabel="Special Collection">
+           <titleInfo><title>Not a Collection</title></titleInfo>
+         </relatedItem>
+       </mods>',
       false
     ).related_item
   end
   let(:multiple_related_items) do
     Stanford::Mods::Record.new.from_str(
       '<mods>
-        <relatedItem displayLabel="Special Collection"><titleInfo><title>Not a Collection</title></titleInfo></relatedItem>
-        <relatedItem><titleInfo><title>The Collection</title></titleInfo><typeOfResource collection="yes" /></relatedItem>
+        <relatedItem displayLabel="Special Collection">
+          <titleInfo><title>Not a Collection</title></titleInfo>
+        </relatedItem>
+        <relatedItem>
+          <titleInfo><title>The Collection</title></titleInfo><typeOfResource collection="yes" />
+        </relatedItem>
       </mods>',
       false
     ).related_item
@@ -58,7 +70,7 @@ describe ModsDisplay::Collection do
       expect(fields.first.values).to eq(['The Collection'])
     end
 
-    it 'should not return anything if the there is not an appropriate typeOfResource field with the collection attribute' do
+    it 'should be blank if the there is not an appropriate typeOfResource field with the collection attribute' do
       expect(mods_display_collection(non_collection).fields).to eq([])
     end
   end

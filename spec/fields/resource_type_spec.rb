@@ -6,9 +6,15 @@ end
 
 describe ModsDisplay::ResourceType do
   before(:all) do
-    @type = Stanford::Mods::Record.new.from_str('<mods><typeOfResource>Resource Type</typeOfResource></mods>', false).typeOfResource
-    @downcase = Stanford::Mods::Record.new.from_str('<mods><typeOfResource>resource type</typeOfResource></mods>', false).typeOfResource
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><typeOfResource displayLabel='Special label'>Resource Type</typeOfResource></mods>", false).typeOfResource
+    @type = Stanford::Mods::Record.new.from_str(
+      '<mods><typeOfResource>Resource Type</typeOfResource></mods>', false
+    ).typeOfResource
+    @downcase = Stanford::Mods::Record.new.from_str(
+      '<mods><typeOfResource>resource type</typeOfResource></mods>', false
+    ).typeOfResource
+    @display_label = Stanford::Mods::Record.new.from_str(
+      "<mods><typeOfResource displayLabel='Special label'>Resource Type</typeOfResource></mods>", false
+    ).typeOfResource
   end
   it "should default to a label of 'Type of resource'" do
     fields = mods_display_resource_type(@type).fields

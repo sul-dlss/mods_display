@@ -5,14 +5,15 @@ def mods_display_title(mods_record)
 end
 
 describe ModsDisplay::Title do
+  include TitleFixtures
   before(:all) do
-    @title = Stanford::Mods::Record.new.from_str('<mods><titleInfo><title>Title</title></titleInfo></mods>', false).title_info
-    @title_parts = Stanford::Mods::Record.new.from_str('<mods><titleInfo><nonSort>The</nonSort><title>Title</title><subTitle>For</subTitle><partName>Something</partName><partNumber>Part 62</partNumber></titleInfo></mods>', false).title_info
-    @reverse_title_parts = Stanford::Mods::Record.new.from_str('<mods><titleInfo><nonSort>The</nonSort><title>Title</title><subTitle>For</subTitle><partNumber>Part 62</partNumber><partName>Something</partName></titleInfo></mods>', false).title_info
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><titleInfo displayLabel='MyTitle'><title>Title</title></titleInfo></mods>", false).title_info
-    @display_form = Stanford::Mods::Record.new.from_str('<mods><titleInfo><title>Title</title><displayForm>The Title of This Item</displayForm></titleInfo></mods>', false).title_info
-    @multi_label = Stanford::Mods::Record.new.from_str("<mods><titleInfo><title>Main Title</title></titleInfo><titleInfo type='alternative'><title>Alt Title</title></titleInfo><titleInfo type='uniform'><title>Uniform Title</title></titleInfo><titleInfo type='alternative'><title>Another Alt Title</title></titleInfo><titleInfo type='alternative'><title>Yet Another Alt Title</title></titleInfo></mods>", false).title_info
-    @alt_title = Stanford::Mods::Record.new.from_str("<mods><titleInfo type='alternative'><title>Title</title></titleInfo></mods>", false).title_info
+    @title = Stanford::Mods::Record.new.from_str(simple_title_fixture, false).title_info
+    @title_parts = Stanford::Mods::Record.new.from_str(title_parts_fixture, false).title_info
+    @reverse_title_parts = Stanford::Mods::Record.new.from_str(reverse_title_parts_fixture, false).title_info
+    @display_label = Stanford::Mods::Record.new.from_str(display_label_fixture, false).title_info
+    @display_form = Stanford::Mods::Record.new.from_str(display_form_fixture, false).title_info
+    @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture, false).title_info
+    @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture, false).title_info
   end
   describe 'labels' do
     it 'should return a default label of Title if nothing else is available' do
@@ -48,7 +49,9 @@ describe ModsDisplay::Title do
       expect(mods_display_title(@title_parts).fields.first.values).to include 'The Title : For. Something. Part 62'
     end
     it 'should use the correct delimiter in the case that a partNumber comes before a partName' do
-      expect(mods_display_title(@reverse_title_parts).fields.first.values).to include 'The Title : For. Part 62, Something'
+      expect(mods_display_title(@reverse_title_parts).fields.first.values).to include(
+        'The Title : For. Part 62, Something'
+      )
     end
     it 'should use the displayForm when available' do
       expect(mods_display_title(@display_form).fields.first.values).to include 'The Title of This Item'

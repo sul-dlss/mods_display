@@ -1,25 +1,38 @@
 require 'spec_helper'
 
 def mods_display_access_condition(mods_record)
-  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new, double('controller'))
+  ModsDisplay::AccessCondition.new(
+    mods_record,
+    ModsDisplay::Configuration::AccessCondition.new,
+    double('controller')
+  )
 end
 
 def mods_display_versioned_access_condition(mods_record, version)
-  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new { cc_license_version version }, double('controller'))
+  ModsDisplay::AccessCondition.new(
+    mods_record,
+    ModsDisplay::Configuration::AccessCondition.new { cc_license_version version },
+    double('controller')
+  )
 end
 
 def mods_display_non_ignore_access_condition(mods_record)
-  ModsDisplay::AccessCondition.new(mods_record, ModsDisplay::Configuration::AccessCondition.new { display! }, double('controller'))
+  ModsDisplay::AccessCondition.new(
+    mods_record,
+    ModsDisplay::Configuration::AccessCondition.new { display! },
+    double('controller')
+  )
 end
 
 describe ModsDisplay::AccessCondition do
+  include AccessConditionFixtures
   before :all do
-    @access_condition = Stanford::Mods::Record.new.from_str('<mods><accessCondition>Access Condition Note</accessCondition></mods>', false).accessCondition
-    @restrict_condition = Stanford::Mods::Record.new.from_str("<mods><accessCondition type='restrictionOnAccess'>Restrict Access Note1</accessCondition><accessCondition type='restriction on access'>Restrict Access Note2</accessCondition></mods>", false).accessCondition
-    @copyright_note = Stanford::Mods::Record.new.from_str("<mods><accessCondition type='copyright'>This is a (c) copyright Note.  Single instances of (c) should also be replaced in these notes.</accessCondition></mods>", false).accessCondition
-    @cc_license_note = Stanford::Mods::Record.new.from_str("<mods><accessCondition type='license'>CC by-sa: This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License</accessCondition></mods>", false).accessCondition
-    @odc_license_note = Stanford::Mods::Record.new.from_str("<mods><accessCondition type='license'>ODC pddl: This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)</accessCondition></mods>", false).accessCondition
-    @no_link_license_note = Stanford::Mods::Record.new.from_str("<mods><accessCondition type='license'>Unknown something: This work is licensed under an Unknown License and will not be linked</accessCondition></mods>", false).accessCondition
+    @access_condition = Stanford::Mods::Record.new.from_str(simple_access_condition_fixture, false).accessCondition
+    @restrict_condition = Stanford::Mods::Record.new.from_str(restricted_access_fixture, false).accessCondition
+    @copyright_note = Stanford::Mods::Record.new.from_str(copyright_access_fixture, false).accessCondition
+    @cc_license_note = Stanford::Mods::Record.new.from_str(cc_license_fixture, false).accessCondition
+    @odc_license_note = Stanford::Mods::Record.new.from_str(odc_license_fixture, false).accessCondition
+    @no_link_license_note = Stanford::Mods::Record.new.from_str(no_license_fixture, false).accessCondition
   end
   describe 'labels' do
     it 'should normalize types and assign proper labels' do
@@ -27,7 +40,7 @@ describe ModsDisplay::AccessCondition do
       expect(fields.length).to eq(1)
       expect(fields.first.label).to eq('Restriction on access:')
       fields.first.values.each_with_index do |value, index|
-        expect(value).to match /^Restrict Access Note#{index + 1}/
+        expect(value).to match(/^Restrict Access Note#{index + 1}/)
       end
     end
   end
@@ -37,7 +50,9 @@ describe ModsDisplay::AccessCondition do
         fields = mods_display_access_condition(@copyright_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to eq('This is a &copy; Note.  Single instances of &copy; should also be replaced in these notes.')
+        expect(fields.first.values.first).to eq(
+          'This is a &copy; Note.  Single instances of &copy; should also be replaced in these notes.'
+        )
       end
     end
     describe 'licenses' do
@@ -45,19 +60,25 @@ describe ModsDisplay::AccessCondition do
         fields = mods_display_access_condition(@no_link_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to match /^<div class='unknown-something'>.*<\/div>$/
+        expect(fields.first.values.first).to match(%r{^<div class='unknown-something'>.*</div>$})
       end
       it 'should itentify and link CreativeCommons licenses properly' do
         fields = mods_display_access_condition(@cc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to include("<a href='http://creativecommons.org/licenses/by-sa/3.0/'>This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License</a>")
+        expect(fields.first.values.first).to include("<a href='http://creativecommons.org/licenses/by-sa/3.0/'>")
+        expect(fields.first.values.first).to include(
+          'This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License'
+        )
       end
       it 'should itentify and link OpenDataCommons licenses properly' do
         fields = mods_display_access_condition(@odc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to include("<a href='http://opendatacommons.org/licenses/pddl'>This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)</a>")
+        expect(fields.first.values.first).to include("<a href='http://opendatacommons.org/licenses/pddl'>")
+        expect(fields.first.values.first).to include(
+          'This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)'
+        )
       end
       it 'should have a configurable version for CC licenses' do
         fields = mods_display_versioned_access_condition(@cc_license_note, '4.0').fields
@@ -76,7 +97,9 @@ describe ModsDisplay::AccessCondition do
         fields = mods_display_access_condition(@no_link_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to include('This work is licensed under an Unknown License and will not be linked')
+        expect(fields.first.values.first).to include(
+          'This work is licensed under an Unknown License and will not be linked'
+        )
         expect(fields.first.values.first).not_to include('<a.*>')
       end
     end
@@ -87,7 +110,7 @@ describe ModsDisplay::AccessCondition do
     end
     it 'should not ignore the access condition when ignore is set to false' do
       html = mods_display_non_ignore_access_condition(@access_condition).to_html
-      expect(html).to match /<dt.*>Access condition:<\/dt><dd>Access Condition Note<\/dd>/
+      expect(html).to match %r{<dt.*>Access condition:</dt><dd>Access Condition Note</dd>}
     end
   end
 end

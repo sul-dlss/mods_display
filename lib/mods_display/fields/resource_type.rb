@@ -1,14 +1,16 @@
-class ModsDisplay::ResourceType < ModsDisplay::Field
-  def fields
-    return_fields = @values.map do |value|
-      ModsDisplay::Values.new(label: displayLabel(value) || label, values: [value.text.strip.capitalize].flatten)
+module ModsDisplay
+  class ResourceType < Field
+    def fields
+      return_fields = @values.map do |value|
+        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [value.text.strip.capitalize].flatten)
+      end
+      collapse_fields(return_fields)
     end
-    collapse_fields(return_fields)
-  end
 
-  private
+    private
 
-  def displayLabel(element)
-    super(element) || I18n.t('mods_display.type_of_resource')
+    def displayLabel(element)
+      super(element) || I18n.t('mods_display.type_of_resource')
+    end
   end
 end

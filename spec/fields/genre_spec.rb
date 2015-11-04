@@ -8,7 +8,9 @@ describe ModsDisplay::Abstract do
   before(:all) do
     @genre = Stanford::Mods::Record.new.from_str('<mods><genre>Map Data</genre></mods>', false).genre
     @downcase = Stanford::Mods::Record.new.from_str('<mods><genre>map data</genre></mods>', false).genre
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><genre displayLabel='Special label'>Catographic</genre></mods>", false).genre
+    @display_label = Stanford::Mods::Record.new.from_str(
+      "<mods><genre displayLabel='Special label'>Catographic</genre></mods>", false
+    ).genre
   end
   describe 'labels' do
     it "should return a default 'Genre' label" do

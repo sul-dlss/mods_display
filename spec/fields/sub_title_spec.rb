@@ -6,7 +6,10 @@ end
 
 describe ModsDisplay::SubTitle do
   before(:all) do
-    @title = Stanford::Mods::Record.new.from_str('<mods><titleInfo><title>Main Title</title></titleInfo><titleInfo><title>Sub Title</title></titleInfo></mods>', false).title_info
+    @title = Stanford::Mods::Record.new.from_str(
+      '<mods><titleInfo><title>Main Title</title></titleInfo><titleInfo><title>Sub Title</title></titleInfo></mods>',
+      false
+    ).title_info
   end
   it 'omit the main title and only return sub titles' do
     fields = mods_display_sub_title(@title).fields

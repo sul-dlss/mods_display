@@ -5,15 +5,17 @@ def mods_display_item(mods_record)
 end
 
 describe ModsDisplay::RelatedItem do
+  include RelatedItemFixtures
+
   before(:all) do
-    @item = Stanford::Mods::Record.new.from_str('<mods><relatedItem><titleInfo>A Related Item</titleInfo></relatedItem></mods>', false).related_item
-    @linked_item = Stanford::Mods::Record.new.from_str('<mods><relatedItem><titleInfo>A Related Item</titleInfo><location><url>http://library.stanford.edu/</url></location></relatedItem></mods>', false).related_item
-    @collection = Stanford::Mods::Record.new.from_str("<mods><relatedItem><titleInfo>This is a Collection</titleInfo><typeOfResource collection='yes' /></relatedItem></mods>", false).related_item
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><relatedItem displayLabel='Special Item'><titleInfo>A Related Item</titleInfo></relatedItem></mods>", false).related_item
-    @location = Stanford::Mods::Record.new.from_str('<mods><relatedItem><location>The Location</location></relatedItem></mods>', false).related_item
-    @reference = Stanford::Mods::Record.new.from_str("<mods><relatedItem type='isReferencedBy'><titleInfo>The title</titleInfo><note>124</note><originInfo><dateOther>DATE</dateOther></originInfo></relatedItem></mods>", false).related_item
-    @blank_item = Stanford::Mods::Record.new.from_str('<mods><relatedItem><titleInfo><title></title></titleInfo><location><url></url></location></relatedItem></mods>', false).related_item
-    @multi_items = Stanford::Mods::Record.new.from_str('<mods><relatedItem><titleInfo><title>Library</title></titleInfo><location><url>http://library.stanford.edu</url></location></relatedItem><relatedItem><titleInfo><title>SDR</title></titleInfo><location><url>http://purl.stanford.edu</url></location></relatedItem></mods>', false).related_item
+    @item = Stanford::Mods::Record.new.from_str(basic_related_item_fixture, false).related_item
+    @linked_item = Stanford::Mods::Record.new.from_str(linked_related_item_fixture, false).related_item
+    @collection = Stanford::Mods::Record.new.from_str(related_item_collection_fixture, false).related_item
+    @display_label = Stanford::Mods::Record.new.from_str(related_item_display_label_fixture, false).related_item
+    @location = Stanford::Mods::Record.new.from_str(related_item_location_fixture, false).related_item
+    @reference = Stanford::Mods::Record.new.from_str(related_item_reference_fixture, false).related_item
+    @blank_item = Stanford::Mods::Record.new.from_str(blank_related_item_fixture, false).related_item
+    @multi_items = Stanford::Mods::Record.new.from_str(multi_related_item_fixture, false).related_item
   end
   describe 'label' do
     it 'should default to Related Item' do
@@ -56,8 +58,8 @@ describe ModsDisplay::RelatedItem do
       expect(fields.length).to eq(1)
       expect(fields.first.label).to eq('Related item:')
       expect(fields.first.values.length).to eq(2)
-      expect(fields.first.values.first).to(match(/<a href=.*>Library<\/a>/)) ||
-        expect(fields.first.values.last).to(match(/<a href=.*>SDR<\/a>/))
+      expect(fields.first.values.first).to(match(%r{<a href=.*>Library</a>}))
+      expect(fields.first.values.last).to(match(%r{<a href=.*>SDR</a>}))
     end
   end
 end

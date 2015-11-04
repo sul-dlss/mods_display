@@ -6,7 +6,9 @@ end
 
 describe ModsDisplay::Contact do
   before(:all) do
-    @contact_note = Stanford::Mods::Record.new.from_str("<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false).note
+    @contact_note = Stanford::Mods::Record.new.from_str(
+      "<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false
+    ).note
   end
   it 'should only get contact fields' do
     fields = mods_display_contact(@contact_note).fields

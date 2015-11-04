@@ -25,7 +25,10 @@ end
 
 describe 'Configuration' do
   before(:all) do
-    xml = "<mods><titleInfo><title>The Title of this Item</title></titleInfo><note type='contact'>jdoe@example.com</note></mods>"
+    xml = "<mods>
+      <titleInfo><title>The Title of this Item</title></titleInfo>
+      <note type='contact'>jdoe@example.com</note>
+    </mods>"
     model = TestModel.new
     model.modsxml = xml
     @no_config_controller = TestNoConfigController.new
@@ -39,7 +42,7 @@ describe 'Configuration' do
     expect(@html.scan(/<dd class='value-class'>/).length).to eq(1)
   end
   it 'should apply the link' do
-    @html.scan(/<a href='\/path\/to\/title\?The Title of this Item'>The Title of this Item<\a>/)
+    @html.scan(%r{<a href='/path/to/title\?The Title of this Item'>The Title of this Item</a>})
   end
   it 'should ignore fields if requested' do
     expect(@html.scan(/jdoe@example\.com/).length).to eq(0)

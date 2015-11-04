@@ -7,11 +7,25 @@ end
 describe ModsDisplay::Note do
   before(:all) do
     @note = Stanford::Mods::Record.new.from_str('<mods><note>Note Field</note></mods>', false).note
-    @display_label = Stanford::Mods::Record.new.from_str("<mods><note displayLabel='Special Label'>Note Field</note></mods>", false).note
-    @sor_label = Stanford::Mods::Record.new.from_str("<mods><note type='statement of responsibility'>Note Field</note></mods>", false).note
-    @contact_note = Stanford::Mods::Record.new.from_str("<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false).note
-    @type_label = Stanford::Mods::Record.new.from_str("<mods><note type='some other Type'>Note Field</note></mods>", false).note
-    @complex_label = Stanford::Mods::Record.new.from_str("<mods><note>Note Field</note><note>2nd Note Field</note><note type='statement of responsibility'>SoR</note><note>Another Note</note></mods>", false).note
+    @display_label = Stanford::Mods::Record.new.from_str(
+      "<mods><note displayLabel='Special Label'>Note Field</note></mods>", false
+    ).note
+    @sor_label = Stanford::Mods::Record.new.from_str(
+      "<mods><note type='statement of responsibility'>Note Field</note></mods>", false
+    ).note
+    @contact_note = Stanford::Mods::Record.new.from_str(
+      "<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false
+    ).note
+    @type_label = Stanford::Mods::Record.new.from_str(
+      "<mods><note type='some other Type'>Note Field</note></mods>", false
+    ).note
+    @complex_label = Stanford::Mods::Record.new.from_str(
+      "<mods>
+        <note>Note Field</note><note>2nd Note Field</note>
+        <note type='statement of responsibility'>SoR</note>
+        <note>Another Note</note>
+      </mods>", false
+    ).note
   end
   describe 'label' do
     it 'should have a default label' do
@@ -38,15 +52,15 @@ describe ModsDisplay::Note do
       fields = mods_display_note(@complex_label).fields
       expect(fields.length).to eq(3)
       expect(fields.first.label).to eq('Note:')
-      fields.first.values.length == 2
+      expect(fields.first.values.length).to eq 2
       expect(fields.first.values).to eq(['Note Field', '2nd Note Field'])
 
-      fields[1].label == 'Statement of responsibility'
-      fields[1].values.length == 1
+      expect(fields[1].label).to eq 'Statement of responsibility:'
+      expect(fields[1].values.length).to eq 1
       expect(fields[1].values).to eq(['SoR'])
 
       expect(fields.last.label).to eq('Note:')
-      fields.last.values.length == 1
+      expect(fields.last.values.length).to eq 1
       expect(fields.last.values).to eq(['Another Note'])
     end
     it 'should not include any contact fields' do

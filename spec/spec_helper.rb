@@ -1,6 +1,6 @@
 require 'mods_display'
 require 'stanford-mods'
-
+Dir["#{File.expand_path('..', __FILE__)}/fixtures/*.rb"].each { |file| require file }
 # Load i18n test file.
 # We don't have any reliable translations yet so this
 # just make sure that we're handling i18n properly.

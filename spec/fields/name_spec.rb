@@ -14,21 +14,22 @@ def mods_display_name(mods_record)
 end
 
 describe ModsDisplay::Language do
+  include NameFixtures
   before(:all) do
-    @name = Stanford::Mods::Record.new.from_str('<mods><name><namePart>John Doe</namePart></name></mods>', false).plain_name
-    @blank_name = Stanford::Mods::Record.new.from_str('<mods><name><namePart/><role><roleTerm></roleTerm></role></name></mods>', false).plain_name
-    @primary_name = Stanford::Mods::Record.new.from_str("<mods><name usage='primary'><namePart>John Doe</namePart><role><roleTerm>lithographer</roleTerm></role></name></mods>", false).plain_name
-    @contributor = Stanford::Mods::Record.new.from_str('<mods><name><namePart>John Doe</namePart><role><roleTerm>lithographer</roleTerm></role></name></mods>', false).plain_name
-    @encoded_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='code' authority='marcrelator'>ltg</roleTerm></role></name></mods>", false).plain_name
-    @mixed_role = Stanford::Mods::Record.new.from_str("<mods><name><role><roleTerm>publisher</roleTerm></role><namePart>John Doe</namePart><role><roleTerm type='text' authority='marcrelator'>engraver</roleTerm></role></name></mods>", false).plain_name
-    @numeral_toa = Stanford::Mods::Record.new.from_str("<mods><name><namePart>Unqualfieid</namePart><namePart type='termsOfAddress'>XVII, ToA</namePart><namePart type='date'>date1-date2</namePart><namePart type='given'>Given Name</namePart><namePart type='family'>Family Name</namePart></name></mods>", false).plain_name
-    @simple_toa = Stanford::Mods::Record.new.from_str("<mods><name><namePart>Unqualfieid</namePart><namePart type='termsOfAddress'>Ier, empereur</namePart><namePart type='date'>date1-date2</namePart><namePart type='given'>Given Name</namePart><namePart type='family'>Family Name</namePart></name></mods>", false).plain_name
-    @display_form = Stanford::Mods::Record.new.from_str('<mods><name><namePart>John Doe</namePart><displayForm>Mr. John Doe</displayForm></name></mods>', false).plain_name
-    @collapse_label = Stanford::Mods::Record.new.from_str('<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart></name></mods>', false).plain_name
-    @complex_labels = Stanford::Mods::Record.new.from_str('<mods><name><namePart>John Doe</namePart></name><name><namePart>Jane Doe</namePart><role><roleTerm>lithographer</roleTerm></role></name><name><namePart>John Dough</namePart></name><name><namePart>Jane Dough</namePart></name></mods>', false).plain_name
-    @complex_roles = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='text'>Depicted</roleTerm><roleTerm type='code'>dpt</roleTerm></role></name></mods>", false).plain_name
-    @name_with_role = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='text'>Depicted</roleTerm></role></name></mods>", false).plain_name
-    @multiple_roles = Stanford::Mods::Record.new.from_str("<mods><name><namePart>John Doe</namePart><role><roleTerm type='text'>Depicted</roleTerm></role><role><roleTerm type='text'>Artist</roleTerm></role></name></mods>", false).plain_name
+    @name = Stanford::Mods::Record.new.from_str(simple_name_fixture, false).plain_name
+    @blank_name = Stanford::Mods::Record.new.from_str(blank_name_fixture, false).plain_name
+    @primary_name = Stanford::Mods::Record.new.from_str(primary_name_fixture, false).plain_name
+    @contributor = Stanford::Mods::Record.new.from_str(contributor_fixture, false).plain_name
+    @encoded_role = Stanford::Mods::Record.new.from_str(encoded_role_fixture, false).plain_name
+    @mixed_role = Stanford::Mods::Record.new.from_str(mixed_role_fixture, false).plain_name
+    @numeral_toa = Stanford::Mods::Record.new.from_str(numural_toa_fixture, false).plain_name
+    @simple_toa = Stanford::Mods::Record.new.from_str(simple_toa_fixture, false).plain_name
+    @display_form = Stanford::Mods::Record.new.from_str(display_form_name_fixture, false).plain_name
+    @collapse_label = Stanford::Mods::Record.new.from_str(collapse_label_name_fixture, false).plain_name
+    @complex_labels = Stanford::Mods::Record.new.from_str(complex_name_label_fixture, false).plain_name
+    @complex_roles = Stanford::Mods::Record.new.from_str(complex_role_name_fixture, false).plain_name
+    @name_with_role = Stanford::Mods::Record.new.from_str(name_with_role_fixture, false).plain_name
+    @multiple_roles = Stanford::Mods::Record.new.from_str(multiple_roles_fixture, false).plain_name
   end
   describe 'label' do
     it 'should default Author/Creator when no role is available' do
@@ -57,15 +58,15 @@ describe ModsDisplay::Language do
       fields = mods_display_name(@numeral_toa).fields
       expect(fields.length).to eq(1)
       expect(fields.first.values.length).to eq(1)
-      expect(fields.first.values.first.to_s).not_to match /Given Name, XVII/
-      expect(fields.first.values.first.to_s).to match /Given Name XVII/
+      expect(fields.first.values.first.to_s).not_to match(/Given Name, XVII/)
+      expect(fields.first.values.first.to_s).to match(/Given Name XVII/)
     end
     it 'should delimit given name and termsOfAddress (that DO NOT begin w/ roman numerals) with a comma' do
       fields = mods_display_name(@simple_toa).fields
       expect(fields.length).to eq(1)
       expect(fields.first.values.length).to eq(1)
-      expect(fields.first.values.first.to_s).to match /Given Name, Ier, empereur/
-      expect(fields.first.values.first.to_s).not_to match /Given Name Ier, empereur/
+      expect(fields.first.values.first.to_s).to match(/Given Name, Ier, empereur/)
+      expect(fields.first.values.first.to_s).not_to match(/Given Name Ier, empereur/)
     end
     it 'should collapse adjacent matching labels' do
       fields = mods_display_name(@collapse_label).fields
@@ -138,11 +139,11 @@ describe ModsDisplay::Language do
   describe 'to_html' do
     it 'should add the role to the name in parens' do
       html = mods_display_name(@name_with_role).to_html
-      expect(html).to match(/<dd>John Doe \(Depicted\)<\/dd>/)
+      expect(html).to match(%r{<dd>John Doe \(Depicted\)</dd>})
     end
     it 'should linke the name and not the role if requested' do
       html = mods_display_name_link(@name_with_role).to_html
-      expect(html).to match(/<dd><a href='.*\?John Doe'>John Doe<\/a> \(Depicted\)<\/dd>/)
+      expect(html).to match(%r{<dd><a href='.*\?John Doe'>John Doe</a> \(Depicted\)</dd>})
     end
   end
 end
