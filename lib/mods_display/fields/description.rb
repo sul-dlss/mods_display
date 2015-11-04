@@ -1,8 +1,7 @@
 class ModsDisplay::Description < ModsDisplay::Field
-
   def fields
     return_fields = description_fields.map do |value|
-      ModsDisplay::Values.new(:label => description_label(value), :values => [value.text])
+      ModsDisplay::Values.new(label: description_label(value), values: [value.text])
     end
     collapse_fields(return_fields)
   end
@@ -20,9 +19,8 @@ class ModsDisplay::Description < ModsDisplay::Field
   end
 
   def labels
-    {:digitalOrigin => I18n.t('mods_display.digital_origin'),
-     :note          => I18n.t('mods_display.note')
+    { digitalOrigin: I18n.t('mods_display.digital_origin'),
+      note: I18n.t('mods_display.note')
      }
   end
-
 end

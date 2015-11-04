@@ -1,14 +1,14 @@
 # encoding: UTF-8
-require "spec_helper"
+require 'spec_helper'
 
-def html_from_mods(xml, locale=nil)
+def html_from_mods(xml, locale = nil)
   model = TestModel.new
   model.modsxml = xml
   I18n.locale = locale if locale
   TestController.new.render_mods_display(model)
 end
 
-describe "HTML Output" do
+describe 'HTML Output' do
   before(:all) do
     @multiple_titles = html_from_mods("<mods><titleInfo><title>Main Title</title></titleInfo><titleInfo type='alternative'><title>Alternate Title</title></titleInfo></mods>")
     @abstract = html_from_mods("<mods><abstract>Hey. I'm an abstract.</abstract></mods>")
@@ -19,32 +19,32 @@ describe "HTML Output" do
   after(:all) do
     I18n.locale = :en
   end
-  describe "i18n" do
-    it "should get the default english translations" do
+  describe 'i18n' do
+    it 'should get the default english translations' do
       expect(@mods.to_html).to match(/<dt title='Title'>Title:<\/dt>/)
     end
-    it "should internationalize the labels when translations are available" do
+    it 'should internationalize the labels when translations are available' do
       expect(@fr_mods.to_html).to match(/<dt title='Résumé'>Résumé :<\/dt>/)
     end
-    it "should get fallback to the default english translations if a translation is missing" do
+    it 'should get fallback to the default english translations if a translation is missing' do
       expect(@fr_mods.to_html).to match(/<dt title='Title'>Title:<\/dt>/)
     end
   end
-  describe "titles" do
-    it "should include both titles it regular display" do
-      expect(@multiple_titles.to_html).to include("<dd>Main Title</dd>")
-      expect(@multiple_titles.to_html).to include("<dd>Alternate Title</dd>")
+  describe 'titles' do
+    it 'should include both titles it regular display' do
+      expect(@multiple_titles.to_html).to include('<dd>Main Title</dd>')
+      expect(@multiple_titles.to_html).to include('<dd>Alternate Title</dd>')
     end
-    it "should return just the first title in the #title method" do
-      expect(@multiple_titles.title).to eq(["Main Title"])
+    it 'should return just the first title in the #title method' do
+      expect(@multiple_titles.title).to eq(['Main Title'])
     end
-    it "should omit the first title and return any remaining titles in the #body" do
-      expect(@multiple_titles.body).not_to include("<dd>Main Title</dd>")
-      expect(@multiple_titles.body).to     include("<dd>Alternate Title</dd>")
+    it 'should omit the first title and return any remaining titles in the #body' do
+      expect(@multiple_titles.body).not_to include('<dd>Main Title</dd>')
+      expect(@multiple_titles.body).to include('<dd>Alternate Title</dd>')
     end
   end
-  describe "individual fields" do
-    it "should return ModsDispaly::Values for the specefied field" do
+  describe 'individual fields' do
+    it 'should return ModsDispaly::Values for the specefied field' do
       fields = @abstract.abstract
       fields.each do |field|
         expect(field).to be_a ModsDisplay::Values
@@ -52,11 +52,11 @@ describe "HTML Output" do
       expect(fields.length).to eq 1
       expect(fields.first.values).to eq ["Hey. I'm an abstract."]
     end
-    it "should return a blank array if no data is available for a specific field" do
+    it 'should return a blank array if no data is available for a specific field' do
       expect(@abstract.genre).to eq []
     end
     it "should not return a field that doesn't exist (and isn't a string)" do
-      expect {@abstract.not_a_real_field}.to raise_error NoMethodError
+      expect { @abstract.not_a_real_field }.to raise_error NoMethodError
     end
   end
 end

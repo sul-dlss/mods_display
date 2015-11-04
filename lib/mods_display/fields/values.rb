@@ -2,10 +2,7 @@ class ModsDisplay::Values
   attr_accessor :label, :values
   def initialize(values)
     values.each do |key, value|
-      if [:label, :values].include?(key)
-        self.send("#{key}=".to_sym, value)
-      end
+      send("#{key}=".to_sym, value) if [:label, :values].include?(key)
     end
   end
-
 end

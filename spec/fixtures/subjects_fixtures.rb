@@ -10,7 +10,7 @@ module SubjectsFixtures
       </mods>
     XML
   end
-  
+
   def blank_subject
     <<-XML
       <mods>
@@ -88,6 +88,7 @@ module SubjectsFixtures
       </mods>
     XML
   end
+
   def display_label_subjects
     <<-XML
       <mods>

@@ -37,7 +37,6 @@ describe ModsDisplay::Collection do
     ).related_item
   end
 
-
   describe 'label' do
     it 'should default to Collection' do
       expect(mods_display_collection(collection).fields.first.label).to eq('Collection:')

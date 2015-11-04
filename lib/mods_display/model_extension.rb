@@ -1,5 +1,4 @@
 module ModsDisplay::ModelExtension
-
   def self.included(base)
     base.extend ClassMethods
     base.class_eval do
@@ -14,7 +13,7 @@ module ModsDisplay::ModelExtension
   end
 
   module ClassMethods
-    def mods_xml_source &xml
+    def mods_xml_source(&xml)
       @mods_xml_source ||= xml
     end
   end

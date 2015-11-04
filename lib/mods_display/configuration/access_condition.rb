@@ -1,5 +1,5 @@
 class ModsDisplay::Configuration::AccessCondition < ModsDisplay::Configuration::Base
-  def delimiter delimiter="<br/>"
+  def delimiter(delimiter = '<br/>')
     @delimiter ||= delimiter
   end
 
@@ -11,7 +11,7 @@ class ModsDisplay::Configuration::AccessCondition < ModsDisplay::Configuration::
     @ignore = false
   end
 
-  def cc_license_version cc_license_version="3.0"
+  def cc_license_version(cc_license_version = '3.0')
     @cc_license_version ||= cc_license_version
   end
 end

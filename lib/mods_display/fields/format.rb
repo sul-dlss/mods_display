@@ -1,22 +1,21 @@
 class ModsDisplay::Format < ModsDisplay::Field
-
   def fields
     return_fields = []
-    if @values.respond_to?(:format) and
-       !@values.format.nil? and
+    if @values.respond_to?(:format) &&
+       !@values.format.nil? &&
        !@values.format.empty?
-         return_fields << ModsDisplay::Values.new(:label => format_label,
-                                                  :values => [decorate_formats(@values.format).join(", ")])
+      return_fields << ModsDisplay::Values.new(label: format_label,
+                                               values: [decorate_formats(@values.format).join(', ')])
     end
     unless @values.physical_description.nil?
       @values.physical_description.each do |description|
-        unless description.form.nil? or description.form.empty?
-          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || format_label,
-                                                   :values => [description.form.map{|f| f.text.strip }.uniq.join(", ")])
+        unless description.form.nil? || description.form.empty?
+          return_fields << ModsDisplay::Values.new(label: displayLabel(description) || format_label,
+                                                   values: [description.form.map { |f| f.text.strip }.uniq.join(', ')])
         end
-        unless description.extent.nil? or description.extent.empty?
-          return_fields << ModsDisplay::Values.new(:label  => displayLabel(description) || format_label,
-                                                   :values => [description.extent.map{|e| e.text }.join(", ")])
+        unless description.extent.nil? || description.extent.empty?
+          return_fields << ModsDisplay::Values.new(label: displayLabel(description) || format_label,
+                                                   values: [description.extent.map(&:text).join(', ')])
         end
       end
     end
@@ -33,7 +32,7 @@ class ModsDisplay::Format < ModsDisplay::Field
 
   def self.format_class(format)
     return format if format.nil?
-    format.strip.downcase.gsub(/\/|\\|\s+/, "_")
+    format.strip.downcase.gsub(/\/|\\|\s+/, '_')
   end
 
   def format_label

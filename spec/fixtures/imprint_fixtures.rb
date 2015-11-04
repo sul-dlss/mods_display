@@ -12,6 +12,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def no_edition_mods
     <<-MODS
       <mods>
@@ -26,6 +27,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def origin_info_mods
     <<-MODS
       <mods>
@@ -38,6 +40,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def mixed_mods
     <<-MODS
       <mods>
@@ -50,6 +53,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def display_form
     <<-MODS
       <mods>
@@ -66,6 +70,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def display_label
     <<-MODS
       <mods>
@@ -82,6 +87,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def date_range
     <<-MODS
       <mods>
@@ -92,6 +98,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def open_date_range
     <<-MODS
       <mods>
@@ -101,6 +108,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def encoded_date_range
     <<-MODS
       <mods>
@@ -111,6 +119,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def dup_qualified_date
     <<-MODS
       <mods>
@@ -121,6 +130,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def dup_unencoded_date
     <<-MODS
       <mods>
@@ -131,6 +141,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def dup_copyright_date
     <<-MODS
       <mods>
@@ -141,6 +152,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def dup_date
     <<-MODS
       <mods>
@@ -151,6 +163,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def approximate_date
     <<-MODS
       <mods>
@@ -160,6 +173,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def questionable_date
     <<-MODS
       <mods>
@@ -169,6 +183,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def inferred_date
     <<-MODS
       <mods>
@@ -178,6 +193,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def three_imprint_dates
     <<-MODS
       <mods>
@@ -189,6 +205,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def qualified_imprint_date
     <<-MODS
       <mods>
@@ -198,6 +215,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def imprint_date_range
     <<-MODS
       <mods>
@@ -209,6 +227,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def encoded_place
     <<-MODS
       <mods>
@@ -234,6 +253,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def xx_country_code
     <<-MODS
       <mods>
@@ -246,6 +266,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def encoded_dates
     <<-MODS
       <mods>
@@ -258,6 +279,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def bad_dates
     <<-MODS
       <mods>
@@ -275,6 +297,7 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
   def invalid_dates
     <<-MODS
       <mods>
