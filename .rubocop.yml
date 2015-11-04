@@ -1,7 +1,11 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Exclude:
+    - '*.gemspec'
     - 'bin/**/*'
     - 'db/**/*'
+    - 'spec/fixtures/**/*'
     - 'vendor/**/*'
 
 Metrics/LineLength:
