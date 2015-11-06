@@ -40,7 +40,7 @@ module ModsDisplay
     private
 
     def compact_and_join_with_delimiter(values, delimiter)
-      compact_values = values.compact
+      compact_values = values.compact.reject { |v| v.strip.empty? }
       return compact_values.join(delimiter) if compact_values.length == 1 ||
                                                !ends_in_terminating_punctuation?(delimiter)
       compact_values.each_with_index.map do |value, i|

@@ -7,34 +7,17 @@ module ModsDisplay
         if imprint_display_form(value)
           return_fields << imprint_display_form(value)
         else
-          place = nil
-          publisher = nil
-          edition = value.edition.map do |e|
-            e.text unless e.text.strip.empty?
-          end.compact.join(' ').strip
-          place = place_terms(value).map do |p|
-            p.text unless p.text.strip.empty?
-          end.compact.join(' : ').strip unless value.place.text.strip.empty?
-          publisher = value.publisher.map do |p|
-            p.text unless p.text.strip.empty?
-          end.compact.join(' : ').strip unless value.publisher.text.strip.empty?
-          parts = %w(dateIssued dateOther).map do |date_field_name|
-            if value.respond_to?(date_field_name.to_sym)
-              parse_dates(value.send(date_field_name.to_sym))
-            end
-          end.flatten.map do |date|
-            date.strip unless date.strip.empty?
-          end.compact.join(', ')
-          edition = nil if edition.strip.empty?
-          parts = nil if parts.strip.empty?
-          placePub = [place, publisher].compact.join(' : ')
-          placePub = nil if placePub.strip.empty?
-          editionPlace = [edition, placePub].compact.join(' - ')
-          editionPlace = nil if editionPlace.strip.empty?
-          unless [editionPlace, parts].compact.join(', ').strip.empty?
+          edition = edition_element(value)
+          place = place_element(value)
+          publisher = publisher_element(value)
+          parts = parts_element(value)
+          place_pub = compact_and_join_with_delimiter([place, publisher], ' : ')
+          edition_place = compact_and_join_with_delimiter([edition, place_pub], ' - ')
+          joined_place_parts = compact_and_join_with_delimiter([edition_place, parts], ', ')
+          unless joined_place_parts.empty?
             return_fields << ModsDisplay::Values.new(
               label: displayLabel(value) || I18n.t('mods_display.imprint'),
-              values: [[editionPlace, parts].compact.join(', ')]
+              values: [joined_place_parts]
             )
           end
           return_fields.concat(dates(value)) if dates(value).length > 0
@@ -250,6 +233,38 @@ module ModsDisplay
     end
 
     private
+
+    def edition_element(value)
+      value.edition.reject do |e|
+        e.text.strip.empty?
+      end.map(&:text).join(' ').strip
+    end
+
+    def place_element(value)
+      return if value.place.text.strip.empty?
+      places = place_terms(value).reject do |p|
+        p.text.strip.empty?
+      end.map(&:text)
+      compact_and_join_with_delimiter(places, ' : ')
+    end
+
+    def publisher_element(value)
+      return if value.publisher.text.strip.empty?
+      publishers = value.publisher.reject do |p|
+        p.text.strip.empty?
+      end.map(&:text)
+      compact_and_join_with_delimiter(publishers, ' : ')
+    end
+
+    def parts_element(value)
+      date_elements = %w(dateIssued dateOther).map do |date_field_name|
+        next unless value.respond_to?(date_field_name.to_sym)
+        parse_dates(value.send(date_field_name.to_sym))
+      end.flatten.compact.reject do |date|
+        date.strip.empty?
+      end.map(&:strip)
+      compact_and_join_with_delimiter(date_elements, ', ')
+    end
 
     def pub_info_parts
       [:issuance, :frequency]

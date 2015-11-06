@@ -45,6 +45,7 @@ describe ModsDisplay::Imprint do
     @encoded_dates = Stanford::Mods::Record.new.from_str(encoded_dates, false).origin_info
     @bad_dates = Stanford::Mods::Record.new.from_str(bad_dates, false).origin_info
     @invalid_dates = Stanford::Mods::Record.new.from_str(invalid_dates, false).origin_info
+    @punctuation_imprint = Stanford::Mods::Record.new.from_str(punctuation_imprint_fixture, false).origin_info
   end
 
   describe 'labels' do
@@ -217,6 +218,15 @@ describe ModsDisplay::Imprint do
       end
     end
   end
+
+  describe 'punctuation' do
+    it 'should not duplicate punctuation' do
+      fields = mods_display_imprint(@punctuation_imprint).fields
+      expect(fields.length).to eq 1
+      expect(fields.first.values).to eq ['San Francisco : Chronicle Books, 2015.']
+    end
+  end
+
   describe 'place processing' do
     it 'should exclude encoded places' do
       fields = mods_display_imprint(@encoded_place).fields
