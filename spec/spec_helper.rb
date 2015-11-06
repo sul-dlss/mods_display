@@ -1,6 +1,6 @@
-require "mods_display"
-require "stanford-mods"
-
+require 'mods_display'
+require 'stanford-mods'
+Dir["#{File.expand_path('..', __FILE__)}/fixtures/*.rb"].each { |file| require file }
 # Load i18n test file.
 # We don't have any reliable translations yet so this
 # just make sure that we're handling i18n properly.
@@ -14,7 +14,6 @@ I18n.backend.load_translations
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
 
@@ -27,9 +26,7 @@ end
 class TestModel
   attr_accessor :modsxml
   include ModsDisplay::ModelExtension
-  mods_xml_source do |doc|
-    doc.modsxml
-  end
+  mods_xml_source(&:modsxml)
 end
 
 class TestController

@@ -1,5 +1,9 @@
-class ModsDisplay::Configuration::Note < ModsDisplay::Configuration::Base
-  def delimiter delimiter="<br/>"
-    @delimiter ||= delimiter
+module ModsDisplay
+  class Configuration
+    class Note < Base
+      def delimiter(delimiter = '<br/>')
+        @delimiter ||= delimiter
+      end
+    end
   end
 end

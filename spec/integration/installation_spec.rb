@@ -1,26 +1,26 @@
-require "spec_helper"
+require 'spec_helper'
 
-describe "Installation" do
+describe 'Installation' do
   before(:all) do
     @pieces_of_data = 1
-    title_xml = "<mods><titleInfo><title>The Title of this Item</title></titleInfo></mods>"
+    title_xml = '<mods><titleInfo><title>The Title of this Item</title></titleInfo></mods>'
     model = TestModel.new
     model.modsxml = title_xml
     controller = TestController.new
     @html = controller.render_mods_display(model)
   end
-  it "should return a single <dl>" do
+  it 'should return a single <dl>' do
     expect(@html.scan(/<dl>/).length).to eq(1)
-    expect(@html.scan(/<\/dl>/).length).to eq(1)
+    expect(@html.scan(%r{</dl>}).length).to eq(1)
   end
-  it "should return a dt/dd pair for each piece of metadata in the mods" do
+  it 'should return a dt/dd pair for each piece of metadata in the mods' do
     expect(@html.scan(/<dt/).length).to eq(@pieces_of_data)
     expect(@html.scan(/<dd>/).length).to eq(@pieces_of_data)
   end
-  it "should return a proper label" do
-    expect(@html.scan(/<dt title='Title'>Title:<\/dt>/).length).to eq(1)
+  it 'should return a proper label' do
+    expect(@html.scan(%r{<dt title='Title'>Title:</dt>}).length).to eq(1)
   end
-  it "should return a proper value" do
-    expect(@html.scan(/<dd>The Title of this Item<\/dd>/).length).to eq(1)
+  it 'should return a proper value' do
+    expect(@html.scan(%r{<dd>The Title of this Item</dd>}).length).to eq(1)
   end
 end

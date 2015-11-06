@@ -1,8 +1,9 @@
-class ModsDisplay::Audience < ModsDisplay::Field
+module ModsDisplay
+  class Audience < Field
+    private
 
-  private
-  def displayLabel(element)
-    super(element) || I18n.t('mods_display.target_audience')
+    def displayLabel(element)
+      super(element) || I18n.t('mods_display.target_audience')
+    end
   end
-
 end

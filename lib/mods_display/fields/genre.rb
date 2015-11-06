@@ -1,15 +1,16 @@
-class ModsDisplay::Genre < ModsDisplay::Field
-
-  def fields
-    return_fields = @values.map do |value|
-      ModsDisplay::Values.new(:label => displayLabel(value) || label, :values => [value.text.strip.capitalize].flatten)
+module ModsDisplay
+  class Genre < Field
+    def fields
+      return_fields = @values.map do |value|
+        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [value.text.strip.capitalize].flatten)
+      end
+      collapse_fields(return_fields)
     end
-    collapse_fields(return_fields)
-  end
 
-  private
+    private
 
-  def displayLabel(element)
-    super(element) || I18n.t('mods_display.genre')
+    def displayLabel(element)
+      super(element) || I18n.t('mods_display.genre')
+    end
   end
 end

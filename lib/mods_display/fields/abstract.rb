@@ -1,8 +1,9 @@
-class ModsDisplay::Abstract < ModsDisplay::Field
+module ModsDisplay
+  class Abstract < Field
+    private
 
-  private
-  def displayLabel(element)
-    super(element) || I18n.t('mods_display.abstract')
+    def displayLabel(element)
+      super(element) || I18n.t('mods_display.abstract')
+    end
   end
-
 end
