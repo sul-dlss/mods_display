@@ -53,6 +53,37 @@ module ModsDisplay
       end.join.strip
     end
 
+    def process_bc_ad_dates(date_fields)
+      date_fields.map do |date_field|
+        case
+        when date_is_bc_edtf?(date_field)
+          year = date_field.text.strip.gsub(/^-0*/, '').to_i - 1
+          date_field.content = "#{year} B.C."
+        when date_is_ad?(date_field)
+          date_field.content = "#{date_field.text.strip.gsub(/^0*/, '')} A.D."
+        end
+        date_field
+      end
+    end
+
+    def date_is_bc_edtf?(date_field)
+      date_field.text.strip.start_with?('-') && date_is_edtf?(date_field)
+    end
+
+    def date_is_ad?(date_field)
+      date_field.text.strip.gsub(/^0*/, '').length < 4
+    end
+
+    def date_is_edtf?(date_field)
+      field_is_encoded?(date_field, 'edtf')
+    end
+
+    def field_is_encoded?(field, encoding)
+      field.attributes['encoding'] &&
+        field.attributes['encoding'].respond_to?(:value) &&
+        field.attributes['encoding'].value.downcase == encoding
+    end
+
     def ends_in_terminating_punctuation?(value)
       value.strip.end_with?('.', ',', ':', ';')
     end

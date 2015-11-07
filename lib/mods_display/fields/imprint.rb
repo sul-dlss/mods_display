@@ -47,7 +47,15 @@ module ModsDisplay
     end
 
     def parse_dates(date_field)
-      apply_date_qualifier_decoration dedup_dates join_date_ranges process_encoded_dates ignore_bad_dates date_field
+      apply_date_qualifier_decoration(
+        dedup_dates(
+          join_date_ranges(
+            process_bc_ad_dates(
+              process_encoded_dates(ignore_bad_dates(date_field))
+            )
+          )
+        )
+      )
     end
 
     def ignore_bad_dates(date_fields)
@@ -147,9 +155,7 @@ module ModsDisplay
     end
 
     def date_is_w3cdtf?(date_field)
-      date_field.attributes['encoding'] &&
-        date_field.attributes['encoding'].respond_to?(:value) &&
-        date_field.attributes['encoding'].value.downcase == 'w3cdtf'
+      field_is_encoded?(date_field, 'w3cdtf')
     end
 
     def process_w3cdtf_date(date_field)
