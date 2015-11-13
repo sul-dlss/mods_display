@@ -46,6 +46,7 @@ describe ModsDisplay::Imprint do
     @bad_dates = Stanford::Mods::Record.new.from_str(bad_dates, false).origin_info
     @invalid_dates = Stanford::Mods::Record.new.from_str(invalid_dates, false).origin_info
     @punctuation_imprint = Stanford::Mods::Record.new.from_str(punctuation_imprint_fixture, false).origin_info
+    @bc_ad_dates = Stanford::Mods::Record.new.from_str(bc_ad_imprint_date_fixture, false).origin_info
   end
 
   describe 'labels' do
@@ -120,6 +121,12 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(@encoded_date_range).fields
         expect(fields.length).to eq 1
         expect(fields.first.values).to eq ['February 01, 2008-December 02, 2009']
+      end
+
+      it 'should handle B.C. and A.D. dates appropriately' do
+        fields = mods_display_imprint(@bc_ad_dates).fields
+        expect(fields.length).to eq 1
+        expect(fields.first.values).to eq ['12 B.C.-44 A.D.']
       end
     end
     describe 'duplication' do

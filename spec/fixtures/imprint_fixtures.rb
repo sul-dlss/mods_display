@@ -324,4 +324,15 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
+  def bc_ad_imprint_date_fixture
+    <<-MODS
+      <mods>
+        <originInfo>
+          <dateCreated encoding="edtf" keydate="yes" point="start">-0013</dateCreated>
+          <dateCreated point="end">0044</dateCreated>
+        </originInfo>
+      </mods>
+    MODS
+  end
 end
