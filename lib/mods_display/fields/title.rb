@@ -18,7 +18,7 @@ module ModsDisplay
             subTitle = value.subTitle.text unless value.subTitle.text.strip.empty?
             preSubTitle = [nonSort, title].compact.join(' ')
             preSubTitle = nil if preSubTitle.strip.empty?
-            preParts = [preSubTitle, subTitle].compact.join(' : ')
+            preParts = compact_and_join_with_delimiter([preSubTitle, subTitle], ' : ')
             preParts = nil if preParts.strip.empty?
             parts = value.children.select do |child|
               %w(partName partNumber).include?(child.name)
@@ -26,7 +26,7 @@ module ModsDisplay
             parts = nil if parts.strip.empty?
             return_values << ModsDisplay::Values.new(
               label: displayLabel(value) || title_label(value),
-              values: [[preParts, parts].compact.join('. ')]
+              values: [compact_and_join_with_delimiter([preParts, parts], '. ')]
             )
           end
         end

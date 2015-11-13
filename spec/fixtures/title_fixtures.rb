@@ -26,7 +26,7 @@ module TitleFixtures
       <mods>
         <titleInfo>
           <nonSort>The</nonSort>
-          <title>Title</title>
+          <title>Title : </title>
           <subTitle>For</subTitle>
           <partNumber>Part 62</partNumber>
           <partName>Something</partName>
@@ -83,6 +83,17 @@ module TitleFixtures
       <mods>
         <titleInfo type='alternative'>
           <title>Title</title>
+        </titleInfo>
+      </mods>
+    XML
+  end
+
+  def title_puncutation_fixture
+    <<-XML
+      <mods>
+        <titleInfo>
+          <title>A title that ends in punctuation.</title>
+          <partNumber>2015</partNumber>
         </titleInfo>
       </mods>
     XML

@@ -310,4 +310,18 @@ module ImprintFixtures
       </mods>
     MODS
   end
+
+  def punctuation_imprint_fixture
+    <<-MODS
+      <mods>
+        <originInfo displayLabel="publisher">
+          <place>
+            <placeTerm>San Francisco :</placeTerm>
+          </place>
+          <publisher>Chronicle Books,</publisher>
+          <dateIssued>2015.</dateIssued>
+        </originInfo>
+      </mods>
+    MODS
+  end
 end

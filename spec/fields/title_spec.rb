@@ -14,6 +14,7 @@ describe ModsDisplay::Title do
     @display_form = Stanford::Mods::Record.new.from_str(display_form_fixture, false).title_info
     @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture, false).title_info
     @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture, false).title_info
+    @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture, false).title_info
   end
   describe 'labels' do
     it 'should return a default label of Title if nothing else is available' do
@@ -48,16 +49,26 @@ describe ModsDisplay::Title do
     it 'should construct all the elements in titleInfo' do
       expect(mods_display_title(@title_parts).fields.first.values).to include 'The Title : For. Something. Part 62'
     end
+
     it 'should use the correct delimiter in the case that a partNumber comes before a partName' do
       expect(mods_display_title(@reverse_title_parts).fields.first.values).to include(
         'The Title : For. Part 62, Something'
       )
     end
+
     it 'should use the displayForm when available' do
       expect(mods_display_title(@display_form).fields.first.values).to include 'The Title of This Item'
     end
+
     it 'should return the basic text held in a sub element of titleInfo' do
       expect(mods_display_title(@title).fields.first.values).to include 'Title'
+    end
+
+    it 'should not duplicate delimiter punctuation' do
+      values = mods_display_title(@title_punctuation).fields.first.values
+      expect(values.length).to eq 1
+      expect(values.first).not_to include '..'
+      expect(values.first).to eq 'A title that ends in punctuation. 2015'
     end
   end
 end
