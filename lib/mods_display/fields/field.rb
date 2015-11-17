@@ -57,7 +57,7 @@ module ModsDisplay
       date_fields.map do |date_field|
         case
         when date_is_bc_edtf?(date_field)
-          year = date_field.text.strip.gsub(/^-0*/, '').to_i - 1
+          year = date_field.text.strip.gsub(/^-0*/, '').to_i + 1
           date_field.content = "#{year} B.C."
         when date_is_ad?(date_field)
           date_field.content = "#{date_field.text.strip.gsub(/^0*/, '')} A.D."
