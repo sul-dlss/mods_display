@@ -126,7 +126,7 @@ describe ModsDisplay::Imprint do
       it 'should handle B.C. and A.D. dates appropriately' do
         fields = mods_display_imprint(@bc_ad_dates).fields
         expect(fields.length).to eq 1
-        expect(fields.first.values).to eq ['12 B.C.-44 A.D.']
+        expect(fields.first.values).to eq ['14 B.C.-44 A.D.']
       end
     end
     describe 'duplication' do
