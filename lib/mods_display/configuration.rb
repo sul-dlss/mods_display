@@ -26,10 +26,6 @@ module ModsDisplay
       @genre ||= ModsDisplay::Configuration::Genre.new(&genre || proc {})
     end
 
-    def format(&format)
-      @format ||= ModsDisplay::Configuration::Format.new(&format || proc {})
-    end
-
     def imprint(&imprint)
       @imprint ||= ModsDisplay::Configuration::Imprint.new(&imprint || proc {})
     end
