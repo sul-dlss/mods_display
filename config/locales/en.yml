@@ -25,6 +25,7 @@ en:
     form: "Form:"
     frequency: "Frequency:"
     genre: "Genre:"
+    geo_extension: 'Format:'
     handle: "Handle:"
     identifier: "Identifier:"
     imprint: "Imprint:"
