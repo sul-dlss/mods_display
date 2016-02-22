@@ -17,8 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.require_paths = ['lib']
 
-  # Need to pin to < 1.2.0 because stanford-mods 13e5f23 breaks location
-  gem.add_dependency 'stanford-mods', '< 1.2.0'
+  gem.add_dependency 'stanford-mods', '~> 2.1'
   gem.add_dependency 'i18n'
 
   gem.add_development_dependency 'rake'
