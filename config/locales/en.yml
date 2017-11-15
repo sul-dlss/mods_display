@@ -10,6 +10,7 @@ en:
     citation_reference: "Citation/Reference:"
     collection: "Collection:"
     contact: "Contact:"
+    constituent: "Contains:"
     contributor: "Contributor:"
     copyright: "Copyright:"
     copyright_date: "Copyright date:"
@@ -27,6 +28,7 @@ en:
     genre: "Genre:"
     geo_extension: 'Format:'
     handle: "Handle:"
+    host: "Appears in:"
     identifier: "Identifier:"
     imprint: "Imprint:"
     isbn: "ISBN:"

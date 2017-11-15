@@ -6,6 +6,7 @@ end
 
 describe ModsDisplay::RelatedItem do
   include RelatedItemFixtures
+  include NestedRelatedItemFixtures
 
   before(:all) do
     @item = Stanford::Mods::Record.new.from_str(basic_related_item_fixture, false).related_item
@@ -16,7 +17,13 @@ describe ModsDisplay::RelatedItem do
     @reference = Stanford::Mods::Record.new.from_str(related_item_reference_fixture, false).related_item
     @blank_item = Stanford::Mods::Record.new.from_str(blank_related_item_fixture, false).related_item
     @multi_items = Stanford::Mods::Record.new.from_str(multi_related_item_fixture, false).related_item
+    @constituent_items = Stanford::Mods::Record.new.from_str(multi_constituent_fixture, false).related_item
   end
+
+  it 'excludes related items that will be rendered as a nested record' do
+    expect(mods_display_item(@constituent_items).fields).to be_empty
+  end
+
   describe 'label' do
     it 'should default to Related Item' do
       expect(mods_display_item(@item).fields.first.label).to eq('Related item:')

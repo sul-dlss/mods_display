@@ -1,8 +1,11 @@
 module ModsDisplay
   class RelatedItem < Field
+    include ModsDisplay::RelatedItemConcerns
+
     def fields
       return_fields = @values.map do |value|
         next if related_item_is_a_collection?(value)
+        next if render_nested_related_item?(value)
         case
         when related_item_is_a_location?(value)
           process_location value
@@ -42,14 +45,6 @@ module ModsDisplay
        item.originInfo.dateOther,
        item.part.detail.number,
        item.note].flatten.compact.map!(&:text).map!(&:strip).join(' ')
-    end
-
-    def related_item_is_a_collection?(item)
-      item.respond_to?(:titleInfo) &&
-        item.respond_to?(:typeOfResource) &&
-        item.typeOfResource.attributes.length > 0 &&
-        item.typeOfResource.attributes.first.key?('collection') &&
-        item.typeOfResource.attributes.first['collection'].value == 'yes'
     end
 
     def related_item_is_a_location?(item)

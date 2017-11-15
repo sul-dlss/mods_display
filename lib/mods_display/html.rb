@@ -89,6 +89,7 @@ module ModsDisplay
        :note,
        :contact,
        :collection,
+       :nestedRelatedItem,
        :relatedItem,
        :subject,
        :identifier,
@@ -116,6 +117,7 @@ module ModsDisplay
         note: :note,
         contact: :note,
         collection: :related_item,
+        nestedRelatedItem: :related_item,
         relatedItem: :related_item,
         subject: :subject,
         identifier: :identifier,
@@ -127,7 +129,8 @@ module ModsDisplay
       { subTitle: :sub_title,
         resourceType: :resource_type,
         relatedItem: :related_item,
-        accessCondition: :access_condition
+        accessCondition: :access_condition,
+        nestedRelatedItem: :nested_related_item
       }
     end
   end
