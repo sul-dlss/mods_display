@@ -3,16 +3,17 @@ module ModsDisplay
     include ModsDisplay::RelatorCodes
     def fields
       return_fields = @values.map do |value|
-        roles = process_role(value)
-        person = nil
-        if value.displayForm.length > 0
-          person = ModsDisplay::Name::Person.new(name: value.displayForm.text, roles: roles)
-        elsif !name_parts(value).empty?
-          person = ModsDisplay::Name::Person.new(name: name_parts(value), roles: roles)
+        person = if value.displayForm.length > 0
+                   ModsDisplay::Name::Person.new(name: value.displayForm.text)
+                 elsif !name_parts(value).empty?
+                   ModsDisplay::Name::Person.new(name: name_parts(value))
+                 end
+        # The person may have multiple roles, so we have to divide them up into an array
+        role_labels(value).collect do |role_label|
+          ModsDisplay::Values.new(label: displayLabel(value) || role_label, values: [person]) if person
         end
-        ModsDisplay::Values.new(label: displayLabel(value) || name_label(value), values: [person]) if person
-      end.compact
-      collapse_fields(return_fields)
+      end.flatten.compact
+      collapse_roles(collapse_fields(return_fields))
     end
 
     def to_html
@@ -23,9 +24,7 @@ module ModsDisplay
         output << "<dd#{value_class}>"
         output << field.values.map do |val|
           if @config.link
-            txt = link_to_value(val.name)
-            txt << " (#{val.roles.join(', ')})" if val.roles
-            txt
+            link_to_value(val.name)
           else
             val.to_s
           end
@@ -37,12 +36,21 @@ module ModsDisplay
 
     private
 
-    def name_label(element)
-      if !role?(element) || primary?(element) || author_or_creator_roles?(element)
-        I18n.t('mods_display.author_creator')
-      else
-        I18n.t('mods_display.contributor')
-      end
+    def collapse_roles(fields)
+      return [] if fields.blank?
+
+      label_order = fields.map(&:label)
+      results = consolidate_under_labels(fields)
+      label_keys = normalize_labels(label_order, results)
+      rebuild_fields_with_new_labels(label_keys, results)
+    end
+
+    def role_labels(element)
+      default_label = I18n.t('mods_display.associated_with')
+      return [default_label] unless element.role.present? && element.role.roleTerm.present?
+      element.role.roleTerm.collect do |role|
+        relator_codes[role.text.downcase] || role.text.capitalize || default_label
+      end.uniq
     end
 
     def role?(element)
@@ -52,12 +60,6 @@ module ModsDisplay
     def primary?(element)
       element.attributes['usage'].respond_to?(:value) &&
         element.attributes['usage'].value == 'primary'
-    end
-
-    def author_or_creator_roles?(element)
-      ['author', 'aut', 'creator', 'cre', ''].include?(element.role.roleTerm.text.downcase)
-    rescue
-      false
     end
 
     def name_parts(element)
@@ -100,22 +102,6 @@ module ModsDisplay
       end
     end
 
-    def process_role(element)
-      return unless element.role.length > 0 && element.role.roleTerm.length > 0
-      if unencoded_role_term?(element)
-        unencoded_role_term(element)
-      else
-        element.role.roleTerm.map do |term|
-          next unless term.attributes['type'].respond_to?(:value) &&
-                      term.attributes['type'].value == 'code' &&
-                      term.attributes['authority'].respond_to?(:value) &&
-                      term.attributes['authority'].value == 'marcrelator' &&
-                      relator_codes.include?(term.text.strip)
-          relator_codes[term.text.strip]
-        end.compact
-      end
-    end
-
     def unencoded_role_term(element)
       roles = element.role.map do |role|
         role.roleTerm.find do |term|
@@ -138,17 +124,49 @@ module ModsDisplay
       end
     end
 
+    # Consolidate all names under label headings
+    def consolidate_under_labels(fields)
+      results = {}
+      fields.each do |mdv| # ModsDisplay::Values
+        results[mdv.label] ||= []
+        results[mdv.label] << mdv.values
+        results[mdv.label].flatten!
+      end
+      results
+    end
+
+    # Normalize label headings by filtering out some punctuation and ending in :
+    def normalize_labels(label_order, results)
+      label_order.uniq.map do |k|
+        label = k.tr('.', '').tr(':', '').strip + ':'
+        if label != k
+          results[label] = results[k]
+          results.delete(k)
+        end
+        label
+      end
+    end
+
+    def rebuild_fields_with_new_labels(label_keys, results)
+      # Build the new fields data, stripping out the roles within the Person classes
+      label_keys.uniq.map do |k|
+        mdv = ModsDisplay::Values.new({})
+        mdv.label = k
+        mdv.values = results[k].map do |person|
+          ModsDisplay::Name::Person.new(name: person.name)
+        end
+        mdv
+      end
+    end
+
     class Person
-      attr_accessor :name, :roles
+      attr_accessor :name
       def initialize(data)
         @name =  data[:name]
-        @roles = data[:roles] && !data[:roles].empty? ? data[:roles] : nil
       end
 
       def to_s
-        text = @name.dup
-        text << " (#{@roles.join(', ')})" if @roles
-        text
+        @name
       end
     end
   end

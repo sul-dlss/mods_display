@@ -68,16 +68,15 @@ describe ModsDisplay::Subject do
       expect(fields.length).to eq(1)
       expect(fields.first.values.first.first).to be_a(ModsDisplay::Name::Person)
       expect(fields.first.values.first.first.name).to eq('John Doe')
-      expect(fields.first.values.first.first.roles).to eq(['Depicted'])
     end
     it 'should link the name (and not the role) correctly' do
       html = mods_display_subject(@name_subject).to_html
-      expect(html).to match(%r{<a href='.*\?John Doe'>John Doe</a> \(Depicted\)})
+      expect(html).to match(%r{<a href='.*\?John Doe'>John Doe</a>})
       expect(html).to match(%r{<a href='.*\?Anonymous People'>Anonymous People</a>})
     end
     it 'should linke the name (and not the role) correctly when linking hierarchicaly' do
       html = mods_display_hierarchical_subject(@name_subject).to_html
-      expect(html).to match(%r{<a href='.*\?John Doe'>John Doe</a> \(Depicted\)})
+      expect(html).to match(%r{<a href='.*\?John Doe'>John Doe</a>})
       expect(html).to match(%r{<a href='.*\?John Doe Anonymous People'>Anonymous People</a>})
     end
   end
