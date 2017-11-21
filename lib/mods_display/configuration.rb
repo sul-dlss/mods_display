@@ -66,6 +66,10 @@ module ModsDisplay
       @collection ||= ModsDisplay::Configuration::Base.new(&collection || proc {})
     end
 
+    def constituent(&constituent)
+      @constituent ||= ModsDisplay::Configuration::Constituent.new(&constituent || proc {})
+    end
+
     def related_item(&related_item)
       @related_item ||= ModsDisplay::Configuration::RelatedItem.new(&related_item || proc {})
     end
