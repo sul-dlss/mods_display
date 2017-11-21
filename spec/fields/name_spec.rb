@@ -36,10 +36,10 @@ describe ModsDisplay::Language do
       expect(mods_display_name(@name).fields.first.label).to eq('Author/Creator:')
     end
     it "should label 'Author/Creator' for primary authors" do
-      expect(mods_display_name(@primary_name).fields.first.label).to eq('Author/Creator:')
+      expect(mods_display_name(@primary_name).fields.first.label).to eq('Lithographer')
     end
     it 'should apply contributor labeling to all non blank/author/creator roles' do
-      expect(mods_display_name(@contributor).fields.first.label).to eq('Contributor:')
+      expect(mods_display_name(@contributor).fields.first.label).to eq('Lithographer')
     end
   end
 
@@ -84,7 +84,7 @@ describe ModsDisplay::Language do
       expect(fields.first.values.length).to eq(1)
       expect(fields.first.values.first.to_s).to eq('John Doe')
 
-      expect(fields[1].label).to eq('Contributor:')
+      expect(fields[1].label).to eq('Lithographer')
       expect(fields[1].values.length).to eq(1)
       expect(fields[1].values.first.name).to eq('Jane Doe')
       expect(fields[1].values.first.roles).to eq(['lithographer'])
@@ -99,6 +99,7 @@ describe ModsDisplay::Language do
       it 'should get the role when present' do
         fields = mods_display_name(@name_with_role).fields
         expect(fields.length).to eq(1)
+        expect(fields.first.label).to eq('Depicted')
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first).to be_a(ModsDisplay::Name::Person)
         expect(fields.first.values.first.roles).to eq(['Depicted'])
@@ -106,30 +107,35 @@ describe ModsDisplay::Language do
       it 'should decode encoded roleTerms when no text (or non-typed) roleTerm is available' do
         fields = mods_display_name(@encoded_role).fields
         expect(fields.length).to eq(1)
+        expect(fields.first.label).to eq('Lithographer')
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first.to_s).to eq('John Doe (Lithographer)')
       end
       it "should get the type='text' role before an untyped role" do
         fields = mods_display_name(@mixed_role).fields
         expect(fields.length).to eq(1)
+        expect(fields.first.label).to eq('Publisher, Engraver')
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first.roles).to eq(['engraver'])
       end
       it 'should be handled correctly when there are more than one' do
         fields = mods_display_name(@multiple_roles).fields
         expect(fields.length).to eq(1)
+        expect(fields.first.label).to eq('Depicted, Artist')
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first.roles).to eq(%w(Depicted Artist))
       end
       it 'should handle code and text roleTerms together correctly' do
         fields = mods_display_name(@complex_roles).fields
         expect(fields.length).to eq(1)
+        expect(fields.first.label).to eq('Depicted, Depositor')
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first.roles).to eq(['Depicted'])
       end
       it 'should comma seperate multiple roles' do
         fields = mods_display_name(@multiple_roles).fields
         expect(fields.length).to eq(1)
+        expect(fields.first.label).to eq('Depicted, Artist')
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first.to_s).to eq('John Doe (Depicted, Artist)')
       end

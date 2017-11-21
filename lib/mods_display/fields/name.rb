@@ -10,7 +10,7 @@ module ModsDisplay
         elsif !name_parts(value).empty?
           person = ModsDisplay::Name::Person.new(name: name_parts(value), roles: roles)
         end
-        ModsDisplay::Values.new(label: displayLabel(value) || name_label(value), values: [person]) if person
+        ModsDisplay::Values.new(label: displayLabel(value) || role_label(value) || name_label(value), values: [person]) if person
       end.compact
       collapse_fields(return_fields)
     end
@@ -43,6 +43,13 @@ module ModsDisplay
       else
         I18n.t('mods_display.contributor')
       end
+    end
+
+    def role_label(element)
+      return unless element.role.present? && element.role.roleTerm.present?
+      element.role.roleTerm.collect do |role|
+        relator_codes[role.text.downcase] || role.text.capitalize
+      end.join(', ')
     end
 
     def role?(element)
