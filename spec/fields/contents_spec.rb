@@ -21,4 +21,19 @@ describe ModsDisplay::Contents do
       expect(mods_display_contents(@display_label).label).to eq('Special Label:')
     end
   end
+  context 'multi-valued contents' do
+    let(:toc) do
+      Stanford::Mods::Record.new.from_str(
+              '<mods><tableOfContents>Content Note 1 -- Content Note 2</tableOfContents></mods>', false
+            ).tableOfContents
+    end
+    it 'should have one value with "--" marker' do
+      mdc = mods_display_contents(toc)
+      expect(mdc.fields.first.values).to eq ['Content Note 1 -- Content Note 2']
+    end
+    it 'should render as a list' do
+      html = mods_display_contents(toc).to_html
+      expect(html).to include '<dd><ul><li>Content Note 1</li><li>Content Note 2</li></ul></dd>'
+    end
+  end
 end
