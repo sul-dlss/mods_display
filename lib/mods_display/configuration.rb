@@ -70,6 +70,10 @@ module ModsDisplay
       @related_item ||= ModsDisplay::Configuration::RelatedItem.new(&related_item || proc {})
     end
 
+    def nested_related_item(&nested_related_item)
+      @nested_related_item ||= ModsDisplay::Configuration::Base.new(&nested_related_item || proc {})
+    end
+
     def subject(&subject)
       @subject ||= ModsDisplay::Configuration::Subject.new(&subject || proc {})
     end
