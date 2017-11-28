@@ -45,17 +45,13 @@ module ModsDisplay
             end
             if @config.link && @config.hierarchical_link
               if val.is_a?(ModsDisplay::Name::Person)
-                txt = link_to_value(val.name, buffer.join(' '))
-                txt << " (#{val.roles.join(', ')})" if val.roles
-                sub_parts << txt
+                sub_parts << link_to_value(val.name, buffer.join(' '))
               else
                 sub_parts << link_to_value(val, buffer.join(' '))
               end
             elsif @config.link
               if val.is_a?(ModsDisplay::Name::Person)
-                txt = link_to_value(val.name)
-                txt << " (#{val.roles.join(', ')})" if val.roles
-                sub_parts << txt
+                sub_parts << link_to_value(val.name)
               else
                 sub_parts << link_to_value(val.to_s)
               end
