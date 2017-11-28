@@ -21,7 +21,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install mods_display
-    
+
 Include the `ModelExtension` into your model.
 
     class MyClass
@@ -32,11 +32,11 @@ Configure the source of the MODS XML in your model.  You can pass a string of XM
 
     class MyClass
       ....
-      
+
       mods_xml_source do |model|
         model.mods
       end
-      
+
     end
 
 Include the `ControllerExtension` into your rails controller (or another class if not using rails).
@@ -44,7 +44,7 @@ Include the `ControllerExtension` into your rails controller (or another class i
     class MyController
       include ModsDisplay::ControllerExtension
     end
-    
+
 Optionally configure the mods display gem (more on configuration later).
 
     class MyController
@@ -70,7 +70,7 @@ Both label_ and value_class accept strings to put in as a class.
 
     class MyController
       include ModsDisplay::ControllerExtension
-      
+
       configure_mods_display do
         title do
           label_class "title-label"
@@ -85,7 +85,7 @@ In certain cases an application may need to explicitly remove a portion of the M
 
     class MyController
       include ModsDisplay::ControllerExtension
-      
+
       configure_mods_display do
         contact do
           ignore!
@@ -111,13 +111,13 @@ The link configuration option takes 2 parameters. The first is a key that is a m
 
     class MyController
       include ModsDisplay::ControllerExtension
-      
+
       configure_mods_display do
         format do
           link :format_path, '"%value%"'
         end
       end
-      
+
       def format_path(format)
         "http://example.com/?f[format_field][]=#{format}"
       end
@@ -128,7 +128,7 @@ The link configuration option takes 2 parameters. The first is a key that is a m
 Depending on the implementation of subjects there may be different ways you would want to link them.  The standard way of linking will just create a link passing the value to the href and the link text.  However; in certain cases the subjects should be linked so that each subject to the right of a delimiter should have the values of all its preceding values in the href.
 
 [Country](http://example.com/?"Country") > [State](http://example.com/?"Country State") > [City](http://example.com/?"Country State City")
-    
+
 This can be accomplished by setting the hierarchical_link configuration option to true for subjects
 
     configure_mods_display do
@@ -181,6 +181,15 @@ Given that this semantics that we're concerned with here are more about titles a
     end.values
 
 ## Release/Upgrade Notes
+
+#### v0.5.0
+There are three major changes in this version.
+
+1. RelatedItem nodes with a type of `constituent` or `host` are now treated separately and will render the full MODS display of any nested metadata.  If accessing the `ModsDisplay::Values` directly through their accessors (e.g. custom grouping), this new metadata is available under `.nested_related_items`.
+    * _**Note:** You may want to style and add some javascript toggling behavior (see exhibits for an example)._
+2. Name nodes are now grouped/labeled by their role.  If you were iterating over the names and splitting them out by their labels, that will need to change.
+3. Table of contents/Summaries are now split on `--` and rendered as an unordered list.
+    * _**Note:** You may want to style this list._
 
 #### v0.3.0
 
