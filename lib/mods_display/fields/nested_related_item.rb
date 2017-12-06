@@ -7,30 +7,34 @@ module ModsDisplay
     include ModsDisplay::RelatedItemConcerns
 
     def fields
-      return_fields = @values.map do |value|
-        next if related_item_is_a_collection?(value)
-        next unless render_nested_related_item?(value)
+      @fields ||= begin
+        return_fields = @values.map do |value|
+          next if related_item_is_a_collection?(value)
+          next unless render_nested_related_item?(value)
 
-        related_item_mods_object(value)
-      end.compact
-      collapse_fields(return_fields)
+          related_item_mods_object(value)
+        end.compact
+        collapse_fields(return_fields)
+      end
     end
 
     def to_html
-      return nil if fields.empty? || @config.ignore?
-      output = ''
-      fields.each do |field|
-        next unless field.values.any? { |f| f && !f.empty? }
-        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd#{value_class}>"
-        output << '<ul class="mods_display_nested_related_items">'
-        output << field.values.map do |val|
-          "<li class='mods_display_nested_related_item open'>#{link_urls_and_email(val.to_s)}</li>"
-        end.join
-        output << '</ul>'
-        output << '</dd>'
+      return if fields.empty? || @config.ignore?
+      @to_html ||= begin
+        output = ''
+        fields.each do |field|
+          next unless field.values.any? { |f| f && !f.empty? }
+          output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
+          output << "<dd#{value_class}>"
+          output << '<ul class="mods_display_nested_related_items">'
+          output << field.values.map do |val|
+            "<li class='mods_display_nested_related_item open'>#{link_urls_and_email(val.to_s)}</li>"
+          end.join
+          output << '</ul>'
+          output << '</dd>'
+        end
+        output
       end
-      output
     end
 
     private

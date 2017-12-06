@@ -1,6 +1,5 @@
 module ModsDisplay
   class HTML
-    attr_reader :title, :body
     def initialize(config, xml, klass)
       @config = config
       @stanford_mods = xml
@@ -24,9 +23,7 @@ module ModsDisplay
       body_fields[0] = :subTitle
       body_fields.each do |field_key|
         field = mods_field(@xml, field_key)
-        unless field.nil? || field.to_html.nil?
-          output << mods_field(@xml, field_key).to_html
-        end
+        output << field.to_html unless field.nil? || field.to_html.nil?
       end
       output << '</dl>'
     end
