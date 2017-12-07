@@ -29,11 +29,18 @@ describe ModsDisplay::NestedRelatedItem do
   end
 
   describe '#fields' do
+    let(:mods) { multi_constituent_fixture }
     subject(:fields) { nested_related_item.fields }
 
-    context 'when an element that should be nested' do
-      let(:mods) { multi_constituent_fixture }
+    describe 'memoization' do
+      it 'only calls related_item_mods_object once per item regardless of how many times the method is called' do
+        expect(nested_related_item).to receive(:related_item_mods_object).exactly(2).times
 
+        5.times { nested_related_item.fields }
+      end
+    end
+
+    context 'when an element that should be nested' do
       it 'has a field for each related item' do
         expect(fields.length).to eq 1
       end
@@ -58,6 +65,16 @@ describe ModsDisplay::NestedRelatedItem do
   describe '#to_html' do
     subject(:html) { Capybara.string(nested_related_item.to_html) }
     let(:mods) { related_item_host_fixture }
+
+    describe 'memoization' do
+      let(:mods) { multi_constituent_fixture }
+
+      it 'only loops throug hthe fields once regardless of how many times the method is called' do
+        expect(nested_related_item.fields).to receive(:each).exactly(1).times.and_call_original
+
+        5.times { nested_related_item.to_html }
+      end
+    end
 
     it 'renders an unordered list with an embedded dl containing the metadata of the related item' do
       within(html.first('dd')) do |dd|
