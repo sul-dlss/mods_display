@@ -27,6 +27,23 @@ describe ModsDisplay::Form do
     it 'returns the text of the form element' do
       expect(subject.first.values).to eq ['Form Value', 'Form Value 2']
     end
+
+    context 'duplicated data' do
+      let(:mods) do
+        <<-XML
+          <mods>
+            <physicalDescription>
+              <form authority="gmd">electronic resource.</form>
+              <form authority="zxy">electronicresource!</form>
+              <form authority="marccategory">electronic Resource</form>
+            </physicalDescription>
+          </mods>
+        XML
+      end
+
+      it 'uses only unique form values, ignore differences in case, punctuation or whitespace' do
+        expect(subject.first.values).to match_array ['electronic resource.']
+      end
     end
   end
 end
