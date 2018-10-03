@@ -6,6 +6,7 @@ describe ModsDisplay::Extent do
       <mods>
         <physicalDescription>
           <extent>Extent Value</extent>
+          <extent>Extent Value 2</extent>
         </physicalDescription>
       </mods>
     XML
@@ -24,7 +25,7 @@ describe ModsDisplay::Extent do
 
   describe 'values' do
     it 'returns the text of the extent element' do
-      expect(subject.first.values).to eq ['Extent Value']
+      expect(subject.first.values).to eq ['Extent Value', 'Extent Value 2']
     end
   end
 end

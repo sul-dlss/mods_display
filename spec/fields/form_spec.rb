@@ -6,6 +6,7 @@ describe ModsDisplay::Form do
       <mods>
         <physicalDescription>
           <form>Form Value</form>
+          <form>Form Value 2</form>
         </physicalDescription>
       </mods>
     XML
@@ -24,7 +25,8 @@ describe ModsDisplay::Form do
 
   describe 'values' do
     it 'returns the text of the form element' do
-      expect(subject.first.values).to eq ['Form Value']
+      expect(subject.first.values).to eq ['Form Value', 'Form Value 2']
+    end
     end
   end
 end

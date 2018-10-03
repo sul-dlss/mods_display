@@ -13,7 +13,7 @@ module ModsDisplay
     private
 
     def form_fields
-      @values.map(&:form)
+      @values.map(&:form).flatten
     end
   end
 end
