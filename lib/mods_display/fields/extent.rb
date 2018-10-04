@@ -13,7 +13,7 @@ module ModsDisplay
     private
 
     def extent_fields
-      @values.map(&:extent)
+      @values.map(&:extent).flatten
     end
   end
 end

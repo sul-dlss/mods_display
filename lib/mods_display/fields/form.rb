@@ -5,7 +5,7 @@ module ModsDisplay
       [
         ModsDisplay::Values.new(
           label: I18n.t('mods_display.form'),
-          values: form_fields.map(&:text)
+          values: form_fields.map(&:text).uniq { |x| x.downcase.gsub(/\s/, '').gsub(/[[:punct:]]/, '') }
         )
       ]
     end
@@ -13,7 +13,7 @@ module ModsDisplay
     private
 
     def form_fields
-      @values.map(&:form)
+      @values.map(&:form).flatten
     end
   end
 end
