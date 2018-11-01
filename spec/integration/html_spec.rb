@@ -54,6 +54,14 @@ describe 'HTML Output' do
       expect(@multiple_titles.body).not_to include('<dd>Main Title</dd>')
       expect(@multiple_titles.body).to include('<dd>Alternate Title</dd>')
     end
+
+    it 'should allow access to the subTitle independently from the title (for use with #body or fields)' do
+      sub_title = @multiple_titles.subTitle
+      expect(sub_title.length).to eq 1
+      expect(sub_title.first).to be_a ModsDisplay::Values
+      expect(sub_title.first.label).to match(/^Alternative title/i)
+      expect(sub_title.first.values).to eq(['Alternate Title'])
+    end
   end
   describe 'individual fields' do
     it 'should return ModsDispaly::Values for the specefied field' do
