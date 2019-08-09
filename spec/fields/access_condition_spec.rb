@@ -8,14 +8,6 @@ def mods_display_access_condition(mods_record)
   )
 end
 
-def mods_display_versioned_access_condition(mods_record, version)
-  ModsDisplay::AccessCondition.new(
-    mods_record,
-    ModsDisplay::Configuration::AccessCondition.new { cc_license_version version },
-    double('controller')
-  )
-end
-
 def mods_display_non_ignore_access_condition(mods_record)
   ModsDisplay::AccessCondition.new(
     mods_record,
@@ -68,31 +60,19 @@ describe ModsDisplay::AccessCondition do
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first).to include("<a href='http://creativecommons.org/licenses/by-sa/3.0/'>")
         expect(fields.first.values.first).to include(
-          'This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License'
+          'This work is licensed under a Creative Commons Attribution-Share Alike 3.0 Unported License'
         )
       end
       it 'should itentify and link OpenDataCommons licenses properly' do
         fields = mods_display_access_condition(@odc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to include("<a href='http://opendatacommons.org/licenses/pddl'>")
+        expect(fields.first.values.first).to include("<a href='http://opendatacommons.org/licenses/pddl/'>")
         expect(fields.first.values.first).to include(
           'This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)'
         )
       end
-      it 'should have a configurable version for CC licenses' do
-        fields = mods_display_versioned_access_condition(@cc_license_note, '4.0').fields
-        expect(fields.length).to eq(1)
-        expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to include('http://creativecommons.org/licenses/by-sa/4.0/')
-        expect(fields.first.values.first).not_to include('http://creativecommons.org/licenses/by-sa/3.0/')
-      end
-      it 'should not apply configured version to NON-CC licenses' do
-        fields = mods_display_versioned_access_condition(@odc_license_note, '4.0').fields
-        expect(fields.length).to eq(1)
-        expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).not_to include('/4.0/')
-      end
+
       it 'should not attempt unknown license types' do
         fields = mods_display_access_condition(@no_link_license_note).fields
         expect(fields.length).to eq(1)

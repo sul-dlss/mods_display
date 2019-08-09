@@ -1,5 +1,53 @@
 module ModsDisplay
   class AccessCondition < Field
+    LICENSES = {
+      'cc-none' => { desc: '' },
+      'cc-by' => {
+        link: 'http://creativecommons.org/licenses/by/3.0/',
+        desc: 'This work is licensed under a Creative Commons Attribution 3.0 Unported License'
+      },
+      'cc-by-sa' => {
+        link: 'http://creativecommons.org/licenses/by-sa/3.0/',
+        desc: 'This work is licensed under a Creative Commons Attribution-Share Alike 3.0 Unported License'
+      },
+      'cc-by-nd' => {
+        link: 'http://creativecommons.org/licenses/by-nd/3.0/',
+        desc: 'This work is licensed under a Creative Commons Attribution-No Derivative Works 3.0 Unported License'
+      },
+      'cc-by-nc' => {
+        link: 'http://creativecommons.org/licenses/by-nc/3.0/',
+        desc: 'This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License'
+      },
+      'cc-by-nc-sa' => {
+        link: 'http://creativecommons.org/licenses/by-nc-sa/3.0/',
+        desc: 'This work is licensed under a Creative Commons Attribution-Noncommercial-Share Alike 3.0 Unported License'
+      },
+      'cc-by-nc-nd' => {
+        link: 'http://creativecommons.org/licenses/by-nc-nd/3.0/',
+        desc: 'This work is licensed under a Creative Commons Attribution-Noncommercial-No Derivative Works 3.0 Unported License'
+      },
+      'cc-pdm' => {
+        link: 'http://creativecommons.org/publicdomain/mark/1.0/',
+        desc: 'This work is in the public domain per Creative Commons Public Domain Mark 1.0'
+      },
+      'odc-odc-pddl' => {
+        link: 'http://opendatacommons.org/licenses/pddl/',
+        desc: 'This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)'
+      },
+      'odc-pddl' => {
+        link: 'http://opendatacommons.org/licenses/pddl/',
+        desc: 'This work is licensed under a Open Data Commons Public Domain Dedication and License (PDDL)'
+      },
+      'odc-odc-by' => {
+        link: 'http://opendatacommons.org/licenses/by/',
+        desc: 'This work is licensed under a Open Data Commons Attribution License'
+      },
+      'odc-odc-odbl' => {
+        link: 'http://opendatacommons.org/licenses/odbl/',
+        desc: 'This work is licensed under a Open Data Commons Open Database License (ODbL)'
+      }
+    }.freeze
+
     def fields
       return_fields = @values.map do |value|
         ModsDisplay::Values.new(
@@ -28,26 +76,32 @@ module ModsDisplay
     end
 
     def license_statement(element)
-      element.text[/^(.*) (.*):(.*)$/]
-      output = "<div class='#{[Regexp.last_match(1), Regexp.last_match(2)].join('-').downcase}'>"
-      if license_link(Regexp.last_match(1), Regexp.last_match(2))
-        link = "<a href='#{license_link(Regexp.last_match(1), Regexp.last_match(2))}'>#{Regexp.last_match(3).strip}</a>"
-        output << link
-      else
-        output << Regexp.last_match(3).strip
-      end
+      matches = element.text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
+      code = matches[:code].downcase
+      type = matches[:type].downcase
+      description = license_description(code, type) || matches[:description]
+      url = license_url(code, type)
+      output = "<div class='#{code}-#{type}'>"
+      output << if url
+                  "<a href='#{url}'>#{description}</a>"
+                else
+                  description
+                end
       output << '</div>'
     end
 
-    def license_code_urls
-      { 'cc'  => 'http://creativecommons.org/licenses/',
-        'odc' => 'http://opendatacommons.org/licenses/' }
+    def license_url(code, type)
+      key = "#{code}-#{type}"
+      return unless LICENSES.key?(key)
+
+      LICENSES[key][:link]
     end
 
-    def license_link(code, type)
-      code = code.downcase
-      return unless license_code_urls.key?(code)
-      "#{license_code_urls[code]}#{type.downcase}#{"/#{@config.cc_license_version}/" if code == 'cc'}"
+    def license_description(code, type)
+      key = "#{code}-#{type}"
+      return unless LICENSES.key?(key) && LICENSES[key][:desc]
+
+      LICENSES[key][:desc]
     end
 
     def access_label(element)
