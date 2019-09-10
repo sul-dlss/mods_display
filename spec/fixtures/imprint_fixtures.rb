@@ -280,6 +280,17 @@ module ImprintFixtures
     MODS
   end
 
+  def iso8601_encoded_dates
+    <<-MODS
+      <mods>
+        <originInfo>
+          <dateCreated encoding="iso8601">20131114161429</dateCreated>
+          <dateModified encoding="iso8601">Jul. 22, 2013</dateModified>
+        </originInfo>
+      </mods>
+    MODS
+  end
+
   def bad_dates
     <<-MODS
       <mods>

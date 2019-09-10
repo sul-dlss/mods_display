@@ -43,6 +43,7 @@ describe ModsDisplay::Imprint do
     @imprint_date_range = Stanford::Mods::Record.new.from_str(imprint_date_range, false).origin_info
     @encoded_place = Stanford::Mods::Record.new.from_str(encoded_place, false).origin_info
     @encoded_dates = Stanford::Mods::Record.new.from_str(encoded_dates, false).origin_info
+    @iso8601_encoded_dates = Stanford::Mods::Record.new.from_str(iso8601_encoded_dates, false).origin_info
     @bad_dates = Stanford::Mods::Record.new.from_str(bad_dates, false).origin_info
     @invalid_dates = Stanford::Mods::Record.new.from_str(invalid_dates, false).origin_info
     @punctuation_imprint = Stanford::Mods::Record.new.from_str(punctuation_imprint_fixture, false).origin_info
@@ -207,6 +208,23 @@ describe ModsDisplay::Imprint do
           expect(fields.find do |field|
             field.label == 'Date captured:'
           end.values).to eq(['July (2013)'])
+        end
+      end
+
+      describe 'iso8601' do
+        it 'handles full dates properly' do
+          fields = mods_display_imprint(@iso8601_encoded_dates).fields
+          expect(fields.length).to eq(2)
+          expect(fields.find do |field|
+            field.label == 'Date created:'
+          end.values).to eq(['November 14, 2013'])
+        end
+        it "should not try to handle dates we can't parse" do
+          fields = mods_display_imprint(@iso8601_encoded_dates).fields
+          expect(fields.length).to eq(2)
+          expect(fields.find do |field|
+            field.label == 'Date modified:'
+          end.values).to eq(['Jul. 22, 2013'])
         end
       end
     end
