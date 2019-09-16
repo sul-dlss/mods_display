@@ -68,6 +68,8 @@ module ModsDisplay
       date_fields.map do |date_field|
         if date_is_w3cdtf?(date_field)
           process_w3cdtf_date(date_field)
+        elsif date_is_iso8601?(date_field)
+          process_iso8601_date(date_field)
         else
           date_field
         end
@@ -158,6 +160,10 @@ module ModsDisplay
       field_is_encoded?(date_field, 'w3cdtf')
     end
 
+    def date_is_iso8601?(date_field)
+      field_is_encoded?(date_field, 'iso8601')
+    end
+
     def process_w3cdtf_date(date_field)
       date_field = date_field.clone
       date_field.content = begin
@@ -168,6 +174,16 @@ module ModsDisplay
         else
           date_field.content
         end
+      rescue
+        date_field.content
+      end
+      date_field
+    end
+
+    def process_iso8601_date(date_field)
+      date_field = date_field.clone
+      date_field.content = begin
+        Date.iso8601(date_field.text).strftime(@config.full_date_format)
       rescue
         date_field.content
       end
