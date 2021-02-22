@@ -1,6 +1,11 @@
+ENV['RAILS_ENV'] ||= 'test'
 require 'mods_display'
 require 'stanford-mods'
 require 'capybara'
+require 'rails'
+require 'fake_app'
+require 'rspec/rails'
+require 'mods_display/helpers/record_helper'
 
 Dir["#{File.expand_path('..', __FILE__)}/fixtures/*.rb"].each { |file| require file }
 # Load i18n test file.
@@ -24,6 +29,7 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+  config.include Rails.application.routes.url_helpers
 end
 class TestModel
   attr_accessor :modsxml
