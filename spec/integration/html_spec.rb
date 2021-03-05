@@ -79,4 +79,9 @@ describe 'HTML Output' do
       expect { @abstract.not_a_real_field }.to raise_error NoMethodError
     end
   end
+  describe 'individual fields' do
+    it 'should return ModsDispaly::Class when raw is specified' do
+      expect(@abstract.abstract(raw: true)).to be_a ModsDisplay::Abstract
+    end
+  end
 end
