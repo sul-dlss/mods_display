@@ -41,7 +41,9 @@ module ModsDisplay
       if to_s.respond_to?(method_name)
         to_html.send(method_name, *args, &block)
       elsif method_name == :subTitle || mods_display_fields.include?(method_name)
-        mods_field(@xml, method_name).fields
+        field = mods_field(@xml, method_name)
+        return field if (args.dig(0, :raw))
+        field.fields
       else
         super
       end
