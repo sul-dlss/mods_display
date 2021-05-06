@@ -76,7 +76,20 @@ module ModsDisplay
     end
 
     def license_statement(element)
+      license_url = element['xlink:href']
+      return license_from_legacy_code(element) unless license_url
+
+      license = License.new(url: license_url)
+
+      "<div class=\"#{license.css_class}\">" +
+      "<a href=\"#{license.link}\">#{license.description}</a>" +
+      '</div>'
+    end
+
+    def license_from_legacy_code(element)
       matches = element.text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
+      return unless matches
+
       code = matches[:code].downcase
       type = matches[:type].downcase
       description = license_description(code, type) || matches[:description]
