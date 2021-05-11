@@ -55,7 +55,7 @@ describe ModsDisplay::AccessCondition do
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first).to match(%r{^<div class='unknown-something'>.*</div>$})
       end
-      it 'should itentify and link CreativeCommons licenses properly' do
+      it 'should identify and link CreativeCommons licenses properly' do
         fields = mods_display_access_condition(@cc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
@@ -64,7 +64,7 @@ describe ModsDisplay::AccessCondition do
           'This work is licensed under a Creative Commons Attribution-Share Alike 3.0 Unported License'
         )
       end
-      it 'should itentify and link OpenDataCommons licenses properly' do
+      it 'should identify and link OpenDataCommons licenses properly' do
         fields = mods_display_access_condition(@odc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
