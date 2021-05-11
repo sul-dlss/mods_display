@@ -25,6 +25,7 @@ describe ModsDisplay::AccessCondition do
     @cc_license_note = Stanford::Mods::Record.new.from_str(cc_license_fixture, false).accessCondition
     @odc_license_note = Stanford::Mods::Record.new.from_str(odc_license_fixture, false).accessCondition
     @no_link_license_note = Stanford::Mods::Record.new.from_str(no_license_fixture, false).accessCondition
+    @garbage_license_fixture = Stanford::Mods::Record.new.from_str(garbage_license_fixture, false).accessCondition
   end
   describe 'labels' do
     it 'should normalize types and assign proper labels' do
@@ -79,6 +80,16 @@ describe ModsDisplay::AccessCondition do
         expect(fields.first.values.length).to eq(1)
         expect(fields.first.values.first).to include(
           'This work is licensed under an Unknown License and will not be linked'
+        )
+        expect(fields.first.values.first).not_to include('<a.*>')
+      end
+
+      it 'returns the license text if it does not look like our expected format' do
+        fields = mods_display_access_condition(@garbage_license_fixture).fields
+        expect(fields.length).to eq(1)
+        expect(fields.first.values.length).to eq(1)
+        expect(fields.first.values.first).to include(
+          'Unknown garbage that does not look like a license'
         )
         expect(fields.first.values.first).not_to include('<a.*>')
       end

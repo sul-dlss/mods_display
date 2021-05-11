@@ -77,6 +77,9 @@ module ModsDisplay
 
     def license_statement(element)
       matches = element.text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
+
+      return "<div>#{element.text}</div>" unless matches
+
       code = matches[:code].downcase
       type = matches[:type].downcase
       description = license_description(code, type) || matches[:description]
