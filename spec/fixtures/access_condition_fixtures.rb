@@ -47,4 +47,12 @@ module AccessConditionFixtures
       </mods>
     XML
   end
+
+  def garbage_license_fixture
+    <<-XML
+      <mods>
+        <accessCondition type='license'>Unknown garbage that does not look like a license</accessCondition>
+      </mods>
+    XML
+  end
 end
