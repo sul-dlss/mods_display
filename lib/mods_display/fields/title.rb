@@ -4,31 +4,10 @@ module ModsDisplay
       return_values = []
       if @values
         @values.each do |value|
-          if displayForm(value)
-            return_values << ModsDisplay::Values.new(
-              label: displayLabel(value) || title_label(value),
-              values: [displayForm(value)]
-            )
-          else
-            nonSort = nil
-            title = nil
-            subTitle = nil
-            nonSort = value.nonSort.text.strip unless value.nonSort.text.strip.empty?
-            title = value.title.text.strip unless value.title.text.strip.empty?
-            subTitle = value.subTitle.text unless value.subTitle.text.strip.empty?
-            preSubTitle = [nonSort, title].compact.join(' ')
-            preSubTitle = nil if preSubTitle.strip.empty?
-            preParts = compact_and_join_with_delimiter([preSubTitle, subTitle], ' : ')
-            preParts = nil if preParts.strip.empty?
-            parts = value.children.select do |child|
-              %w(partName partNumber).include?(child.name)
-            end.map(&:text).compact.join(parts_delimiter(value))
-            parts = nil if parts.strip.empty?
-            return_values << ModsDisplay::Values.new(
-              label: displayLabel(value) || title_label(value),
-              values: [compact_and_join_with_delimiter([preParts, parts], '. ')]
-            )
-          end
+          return_values << ModsDisplay::Values.new(
+            label: displayLabel(value) || title_label(value),
+            values: [assemble_title(value)]
+          )
         end
       end
       collapse_fields(return_values)
@@ -36,14 +15,42 @@ module ModsDisplay
 
     private
 
-    def parts_delimiter(element)
-      children = element.children.to_a
-      # index will retun nil which is not comparable so we call 100
-      # if the element isn't present (thus meaning it's at the end of the list)
-      if (children.index { |c| c.name == 'partNumber' } || 100) < (children.index { |c| c.name == 'partName' } || 100)
-        return ', '
+    def assemble_title(element)
+      return displayForm(element) if displayForm(element)
+
+      title = ''
+      previous_element = nil
+
+      element.children.select { |value| title_parts.include? value.name }.each do |value|
+        str = value.text.strip
+        next if str.empty?
+
+        delimiter = case
+        when title.empty?, title.end_with?(' ')
+          nil
+        when title.end_with?('.', ',', ':', ';')
+          ' '
+        when value.name == 'subTitle'
+          ' : '
+        when value.name == 'partName' && previous_element.name == 'partNumber'
+          ', '
+        when value.name == 'partNumber', value.name == 'partName'
+          '. '
+        else
+          ' '
+        end
+
+        title += delimiter if delimiter
+        title += str
+
+        previous_element = value
       end
-      '. '
+
+      title
+    end
+
+    def title_parts
+      %w[nonSort title subTitle partName partNumber]
     end
 
     def title_label(element)
