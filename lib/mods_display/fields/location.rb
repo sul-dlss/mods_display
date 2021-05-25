@@ -24,7 +24,7 @@ module ModsDisplay
     private
 
     def location_field_keys
-      [:physicalLocation, :url, :shelfLocation, :holdingSimple, :holdingExternal]
+      [:physicalLocation, :url, :shelfLocator, :holdingSimple, :holdingExternal]
     end
 
     def location_label(element)

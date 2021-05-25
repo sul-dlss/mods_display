@@ -5,7 +5,7 @@ describe ModsDisplay::Location do
     <<-XML
       <mods>
         <location>
-          <shelfLocation>On Shelf A</shelfLocation>
+          <shelfLocator>On Shelf A</shelfLocator>
         </location>
       </mods>
     XML
