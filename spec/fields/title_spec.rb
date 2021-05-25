@@ -15,6 +15,7 @@ describe ModsDisplay::Title do
     @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture, false).title_info
     @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture, false).title_info
     @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture, false).title_info
+    @ordered_title_fixture = Stanford::Mods::Record.new.from_str(ordered_title_fixture, false).title_info
   end
   describe 'labels' do
     it 'should return a default label of Title if nothing else is available' do
@@ -69,6 +70,13 @@ describe ModsDisplay::Title do
       expect(values.length).to eq 1
       expect(values.first).not_to include '..'
       expect(values.first).to eq 'A title that ends in punctuation. 2015'
+    end
+
+    it 'combines the title parts in the order from the record' do
+      values = mods_display_title(@ordered_title_fixture).fields.first.values
+      expect(values.length).to eq 1
+
+      expect(values.first).to eq 'The medium term expenditure framework (MTEF) for ... and the annual estimates for ... 016, Ministry of Tourism : expenditure to be met out of moneys granted and drawn from the consolidated fund, central government budget'
     end
   end
 end

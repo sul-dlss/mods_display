@@ -98,4 +98,18 @@ module TitleFixtures
       </mods>
     XML
   end
+
+  def ordered_title_fixture
+    <<-XML
+    <mods>
+      <titleInfo>
+        <nonSort>The</nonSort>
+        <title>medium term expenditure framework (MTEF) for ... and the annual estimates for ...</title>
+        <partNumber>016</partNumber>
+        <partName>Ministry of Tourism</partName>
+        <subTitle>expenditure to be met out of moneys granted and drawn from the consolidated fund, central government budget</subTitle>
+      </titleInfo>
+    </mods>
+    XML
+  end
 end
