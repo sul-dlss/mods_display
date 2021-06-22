@@ -26,9 +26,9 @@ describe ModsDisplay::ResourceType do
     expect(fields.length).to eq(1)
     expect(fields.first.label).to eq('Special label:')
   end
-  it 'should capitalize the first letter of the values' do
+  it 'passes the field value through' do
     fields = mods_display_resource_type(@downcase).fields
     expect(fields.length).to eq(1)
-    expect(fields.first.values).to eq(['Resource type'])
+    expect(fields.first.values).to eq(['resource type'])
   end
 end
