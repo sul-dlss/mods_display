@@ -22,69 +22,51 @@ module ModsDisplay
       content_tag(:dt, label.delete(':')) + "\n".html_safe
     end
 
+    # @private
     def mods_display_content(values, delimiter = nil)
-      if delimiter
-        content_tag(:dd, values.map do |value|
-          link_urls_and_email(value) if value.present?
-        end.compact.join(delimiter).html_safe)
-      else
-        Array[values].flatten.map do |value|
-          content_tag(:dd, link_urls_and_email(value.to_s).html_safe) if value.present?
-        end.join.html_safe
-      end
+      mods_record_field ModsDisplay::Values.new(values: Array(values)), delimiter
     end
 
-    def mods_record_field(field, delimiter = nil)
-      return unless field.respond_to?(:label, :values) && field.values.any?(&:present?)
-
-      mods_display_label(field.label) + mods_display_content(field.values, delimiter)
+    def mods_record_field(field, delimiter = nil, component: ModsDisplay::FieldComponent, &block)
+      render component.new(field: field, delimiter: delimiter, &block)
     end
 
     def mods_name_field(field, &block)
-      return unless field.respond_to?(:label, :values) && field.values.any?(&:present?)
-
-      mods_display_label(field.label) + mods_display_name(field.values, &block)
+      mods_record_field(field) do |name|
+        block_given? ? yield(name.name) : name.name
+      end
     end
 
-    def mods_display_name(names, &block)
-      names.map do |name|
-        content_tag(:dd) do
-          block_given? ? yield(name.name) : name.name
-        end
-      end.join.html_safe
+    def mods_display_name(values, &block)
+      mods_name_field(ModsDisplay::Values.new(values: Array(values)), &block)
     end
 
     # We need this to remove the ending ":" from the role labels only in data from
     # mods_display
+    # @private (but currently used in searchworks)
     def sanitize_mods_name_label(label)
       label.sub(/:$/, '')
     end
 
-    def mods_subject_field(subject, &block)
-      return unless subject.values.any?(&:present?)
-
-      fields = subject.values.map do |subject_line|
-        content_tag :dd, safe_join(link_mods_subjects(subject_line, &block), ' > ')
+    def mods_subject_field(field, &block)
+      mods_record_field(field) do |subject_line|
+        safe_join(link_mods_subjects(subject_line, &block), ' > ')
       end
-
-      (mods_display_label(subject.label) + safe_join(fields))
     end
 
-    def mods_genre_field(genre, &block)
-      return unless genre.values.any?(&:present?)
-
-      fields = genre.values.map do |genre_line|
-        content_tag :dd, link_mods_genres(genre_line, &block)
+    def mods_genre_field(field, &block)
+      mods_record_field(field) do |genre_line|
+        link_to_mods_subject(genre_line, &block)
       end
-
-      mods_display_label(genre.label) + safe_join(fields)
     end
 
+    # @private
     def link_mods_genres(genre, &block)
       link_buffer = []
       link_to_mods_subject(genre, link_buffer, &block)
     end
 
+    # @private
     def link_mods_subjects(subjects, &block)
       link_buffer = []
       linked_subjects = []
@@ -96,7 +78,8 @@ module ModsDisplay
       linked_subjects
     end
 
-    def link_to_mods_subject(subject, buffer, &block)
+    # @private
+    def link_to_mods_subject(subject, buffer = [], &block)
       subject_text = subject.respond_to?(:name) ? subject.name : subject
       link = block_given? ? yield(subject_text, buffer) : subject_text
       buffer << subject_text.strip
@@ -105,6 +88,7 @@ module ModsDisplay
     end
 
     # rubocop:disable Layout/LineLength
+    # @private, but used in PURL currently
     def link_urls_and_email(val)
       val = val.dup
       # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
