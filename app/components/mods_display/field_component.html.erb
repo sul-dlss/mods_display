@@ -1,0 +1,12 @@
+<% if @field.label %>
+  <%= tag.dt @field.label.sub(/:$/, ''), **@label_html_attributes %>
+<% end %>
+<% if @delimiter %>
+  <%= tag.dd **@value_html_attributes do %>
+    <%= safe_join @field.values.select(&:present?).map { |value| format(value) }, @delimiter %>
+  <% end %>
+<% else %>
+  <% @field.values.select(&:present?).each do |value| %>
+    <%= tag.dd format(value), **@value_html_attributes %>
+  <% end %>
+<% end %>
