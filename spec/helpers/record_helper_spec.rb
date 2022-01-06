@@ -35,7 +35,7 @@ describe ModsDisplay::RecordHelper, type: :helper do
       expect(helper.mods_record_field(mods_field)).to have_css('dd', text: 'hello, there')
     end
     it 'should link fields with URLs' do
-      expect(mods_record_field(url_field)).to have_css("a[href='https://library.stanford.edu']", text: 'https://library.stanford.edu')
+      expect(helper.mods_record_field(url_field)).to have_css("a[href='https://library.stanford.edu']", text: 'https://library.stanford.edu')
     end
     it 'should not print empty labels' do
       expect(helper.mods_record_field(empty_field)).not_to be_present
@@ -115,7 +115,7 @@ describe ModsDisplay::RecordHelper, type: :helper do
         end
       end
       it 'should join the subject fields in a dd' do
-        expect(subject).to match /<dd><a href=*.*\">Subject1a*.*Subject1b<\/a><\/dd><dd><a/
+        expect(subject).to match /<dd><a href=*.*\">Subject1a*.*Subject1b<\/a><\/dd>\s*<dd><a/
       end
       it "should join the individual subjects with a '>'" do
         expect(subject).to match /Subject2b<\/a> &gt; <a href/
@@ -129,7 +129,7 @@ describe ModsDisplay::RecordHelper, type: :helper do
       it 'should join the genre fields with a dd' do
         expect(mods_genre_field(genres.first) do |text|
           link_to(text, searches_path(q: text))
-        end).to match /<dd><a href=*.*>Genre1*.*<\/a><\/dd><dd><a*.*Genre2<\/a><\/dd>/
+        end).to match /<dd><a href=*.*>Genre1*.*<\/a><\/dd>\s*<dd><a*.*Genre2<\/a><\/dd>/
       end
       it 'should not print empty labels' do
         expect(mods_genre_field(empty_field)).not_to be_present
@@ -206,10 +206,10 @@ describe ModsDisplay::RecordHelper, type: :helper do
     let(:email) { 'This is a field that contains an email@email.com address' }
 
     it 'should link URLs' do
-      expect(link_urls_and_email(url)).to eq "This is a field that contains an <a href='https://library.stanford.edu'>https://library.stanford.edu</a> URL"
+      expect(link_urls_and_email(url)).to eq 'This is a field that contains an <a href="https://library.stanford.edu">https://library.stanford.edu</a> URL'
     end
     it 'should link email addresses' do
-      expect(link_urls_and_email(email)).to eq "This is a field that contains an <a href='mailto:email@email.com'>email@email.com</a> address"
+      expect(link_urls_and_email(email)).to eq 'This is a field that contains an <a href="mailto:email@email.com">email@email.com</a> address'
     end
   end
 end
