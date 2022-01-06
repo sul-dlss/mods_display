@@ -2,22 +2,6 @@
 
 module ModsDisplay
   module RecordHelper
-    def display_content_field(field)
-      return unless field.respond_to?(:label, :values) && field.values.any?(&:present?)
-
-      display_content_label(field.label) + display_content_values(field.values)
-    end
-
-    def display_content_label(label)
-      content_tag :dt, label
-    end
-
-    def display_content_values(values)
-      values.map do |value|
-        content_tag :dd, value
-      end.join('').html_safe
-    end
-
     def mods_display_label(label)
       content_tag(:dt, label.delete(':')) + "\n".html_safe
     end
