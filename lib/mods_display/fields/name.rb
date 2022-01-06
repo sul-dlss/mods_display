@@ -150,12 +150,11 @@ module ModsDisplay
     def rebuild_fields_with_new_labels(label_keys, results)
       # Build the new fields data, stripping out the roles within the Person classes
       label_keys.uniq.map do |k|
-        mdv = ModsDisplay::Values.new({})
-        mdv.label = k
-        mdv.values = results[k].map do |person|
+        values = results[k].map do |person|
           ModsDisplay::Name::Person.new(name: person.name)
         end
-        mdv
+
+        ModsDisplay::Values.new(label: k, values: values)
       end
     end
 
