@@ -7,7 +7,7 @@ describe 'Installation' do
     model = TestModel.new
     model.modsxml = title_xml
     controller = TestController.new
-    @html = controller.render_mods_display(model)
+    @html = controller.render_mods_display(model).to_html
   end
   it 'should return a single <dl>' do
     expect(@html.scan(/<dl>/).length).to eq(1)
@@ -18,7 +18,7 @@ describe 'Installation' do
     expect(@html.scan(/<dd>/).length).to eq(@pieces_of_data)
   end
   it 'should return a proper label' do
-    expect(@html.scan(%r{<dt title='Title'>Title:</dt>}).length).to eq(1)
+    expect(@html.scan(%r{<dt>Title</dt>}).length).to eq(1)
   end
   it 'should return a proper value' do
     expect(@html.scan(%r{<dd>The Title of this Item</dd>}).length).to eq(1)

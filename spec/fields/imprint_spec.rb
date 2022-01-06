@@ -255,13 +255,13 @@ describe ModsDisplay::Imprint do
       expect(html.scan(%r{<dd>The Display Form</dd>}).length).to eq(2)
     end
     it "should return the displayLabel when present if we're using the displayForm" do
-      expect(mods_display_imprint(@display_form_with_label).to_html).to match(%r{<dt title='TheLabel'>TheLabel:</dt>})
+      expect(mods_display_imprint(@display_form_with_label).to_html).to match(%r{<dt>TheLabel</dt>})
     end
     it 'should have individual dt/dd pairs for mixed content' do
       html = mods_display_imprint(@mixed).to_html
-      expect(html.scan(%r{<dt title='Imprint'>Imprint:</dt>}).length).to eq(1)
-      expect(html.scan(%r{<dt title='Issuance'>Issuance:</dt>}).length).to eq(1)
-      expect(html.scan(%r{<dt title='Date captured'>Date captured:</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Imprint</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Issuance</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Date captured</dt>}).length).to eq(1)
       expect(html.scan(/<dd>/).length).to eq(3)
     end
   end

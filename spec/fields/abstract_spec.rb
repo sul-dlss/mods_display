@@ -26,13 +26,13 @@ describe ModsDisplay::Abstract do
     it 'should turn URLs into links' do
       expect(mods_display_abstract(@link).to_html).to match(/A link to the library \(<a href/)
       expect(mods_display_abstract(@link).to_html).to match(
-        %r{\(<a href='http://library.stanford.edu'>http://library.stanford.edu</a>\)}
+        %r{\(<a href="http://library.stanford.edu">http://library.stanford.edu</a>\)}
       )
       expect(mods_display_abstract(@link).to_html).to match(%r{</a>\) should appear here})
     end
     it 'should turn email addresses into mailto links' do
       expect(mods_display_abstract(@email).to_html).to match(
-        %r{A link to an email address <a href='mailto:jdoe@example.com'>jdoe@example.com</a> should appear here}
+        %r{A link to an email address <a href="mailto:jdoe@example.com">jdoe@example.com</a> should appear here}
       )
     end
   end

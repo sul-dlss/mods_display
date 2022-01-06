@@ -33,13 +33,13 @@ describe 'HTML Output' do
   end
   describe 'i18n' do
     it 'should get the default english translations' do
-      expect(@mods.to_html).to match(%r{<dt title='Title'>Title:</dt>})
+      expect(@mods.to_html).to match(%r{<dt>Title</dt>})
     end
     it 'should internationalize the labels when translations are available' do
-      expect(@fr_mods.to_html).to match(%r{<dt title='Résumé'>Résumé :</dt>})
+      expect(@fr_mods.to_html).to match(%r{<dt>Résumé </dt>})
     end
     it 'should get fallback to the default english translations if a translation is missing' do
-      expect(@fr_mods.to_html).to match(%r{<dt title='Title'>Title:</dt>})
+      expect(@fr_mods.to_html).to match(%r{<dt>Title</dt>})
     end
   end
   describe 'titles' do

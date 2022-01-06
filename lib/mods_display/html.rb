@@ -26,6 +26,7 @@ module ModsDisplay
       output << '</dl>'
     end
 
+    # @deprecated
     def to_html
       output = '<dl>'
       mods_display_fields.each do |field_key|

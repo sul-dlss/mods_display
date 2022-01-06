@@ -21,18 +21,7 @@ module ModsDisplay
     end
 
     def to_html
-      return nil if fields.empty?
-      output = ''
-      fields.each do |field|
-        next unless field.values.any? { |f| f && !f.empty? }
-        output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd>"
-        output << field.values.map do |val|
-          link_urls_and_email(val.to_s)
-        end.join(delimiter)
-        output << '</dd>'
-      end
-      output
+      ApplicationController.renderer.render ModsDisplay::FieldComponent.with_collection(fields)
     end
 
     private
