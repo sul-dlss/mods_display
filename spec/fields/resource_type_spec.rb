@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_resource_type(mods_record)
-  ModsDisplay::ResourceType.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::ResourceType.new(mods_record)
 end
 
 describe ModsDisplay::ResourceType do

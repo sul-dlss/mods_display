@@ -3,7 +3,7 @@ require 'fixtures/cartographics_fixtures'
 include CartographicsFixtures
 
 def mods_display_cartographics(mods)
-  ModsDisplay::Cartographics.new(mods, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Cartographics.new(mods)
 end
 
 describe ModsDisplay::Cartographics do

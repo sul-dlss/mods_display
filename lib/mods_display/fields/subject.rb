@@ -28,11 +28,11 @@ module ModsDisplay
 
     # Would really like to clean this up, but it works and is tested for now.
     def to_html
-      return nil if fields.empty? || @config.ignore?
+      return nil if fields.empty?
       output = ''
       fields.each do |field|
-        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd#{value_class}>"
+        output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
+        output << "<dd>"
         subs = []
         field.values.each do |subjects|
           buffer = []
@@ -43,23 +43,10 @@ module ModsDisplay
             else
               buffer << val
             end
-            if @config.link && @config.hierarchical_link
-              if val.is_a?(ModsDisplay::Name::Person)
-                sub_parts << link_to_value(val.name, buffer.join(' '))
-              else
-                sub_parts << link_to_value(val, buffer.join(' '))
-              end
-            elsif @config.link
-              if val.is_a?(ModsDisplay::Name::Person)
-                sub_parts << link_to_value(val.name)
-              else
-                sub_parts << link_to_value(val.to_s)
-              end
-            else
-              sub_parts << val.to_s
-            end
+
+            sub_parts << val.to_s
           end
-          subs << sub_parts.join(@config.delimiter)
+          subs << sub_parts.join(delimiter)
         end
         output << subs.join('<br/>')
         output << '</dd>'
@@ -72,12 +59,16 @@ module ModsDisplay
     end
 
     def process_name(element)
-      name = ModsDisplay::Name.new([element], @config, @klass).fields.first
+      name = ModsDisplay::Name.new([element]).fields.first
 
       name.values.first if name
     end
 
     private
+
+    def delimiter
+      ' &gt; '
+    end
 
     def values_from_subjects(element)
       return_values = []

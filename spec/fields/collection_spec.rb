@@ -2,9 +2,7 @@ require 'spec_helper'
 
 def mods_display_collection(mods_record)
   ModsDisplay::Collection.new(
-    mods_record,
-    ModsDisplay::Configuration::Base.new,
-    double('controller')
+    mods_record
   )
 end
 

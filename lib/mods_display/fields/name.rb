@@ -17,24 +17,24 @@ module ModsDisplay
     end
 
     def to_html
-      return nil if fields.empty? || @config.ignore?
+      return nil if fields.empty?
       output = ''
       fields.each do |field|
-        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd#{value_class}>"
+        output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
+        output << "<dd>"
         output << field.values.map do |val|
-          if @config.link
-            link_to_value(val.name)
-          else
-            val.to_s
-          end
-        end.join(@config.delimiter)
+          val.to_s
+        end.join(delimiter)
         output << '</dd>'
       end
       output
     end
 
     private
+
+    def delimiter
+      '<br />'
+    end
 
     def collapse_roles(fields)
       return [] if fields.blank?

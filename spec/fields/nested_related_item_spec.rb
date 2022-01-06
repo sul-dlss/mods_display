@@ -6,9 +6,7 @@ describe ModsDisplay::NestedRelatedItem do
 
   let(:nested_related_item) do
     described_class.new(
-      Stanford::Mods::Record.new.from_str(mods, false).related_item,
-      ModsDisplay::Configuration::Base.new,
-      double('controller')
+      Stanford::Mods::Record.new.from_str(mods, false).related_item
     )
   end
 

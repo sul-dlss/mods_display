@@ -2,15 +2,8 @@ require 'spec_helper'
 require 'fixtures/name_fixtures'
 include NameFixtures
 
-def mods_display_name_link(mods_record)
-  config = ModsDisplay::Configuration::Base.new do
-    link :link_method, '%value%'
-  end
-  ModsDisplay::Name.new(mods_record, config, TestController.new)
-end
-
 def mods_display_name(mods_record)
-  ModsDisplay::Name.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Name.new(mods_record)
 end
 
 describe ModsDisplay::Language do
@@ -157,10 +150,6 @@ describe ModsDisplay::Language do
     it 'should add the role to the name in parens' do
       html = mods_display_name(@name_with_role).to_html
       expect(html).to match(%r{<dd>John Doe</dd>})
-    end
-    it 'should link the name and not the role if requested' do
-      html = mods_display_name_link(@name_with_role).to_html
-      expect(html).to match(%r{<dd><a href='.*\?John Doe'>John Doe</a></dd>})
     end
   end
 end

@@ -14,7 +14,7 @@ describe ModsDisplay::Extent do
 
   subject do
     parsed_mods = Stanford::Mods::Record.new.from_str(mods, false).physical_description
-    described_class.new(parsed_mods, ModsDisplay::Configuration::Base.new, double('controller')).fields
+    described_class.new(parsed_mods).fields
   end
 
   describe 'label' do

@@ -1,10 +1,8 @@
 module ModsDisplay
   class HTML
-    def initialize(config, xml, klass)
-      @config = config
+    def initialize(xml)
       @stanford_mods = xml
       @xml = xml.mods_ng_xml
-      @klass = klass
     end
 
     def title
@@ -56,18 +54,12 @@ module ModsDisplay
         field = xml.send(mods_display_field_mapping[field_key])
         ModsDisplay.const_get(
           "#{field_key.slice(0, 1).upcase}#{field_key.slice(1..-1)}"
-        ).new(field, field_config(field_key), @klass)
+        ).new(field)
       elsif @stanford_mods.respond_to?(field_key)
         ModsDisplay.const_get(
           "#{field_key.slice(0, 1).upcase}#{field_key.slice(1..-1)}"
-        ).new(@stanford_mods, field_config(field_key), @klass)
+        ).new(@stanford_mods)
       end
-    end
-
-    def field_config(field_key)
-      @config.send(field_key_translation[field_key] || field_key)
-    rescue
-      ModsDisplay::Configuration::Base.new
     end
 
     def mods_display_fields

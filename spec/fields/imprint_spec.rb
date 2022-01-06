@@ -4,18 +4,7 @@ require 'fixtures/imprint_fixtures'
 include ImprintFixtures
 
 def mods_display_imprint(mods_record)
-  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new, double('controller'))
-end
-
-def mods_display_format_date_imprint(mods_record)
-  ModsDisplay::Imprint.new(
-    mods_record,
-    ModsDisplay::Configuration::Imprint.new do
-      full_date_format('(%Y) %B, %d')
-      short_date_format('%B (%Y)')
-    end,
-    double('controller')
-  )
+  ModsDisplay::Imprint.new(mods_record)
 end
 
 describe ModsDisplay::Imprint do
@@ -198,16 +187,6 @@ describe ModsDisplay::Imprint do
           expect(fields.find do |field|
             field.label == 'Date modified:'
           end.values).to eq(['Jul. 22, 2013'])
-        end
-        it 'should accept date configurations' do
-          fields = mods_display_format_date_imprint(@encoded_dates).fields
-          expect(fields.length).to eq(4)
-          expect(fields.find do |field|
-            field.label == 'Date created:'
-          end.values).to eq(['(2013) July, 10'])
-          expect(fields.find do |field|
-            field.label == 'Date captured:'
-          end.values).to eq(['July (2013)'])
         end
       end
 

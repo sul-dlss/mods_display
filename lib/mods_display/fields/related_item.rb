@@ -20,6 +20,10 @@ module ModsDisplay
 
     private
 
+    def delimiter
+      '<br />'
+    end
+
     def process_location(item)
       ModsDisplay::Values.new(label: related_item_label(item), values: [item.location.text.strip])
     end

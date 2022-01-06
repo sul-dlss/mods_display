@@ -19,13 +19,13 @@ module ModsDisplay
     end
 
     def to_html
-      return if fields.empty? || @config.ignore?
+      return if fields.empty?
       @to_html ||= begin
         output = ''
         fields.each do |field|
           next unless field.values.any? { |f| f && !f.empty? }
-          output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-          output << "<dd#{value_class}>"
+          output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
+          output << "<dd>"
           output << '<ul class="mods_display_nested_related_items">'
           output << field.values.map do |val|
             "<li class='mods_display_nested_related_item open'>#{link_urls_and_email(val.to_s)}</li>"
@@ -41,7 +41,7 @@ module ModsDisplay
 
     def related_item_mods_object(value)
       mods = ::Stanford::Mods::Record.new.tap { |r| r.from_str("<mods>#{value.children.to_xml}</mods>", false) }
-      related_item = ModsDisplay::HTML.new(@config, mods, @klass)
+      related_item = ModsDisplay::HTML.new(mods)
 
       ModsDisplay::Values.new(
         label: related_item_label(value),

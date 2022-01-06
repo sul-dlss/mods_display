@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_genre(mods_record)
-  ModsDisplay::Genre.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Genre.new(mods_record)
 end
 
 describe ModsDisplay::Abstract do

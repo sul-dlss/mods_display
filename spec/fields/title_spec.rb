@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_title(mods_record)
-  ModsDisplay::Title.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Title.new(mods_record)
 end
 
 describe ModsDisplay::Title do

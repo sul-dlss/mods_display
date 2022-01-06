@@ -168,9 +168,9 @@ module ModsDisplay
       date_field = date_field.clone
       date_field.content = begin
         if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
-          Date.parse(date_field.text).strftime(@config.full_date_format)
+          Date.parse(date_field.text).strftime('%B %d, %Y')
         elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
-          Date.parse("#{date_field.text}-01").strftime(@config.short_date_format)
+          Date.parse("#{date_field.text}-01").strftime('%B %Y')
         else
           date_field.content
         end
@@ -183,7 +183,7 @@ module ModsDisplay
     def process_iso8601_date(date_field)
       date_field = date_field.clone
       date_field.content = begin
-        Date.iso8601(date_field.text).strftime(@config.full_date_format)
+        Date.iso8601(date_field.text).strftime('%B %d, %Y')
       rescue
         date_field.content
       end

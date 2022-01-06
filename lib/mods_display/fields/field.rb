@@ -1,10 +1,8 @@
 # encoding: utf-8
 module ModsDisplay
   class Field
-    def initialize(values, config, klass)
+    def initialize(values)
       @values = values
-      @config = config
-      @klass = klass
     end
 
     def fields
@@ -23,21 +21,25 @@ module ModsDisplay
     end
 
     def to_html
-      return nil if fields.empty? || @config.ignore?
+      return nil if fields.empty?
       output = ''
       fields.each do |field|
         next unless field.values.any? { |f| f && !f.empty? }
-        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd#{value_class}>"
+        output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
+        output << "<dd>"
         output << field.values.map do |val|
-          @config.link ? link_to_value(val.to_s) : link_urls_and_email(val.to_s)
-        end.join(@config.delimiter)
+          link_urls_and_email(val.to_s)
+        end.join(delimiter)
         output << '</dd>'
       end
       output
     end
 
     private
+
+    def delimiter
+      ', '
+    end
 
     def compact_and_join_with_delimiter(values, delimiter)
       compact_values = values.compact.reject { |v| v.strip.empty? }
@@ -86,19 +88,6 @@ module ModsDisplay
 
     def ends_in_terminating_punctuation?(value)
       value.strip.end_with?('.', ',', ':', ';')
-    end
-
-    def label_class
-      " class='#{@config.label_class}'" unless @config.label_class == ''
-    end
-
-    def value_class
-      " class='#{@config.value_class}'" unless @config.value_class == ''
-    end
-
-    def link_to_value(link_text, link_href = nil)
-      href_or_text = link_href || link_text
-      "<a href='#{@klass.send(@config.link[0], replace_tokens(@config.link[1], href_or_text))}'>#{link_text}</a>"
     end
 
     def displayForm(element)

@@ -36,17 +36,17 @@ describe ModsDisplay::Location do
 
   let(:location) do
     mods = Stanford::Mods::Record.new.from_str(location_mods, false).location
-    described_class.new(mods, ModsDisplay::Configuration::Base.new, double('controller')).fields
+    described_class.new(mods).fields
   end
 
   let(:urls) do
     mods = Stanford::Mods::Record.new.from_str(url_mods, false).location
-    described_class.new(mods, ModsDisplay::Configuration::Base.new, double('controller')).fields
+    described_class.new(mods).fields
   end
 
   let(:repository_label) do
     mods = Stanford::Mods::Record.new.from_str(repository_mods, false).location
-    described_class.new(mods, ModsDisplay::Configuration::Base.new, double('controller')).fields
+    described_class.new(mods).fields
   end
 
   describe 'label' do

@@ -15,6 +15,10 @@ module ModsDisplay
 
     private
 
+    def delimiter
+      '<br />'
+    end
+
     def assemble_title(element)
       return displayForm(element) if displayForm(element)
 

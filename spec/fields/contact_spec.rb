@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_contact(mods_record)
-  ModsDisplay::Contact.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Contact.new(mods_record)
 end
 
 describe ModsDisplay::Contact do

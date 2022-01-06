@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_contents(mods_record)
-  ModsDisplay::Contents.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Contents.new(mods_record)
 end
 
 describe ModsDisplay::Contents do

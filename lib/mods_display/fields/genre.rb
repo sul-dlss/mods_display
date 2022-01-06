@@ -9,6 +9,10 @@ module ModsDisplay
 
     private
 
+    def delimiter
+      '<br />'
+    end
+
     def displayLabel(element)
       super(element) || I18n.t('mods_display.genre')
     end

@@ -60,6 +60,10 @@ module ModsDisplay
 
     private
 
+    def delimiter
+      '<br />'
+    end
+
     def process_access_statement(element)
       case normalize_type(element)
       when 'copyright'
