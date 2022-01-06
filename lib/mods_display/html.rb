@@ -82,14 +82,5 @@ module ModsDisplay
         location: :location,
         accessCondition: :accessCondition }
     end
-
-    def field_key_translation
-      { subTitle: :sub_title,
-        resourceType: :resource_type,
-        relatedItem: :related_item,
-        accessCondition: :access_condition,
-        nestedRelatedItem: :nested_related_item
-      }
-    end
   end
 end

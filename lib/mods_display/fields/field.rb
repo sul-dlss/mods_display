@@ -95,52 +95,6 @@ module ModsDisplay
       "#{element.attributes['displayLabel'].value}:"
     end
 
-    def replace_tokens(object, value)
-      object = object.dup
-      if object.is_a?(Hash)
-        object.each do |k, v|
-          object[k] = replace_token(v, value)
-        end
-      elsif object.is_a?(String)
-        object = replace_token(object, value)
-      end
-      object
-    end
-
-    def replace_token(string, value)
-      string = string.dup
-      tokens.each do |token|
-        string.gsub!(token, value)
-      end
-      string
-    end
-
-    def tokens
-      ['%value%']
-    end
-
-    # rubocop:disable Metrics/LineLength
-    # Disabling line length due to necessarily long regular expressions
-    def link_urls_and_email(val)
-      val = val.dup
-      # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-      url = %r{(?i)\b(?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])}i
-      # http://www.regular-expressions.info/email.html
-      email = /[A-Z0-9_\.%\+\-\']+@(?:[A-Z0-9\-]+\.)+(?:[A-Z]{2,4}|museum|travel)/i
-      matches = [val.scan(url), val.scan(email)].flatten
-      unless val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
-        matches.each do |match|
-          if match =~ email
-            val = val.gsub(match, "<a href='mailto:#{match}'>#{match}</a>")
-          else
-            val = val.gsub(match, "<a href='#{match}'>#{match}</a>")
-          end
-        end
-      end
-      val
-    end
-    # rubocop:enable Metrics/LineLength
-
     def collapse_fields(display_fields)
       return display_fields if display_fields.length == 1
 
