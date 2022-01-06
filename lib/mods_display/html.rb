@@ -28,7 +28,7 @@ module ModsDisplay
     def method_missing(method_name, *args, &block)
       if to_s.respond_to?(method_name)
         to_html.send(method_name, *args, &block)
-      elsif method_name == :subTitle || mods_display_field_mapping.include?(method_name)
+      elsif mods_display_field_mapping.include?(method_name)
         field = mods_field(method_name)
         return field if (args.dig(0, :raw))
         field.fields
@@ -37,20 +37,20 @@ module ModsDisplay
       end
     end
 
-    def mods_field(field_key)
-      if @xml.respond_to?(mods_display_field_mapping[field_key])
-        field = @xml.send(mods_display_field_mapping[field_key])
-        ModsDisplay.const_get(
-          "#{field_key.slice(0, 1).upcase}#{field_key.slice(1..-1)}"
-        ).new(field)
-      elsif @stanford_mods.respond_to?(field_key)
-        ModsDisplay.const_get(
-          "#{field_key.slice(0, 1).upcase}#{field_key.slice(1..-1)}"
-        ).new(@stanford_mods)
-      end
+    def mods_field(key)
+      raise ArgumentError unless mods_display_field_mapping[key] && @xml.respond_to?(mods_display_field_mapping[key])
+
+      field = @xml.send(mods_display_field_mapping[key])
+      mods_field_class(key).new(field)
     end
 
     private
+
+    def mods_field_class(key)
+      ModsDisplay.const_get(
+        "#{key.slice(0, 1).upcase}#{key.slice(1..-1)}"
+      )
+    end
 
     def mods_display_field_mapping
       { title: :title_info,
