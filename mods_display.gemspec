@@ -31,4 +31,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'byebug'
   gem.add_development_dependency 'rails', '~> 6.0'
+  gem.add_development_dependency 'combustion', '~> 1.3'
 end

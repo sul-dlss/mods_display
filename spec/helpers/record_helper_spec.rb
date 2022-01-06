@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'byebug'
 
-describe ModsDisplay::Helpers::RecordHelper, type: :helper do
+describe ModsDisplay::RecordHelper, type: :helper do
   let(:empty_field) { OpenStruct.new(label: 'test', values: ['']) }
 
   describe 'display_content_field' do
