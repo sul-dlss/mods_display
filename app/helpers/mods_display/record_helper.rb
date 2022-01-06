@@ -89,7 +89,7 @@ module ModsDisplay
           end
         end
       end
-      val
+      sanitize val, tags: %w[a], attributes: %w[href]
     end
     # rubocop:enable Layout/LineLength
 
