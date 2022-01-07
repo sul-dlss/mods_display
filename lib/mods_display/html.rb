@@ -1,5 +1,32 @@
 module ModsDisplay
   class HTML
+    MODS_DISPLAY_FIELD_MAPPING = {
+      title: :title_info,
+      subTitle: :title_info,
+      name: :plain_name,
+      resourceType: :typeOfResource,
+      genre: :genre,
+      form: :physical_description,
+      extent: :physical_description,
+      geo: :extension,
+      imprint: :origin_info,
+      language: :language,
+      description: :physical_description,
+      cartographics: :subject,
+      abstract: :abstract,
+      contents: :tableOfContents,
+      audience: :targetAudience,
+      note: :note,
+      contact: :note,
+      collection: :related_item,
+      nestedRelatedItem: :related_item,
+      relatedItem: :related_item,
+      subject: :subject,
+      identifier: :identifier,
+      location: :location,
+      accessCondition: :accessCondition
+    }.freeze
+
     def initialize(xml)
       @stanford_mods = xml
       @xml = xml.mods_ng_xml
@@ -29,22 +56,19 @@ module ModsDisplay
       view_context.render ModsDisplay::RecordComponent.new(record: self, fields: fields)
     end
 
-    def method_missing(method_name, *args, &block)
-      if to_s.respond_to?(method_name)
-        to_html.send(method_name, *args, &block)
-      elsif mods_display_field_mapping.include?(method_name)
-        field = mods_field(method_name)
-        return field if (args.dig(0, :raw))
+    MODS_DISPLAY_FIELD_MAPPING.except(:title).each do |key, _value|
+      define_method(key) do |raw: false|
+        field = mods_field(key)
+        next field if raw
+
         field.fields
-      else
-        super
       end
     end
 
     def mods_field(key)
-      raise ArgumentError unless mods_display_field_mapping[key] && @xml.respond_to?(mods_display_field_mapping[key])
+      raise ArgumentError unless MODS_DISPLAY_FIELD_MAPPING[key] && @xml.respond_to?(MODS_DISPLAY_FIELD_MAPPING[key])
 
-      field = @xml.send(mods_display_field_mapping[key])
+      field = @xml.public_send(MODS_DISPLAY_FIELD_MAPPING[key])
       mods_field_class(key).new(field)
     end
 
@@ -54,33 +78,6 @@ module ModsDisplay
       ModsDisplay.const_get(
         "#{key.slice(0, 1).upcase}#{key.slice(1..-1)}"
       )
-    end
-
-    def mods_display_field_mapping
-      { title: :title_info,
-        subTitle: :title_info,
-        name: :plain_name,
-        resourceType: :typeOfResource,
-        genre: :genre,
-        form: :physical_description,
-        extent: :physical_description,
-        geo: :extension,
-        imprint: :origin_info,
-        language: :language,
-        description: :physical_description,
-        cartographics: :subject,
-        abstract: :abstract,
-        contents: :tableOfContents,
-        audience: :targetAudience,
-        note: :note,
-        contact: :note,
-        collection: :related_item,
-        nestedRelatedItem: :related_item,
-        relatedItem: :related_item,
-        subject: :subject,
-        identifier: :identifier,
-        location: :location,
-        accessCondition: :accessCondition }
     end
   end
 end
