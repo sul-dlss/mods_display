@@ -20,8 +20,12 @@ module ModsDisplay
       displayLabel(@values.first)
     end
 
-    def to_html
-      ApplicationController.renderer.render ModsDisplay::FieldComponent.with_collection(fields)
+    def to_html(view_context = ApplicationController.renderer)
+      view_context.render ModsDisplay::FieldComponent.with_collection(fields)
+    end
+
+    def render_in(view_context)
+      to_html(view_context)
     end
 
     private

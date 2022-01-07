@@ -27,14 +27,14 @@ module ModsDisplay
     end
 
     # Would really like to clean this up, but it works and is tested for now.
-    def to_html
+    def to_html(view_context = ApplicationController.renderer)
       component = ModsDisplay::FieldComponent.with_collection(
         fields,
         delimiter: '<br />'.html_safe,
         value_transformer: ->(value) { value.join(' > ') }
       )
 
-      ApplicationController.renderer.render component
+      view_context.render component
     end
 
     def process_hierarchicalGeographic(element)

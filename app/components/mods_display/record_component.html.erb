@@ -1,5 +1,5 @@
 <dl>
   <% @fields.each do |field| %>
-    <%= @record.mods_field(field)&.to_html || '' %>
+    <%= render @record.mods_field(field) %>
   <% end %>
 </dl>

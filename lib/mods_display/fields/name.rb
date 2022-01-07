@@ -16,10 +16,10 @@ module ModsDisplay
       collapse_roles(collapse_fields(return_fields))
     end
 
-    def to_html
+    def to_html(view_context = ApplicationController.renderer)
       component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { value.to_s })
 
-      ApplicationController.renderer.render component
+      view_context.render component
     end
 
     private

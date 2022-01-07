@@ -18,7 +18,7 @@ module ModsDisplay
       end
     end
 
-    def to_html
+    def to_html(view_context = nil)
       return if fields.empty?
       @to_html ||= begin
         output = ''

@@ -1,25 +1,23 @@
 module ModsDisplay
   class Contents < Field
-    def to_html
+    def to_html(view_context = ApplicationController.renderer)
       f = fields.map do |field|
         ModsDisplay::Values.new(label: field.label, values: [field.values.join("\n\n")])
       end
 
+      helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context
+
       value_transformer = lambda do |value|
         text = ERB::Util.h(value.gsub('&#10;', "\n"))
-        simple_format(text, {}, sanitize: false)
+        helpers.simple_format(text, {}, sanitize: false)
       end
 
       component = ModsDisplay::FieldComponent.with_collection(f, value_transformer: value_transformer)
 
-      ApplicationController.renderer.render component
+      view_context.render component
     end
 
     private
-
-    def simple_format(*args)
-      ApplicationController.new.view_context.simple_format(*args)
-    end
 
     def displayLabel(element)
       super(element) || I18n.t('mods_display.table_of_contents')
