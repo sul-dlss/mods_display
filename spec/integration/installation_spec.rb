@@ -21,6 +21,6 @@ describe 'Installation' do
     expect(@html.scan(%r{<dt>Title</dt>}).length).to eq(1)
   end
   it 'should return a proper value' do
-    expect(@html.scan(%r{<dd>The Title of this Item</dd>}).length).to eq(1)
+    expect(@html.scan(%r{<dd>\s*The Title of this Item\s*</dd>}).length).to eq(1)
   end
 end

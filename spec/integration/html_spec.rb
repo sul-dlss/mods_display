@@ -44,8 +44,8 @@ describe 'HTML Output' do
   end
   describe 'titles' do
     it 'should include both titles it regular display' do
-      expect(@multiple_titles.to_html).to include('<dd>Main Title</dd>')
-      expect(@multiple_titles.to_html).to include('<dd>Alternate Title</dd>')
+      expect(@multiple_titles.to_html).to match(%r{<dd>\s*Main Title\s*</dd>})
+      expect(@multiple_titles.to_html).to match(%r{<dd>\s*Alternate Title\s*</dd>})
     end
     it 'should return just the first title in the #title method' do
       expect(@multiple_titles.title).to eq(['Main Title'])

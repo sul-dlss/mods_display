@@ -21,7 +21,7 @@ module ModsDisplay
     end
 
     def to_html(view_context = ApplicationController.renderer)
-      view_context.render ModsDisplay::FieldComponent.with_collection(fields)
+      view_context.render ModsDisplay::FieldComponent.with_collection(fields, delimiter: delimiter)
     end
 
     def render_in(view_context)
@@ -31,7 +31,7 @@ module ModsDisplay
     private
 
     def delimiter
-      ', '
+      nil
     end
 
     def compact_and_join_with_delimiter(values, delimiter)
