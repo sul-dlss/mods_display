@@ -51,8 +51,8 @@ describe 'HTML Output' do
       expect(@multiple_titles.title).to eq(['Main Title'])
     end
     it 'should omit the first title and return any remaining titles in the #body' do
-      expect(@multiple_titles.body).not_to include('<dd>Main Title</dd>')
-      expect(@multiple_titles.body).to include('<dd>Alternate Title</dd>')
+      expect(@multiple_titles.body).not_to match(%r{<dd>\s*Main Title\s*</dd>})
+      expect(@multiple_titles.body).to match(%r{<dd>\s*Alternate Title\s*</dd>})
     end
 
     it 'should allow access to the subTitle independently from the title (for use with #body or fields)' do
