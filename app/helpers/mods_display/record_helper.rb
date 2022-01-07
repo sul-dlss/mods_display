@@ -17,7 +17,7 @@ module ModsDisplay
 
     def mods_name_field(field, &block)
       mods_record_field(field) do |name|
-        block_given? ? yield(name.name) : name.name
+        block_given? ? capture { yield(name.name) } : name.name
       end
     end
 
@@ -65,7 +65,7 @@ module ModsDisplay
     # @private
     def link_to_mods_subject(subject, buffer = [], &block)
       subject_text = subject.respond_to?(:name) ? subject.name : subject
-      link = block_given? ? yield(subject_text, buffer) : subject_text
+      link = block_given? ? capture { yield(subject_text, buffer) } : subject_text
       buffer << subject_text.strip
       link << " (#{subject.roles.join(', ')})" if subject.respond_to?(:roles) && subject.roles.present?
       link
