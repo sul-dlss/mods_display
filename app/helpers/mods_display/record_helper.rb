@@ -73,8 +73,16 @@ module ModsDisplay
 
     # rubocop:disable Layout/LineLength
     # @private, but used in PURL currently
-    def link_urls_and_email(val)
-      val = val.dup
+    def link_urls_and_email(val, tags: %w[a dl dd dt])
+      val = val.gsub(%r{<[^/> ]+}) do |possible_tag|
+        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
+        if tags.include? possible_tag[1..]
+          possible_tag
+        else
+          "&lt;#{possible_tag[1..]}"
+        end
+      end
+
       # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
       url = %r{(?i)\b(?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])}i
       # http://www.regular-expressions.info/email.html
@@ -89,7 +97,8 @@ module ModsDisplay
           end
         end
       end
-      sanitize val, tags: %w[a], attributes: %w[href]
+
+      sanitize val, tags: tags, attributes: %w[href]
     end
     # rubocop:enable Layout/LineLength
 

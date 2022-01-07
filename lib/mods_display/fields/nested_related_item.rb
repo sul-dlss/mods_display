@@ -18,23 +18,12 @@ module ModsDisplay
       end
     end
 
-    def to_html(view_context = nil)
-      return if fields.empty?
-      @to_html ||= begin
-        output = ''
-        fields.each do |field|
-          next unless field.values.any? { |f| f && !f.empty? }
-          output << "<dt>#{field.label}</dt>"
-          output << "<dd>"
-          output << '<ul class="mods_display_nested_related_items">'
-          output << field.values.map do |val|
-            "<li class='mods_display_nested_related_item open'>#{link_urls_and_email(val.to_s)}</li>"
-          end.join
-          output << '</ul>'
-          output << '</dd>'
-        end
-        output
-      end
+    def to_html(view_context = ApplicationController.renderer)
+      helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context
+
+      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) })
+
+      view_context.render component
     end
 
     private
