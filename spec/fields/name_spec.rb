@@ -6,7 +6,7 @@ def mods_display_name(mods_record)
   ModsDisplay::Name.new(mods_record)
 end
 
-describe ModsDisplay::Language do
+describe ModsDisplay::Name do
   include NameFixtures
   before(:all) do
     @name = Stanford::Mods::Record.new.from_str(simple_name_fixture, false).plain_name

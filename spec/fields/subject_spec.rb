@@ -63,15 +63,15 @@ describe ModsDisplay::Subject do
   describe 'to_html' do
     it 'should collapse fields into the same label' do
       html = mods_display_subject(@complex_subject).to_html
-      expect(html.scan(%r{<dt title='Subject'>Subject:</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Subject</dt>}).length).to eq(1)
       expect(html.scan(/<dd>/).length).to eq(1)
-      expect(html.scan(%r{<br/>}).length).to eq(1)
+      expect(html.scan(%r{<br />}).length).to eq(1)
       expect(html.scan(/ &gt; /).length).to eq(3)
     end
     it 'should handle complex display labels' do
       html = mods_display_subject(@display_label).to_html
-      expect(html.scan(%r{<dt title='Subject'>Subject:</dt>}).length).to eq 2
-      expect(html.scan(%r{<dt title='Subject Heading'>Subject Heading:</dt>}).length).to eq 1
+      expect(html.scan(%r{<dt>Subject</dt>}).length).to eq 2
+      expect(html.scan(%r{<dt>Subject Heading</dt>}).length).to eq 1
       expect(html.scan(/<dd>/).length).to eq(3)
     end
   end

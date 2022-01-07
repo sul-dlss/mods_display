@@ -28,30 +28,13 @@ module ModsDisplay
 
     # Would really like to clean this up, but it works and is tested for now.
     def to_html
-      return nil if fields.empty?
-      output = ''
-      fields.each do |field|
-        output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd>"
-        subs = []
-        field.values.each do |subjects|
-          buffer = []
-          sub_parts = []
-          subjects.each do |val|
-            if val.is_a?(ModsDisplay::Name::Person)
-              buffer << val.name
-            else
-              buffer << val
-            end
+      component = ModsDisplay::FieldComponent.with_collection(
+        fields,
+        delimiter: '<br />'.html_safe,
+        value_transformer: ->(value) { value.join(' > ') }
+      )
 
-            sub_parts << val.to_s
-          end
-          subs << sub_parts.join(delimiter)
-        end
-        output << subs.join('<br/>')
-        output << '</dd>'
-      end
-      output
+      ApplicationController.renderer.render component
     end
 
     def process_hierarchicalGeographic(element)

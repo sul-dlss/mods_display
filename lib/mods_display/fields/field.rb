@@ -91,10 +91,6 @@ module ModsDisplay
       "#{element.attributes['displayLabel'].value}:"
     end
 
-    def sanitized_field_title(label)
-      "title='#{label.gsub(/:$/, '').strip}'"
-    end
-
     def replace_tokens(object, value)
       object = object.dup
       if object.is_a?(Hash)

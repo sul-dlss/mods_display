@@ -12,7 +12,7 @@ module ModsDisplay
     end
 
     def mods_record_field(field, delimiter = nil, component: ModsDisplay::FieldComponent, &block)
-      render component.new(field: field, delimiter: delimiter, &block)
+      render component.new(field: field, delimiter: delimiter, value_transformer: block)
     end
 
     def mods_name_field(field, &block)

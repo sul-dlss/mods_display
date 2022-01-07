@@ -24,7 +24,7 @@ module ModsDisplay
         output = ''
         fields.each do |field|
           next unless field.values.any? { |f| f && !f.empty? }
-          output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
+          output << "<dt>#{field.label}</dt>"
           output << "<dd>"
           output << '<ul class="mods_display_nested_related_items">'
           output << field.values.map do |val|

@@ -24,16 +24,16 @@ describe ModsDisplay::Contents do
   context 'multi-valued contents' do
     let(:toc) do
       Stanford::Mods::Record.new.from_str(
-              '<mods><tableOfContents>Content Note 1 -- Content Note 2</tableOfContents></mods>', false
+              '<mods><tableOfContents>Content Note 1&#10;Content Note 2</tableOfContents></mods>', false
             ).tableOfContents
     end
-    it 'should have one value with "--" marker' do
+    it 'should have one value with a new-line' do
       mdc = mods_display_contents(toc)
-      expect(mdc.fields.first.values).to eq ['Content Note 1 -- Content Note 2']
+      expect(mdc.fields.first.values).to eq ["Content Note 1\nContent Note 2"]
     end
     it 'should render as a list' do
       html = mods_display_contents(toc).to_html
-      expect(html).to include '<dd><ul><li>Content Note 1</li><li>Content Note 2</li></ul></dd>'
+      expect(html).to include('<p>Content Note 1').and include('<br />Content Note 2</p>')
     end
   end
 end

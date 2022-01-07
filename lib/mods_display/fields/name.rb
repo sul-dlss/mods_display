@@ -17,17 +17,9 @@ module ModsDisplay
     end
 
     def to_html
-      return nil if fields.empty?
-      output = ''
-      fields.each do |field|
-        output << "<dt #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd>"
-        output << field.values.map do |val|
-          val.to_s
-        end.join(delimiter)
-        output << '</dd>'
-      end
-      output
+      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { value.to_s })
+
+      ApplicationController.renderer.render component
     end
 
     private
