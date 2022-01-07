@@ -28,11 +28,12 @@ module ModsDisplay
 
     with_collection_parameter :record
 
-    def initialize(record:, fields: DEFAULT_FIELDS)
+    def initialize(record:, fields: DEFAULT_FIELDS, html_attributes: {})
       super
 
       @record = record
       @fields = fields
+      @html_attributes = html_attributes
     end
   end
 end

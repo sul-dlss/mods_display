@@ -1,5 +1,5 @@
-<dl>
+<%= tag.dl **@html_attributes do %>
   <% @fields.each do |field| %>
     <%= render @record.mods_field(field) %>
   <% end %>
-</dl>
+<% end %>
