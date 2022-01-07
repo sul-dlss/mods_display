@@ -32,16 +32,3 @@ RSpec.configure do |config|
   config.order = 'random'
   config.include Rails.application.routes.url_helpers
 end
-class TestModel
-  attr_accessor :modsxml
-  include ModsDisplay::ModelExtension
-  mods_xml_source(&:modsxml)
-end
-
-class TestController
-  include ModsDisplay::ControllerExtension
-
-  def link_method(val)
-    "http://library.stanford.edu?#{val}"
-  end
-end

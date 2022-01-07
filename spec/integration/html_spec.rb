@@ -2,11 +2,9 @@
 require 'spec_helper'
 
 def html_from_mods(xml, locale = nil)
-  model = TestModel.new
-  model.modsxml = xml
   I18n.locale = locale if locale
   I18n.fallbacks[:fr] = [:fr, :en]
-  TestController.new.render_mods_display(model)
+  ModsDisplay::Record.new(xml).mods_display_html
 end
 
 describe 'HTML Output' do
