@@ -4,8 +4,10 @@ require 'view_component'
 
 module ModsDisplay
   class Engine < ::Rails::Engine
-    ActiveSupport.on_load :action_view do
-      ::ActionView::Base.send :include, ModsDisplay::RecordHelper
+    initializer 'mods_display.helpers' do
+      config.after_initialize do
+        ActionView::Base.include ModsDisplay::RecordHelper
+      end
     end
   end
 end
