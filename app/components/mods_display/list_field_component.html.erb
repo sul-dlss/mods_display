@@ -1,0 +1,11 @@
+<% if @field.label %>
+  <%= tag.dt @field.label.sub(/:$/, ''), **@label_html_attributes %>
+<% end %>
+
+<%= tag.dd format_value(value), **@value_html_attributes %>
+  <% tag.ul **@list_html_attributes %>
+    <% @field.values.select(&:present?).each do |value| %>
+      <%= tag.li format_value(value), **@list_item_html_attributes %>
+    <% end %>
+  <% end %>
+<% end %>

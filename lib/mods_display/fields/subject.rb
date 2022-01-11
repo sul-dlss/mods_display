@@ -27,44 +27,14 @@ module ModsDisplay
     end
 
     # Would really like to clean this up, but it works and is tested for now.
-    def to_html
-      return nil if fields.empty? || @config.ignore?
-      output = ''
-      fields.each do |field|
-        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd#{value_class}>"
-        subs = []
-        field.values.each do |subjects|
-          buffer = []
-          sub_parts = []
-          subjects.each do |val|
-            if val.is_a?(ModsDisplay::Name::Person)
-              buffer << val.name
-            else
-              buffer << val
-            end
-            if @config.link && @config.hierarchical_link
-              if val.is_a?(ModsDisplay::Name::Person)
-                sub_parts << link_to_value(val.name, buffer.join(' '))
-              else
-                sub_parts << link_to_value(val, buffer.join(' '))
-              end
-            elsif @config.link
-              if val.is_a?(ModsDisplay::Name::Person)
-                sub_parts << link_to_value(val.name)
-              else
-                sub_parts << link_to_value(val.to_s)
-              end
-            else
-              sub_parts << val.to_s
-            end
-          end
-          subs << sub_parts.join(@config.delimiter)
-        end
-        output << subs.join('<br/>')
-        output << '</dd>'
-      end
-      output
+    def to_html(view_context = ApplicationController.renderer)
+      component = ModsDisplay::FieldComponent.with_collection(
+        fields,
+        delimiter: '<br />'.html_safe,
+        value_transformer: ->(value) { value.join(' > ') }
+      )
+
+      view_context.render component
     end
 
     def process_hierarchicalGeographic(element)
@@ -72,12 +42,16 @@ module ModsDisplay
     end
 
     def process_name(element)
-      name = ModsDisplay::Name.new([element], @config, @klass).fields.first
+      name = ModsDisplay::Name.new([element]).fields.first
 
       name.values.first if name
     end
 
     private
+
+    def delimiter
+      ' &gt; '
+    end
 
     def values_from_subjects(element)
       return_values = []

@@ -7,8 +7,9 @@ AllCops:
     - 'db/**/*'
     - 'spec/fixtures/**/*'
     - 'vendor/**/*'
+  TargetRubyVersion: 2.7
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
 
 Style/StringLiterals:

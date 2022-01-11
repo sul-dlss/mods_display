@@ -168,9 +168,9 @@ module ModsDisplay
       date_field = date_field.clone
       date_field.content = begin
         if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
-          Date.parse(date_field.text).strftime(@config.full_date_format)
+          Date.parse(date_field.text).strftime('%B %d, %Y')
         elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
-          Date.parse("#{date_field.text}-01").strftime(@config.short_date_format)
+          Date.parse("#{date_field.text}-01").strftime('%B %Y')
         else
           date_field.content
         end
@@ -183,7 +183,7 @@ module ModsDisplay
     def process_iso8601_date(date_field)
       date_field = date_field.clone
       date_field.content = begin
-        Date.iso8601(date_field.text).strftime(@config.full_date_format)
+        Date.iso8601(date_field.text).strftime('%B %d, %Y')
       rescue
         date_field.content
       end
@@ -255,6 +255,55 @@ module ModsDisplay
     end
 
     private
+
+    def compact_and_join_with_delimiter(values, delimiter)
+      compact_values = values.compact.reject { |v| v.strip.empty? }
+      return compact_values.join(delimiter) if compact_values.length == 1 ||
+                                               !ends_in_terminating_punctuation?(delimiter)
+      compact_values.each_with_index.map do |value, i|
+        if (compact_values.length - 1) == i || # last item?
+           ends_in_terminating_punctuation?(value)
+          value << ' '
+        else
+          value << delimiter
+        end
+      end.join.strip
+    end
+
+    def process_bc_ad_dates(date_fields)
+      date_fields.map do |date_field|
+        case
+        when date_is_bc_edtf?(date_field)
+          year = date_field.text.strip.gsub(/^-0*/, '').to_i + 1
+          date_field.content = "#{year} B.C."
+        when date_is_ad?(date_field)
+          date_field.content = "#{date_field.text.strip.gsub(/^0*/, '')} A.D."
+        end
+        date_field
+      end
+    end
+
+    def date_is_bc_edtf?(date_field)
+      date_field.text.strip.start_with?('-') && date_is_edtf?(date_field)
+    end
+
+    def date_is_ad?(date_field)
+      date_field.text.strip.gsub(/^0*/, '').length < 4
+    end
+
+    def date_is_edtf?(date_field)
+      field_is_encoded?(date_field, 'edtf')
+    end
+
+    def field_is_encoded?(field, encoding)
+      field.attributes['encoding'] &&
+        field.attributes['encoding'].respond_to?(:value) &&
+        field.attributes['encoding'].value.downcase == encoding
+    end
+
+    def ends_in_terminating_punctuation?(value)
+      value.strip.end_with?('.', ',', ':', ';')
+    end
 
     def edition_element(value)
       value.edition.reject do |e|

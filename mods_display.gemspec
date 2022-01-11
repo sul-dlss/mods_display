@@ -1,7 +1,5 @@
-# -*- encoding: utf-8 -*-
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'mods_display/version'
+# frozen_string_literal: true
+require_relative "lib/mods_display/version"
 
 Gem::Specification.new do |gem|
   gem.name          = 'mods_display'
@@ -12,13 +10,20 @@ Gem::Specification.new do |gem|
   gem.summary       = 'The MODS Display gem allows implementers to configure a customized display of MODS metadata.  This display implements the specifications defined at Stanford for how to display MODS.'
   gem.homepage      = 'https://github.com/sul-dlss/mods_display'
 
-  gem.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
-  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(spec)/})
-  gem.require_paths = ['lib']
+  # Specify which files should be added to the gem when it is released.
+  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
+  gem.files = Dir.chdir(File.expand_path(__dir__)) do
+    `git ls-files -z`.split("\x0").reject do |f|
+      (f == __FILE__) || f.match(%r{\A(?:(?:test|spec|features)/|\.(?:git|travis|circleci)|appveyor)})
+    end
+  end
+  gem.bindir = "exe"
+  gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  gem.require_paths = ["lib"]
 
   gem.add_dependency 'stanford-mods', '~> 2.1'
   gem.add_dependency 'i18n'
+  gem.add_dependency 'view_component'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3.0'
@@ -26,5 +31,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'byebug'
-  gem.add_development_dependency 'rails', '~> 6.0'
+  gem.add_development_dependency 'rails', ENV['RAILS_VERSION'] || '~> 6.0'
+  gem.add_development_dependency 'combustion', '~> 1.3'
 end

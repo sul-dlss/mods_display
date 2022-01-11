@@ -16,25 +16,17 @@ module ModsDisplay
       collapse_roles(collapse_fields(return_fields))
     end
 
-    def to_html
-      return nil if fields.empty? || @config.ignore?
-      output = ''
-      fields.each do |field|
-        output << "<dt#{label_class} #{sanitized_field_title(field.label)}>#{field.label}</dt>"
-        output << "<dd#{value_class}>"
-        output << field.values.map do |val|
-          if @config.link
-            link_to_value(val.name)
-          else
-            val.to_s
-          end
-        end.join(@config.delimiter)
-        output << '</dd>'
-      end
-      output
+    def to_html(view_context = ApplicationController.renderer)
+      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { value.to_s })
+
+      view_context.render component
     end
 
     private
+
+    def delimiter
+      '<br />'
+    end
 
     def collapse_roles(fields)
       return [] if fields.blank?
@@ -150,12 +142,11 @@ module ModsDisplay
     def rebuild_fields_with_new_labels(label_keys, results)
       # Build the new fields data, stripping out the roles within the Person classes
       label_keys.uniq.map do |k|
-        mdv = ModsDisplay::Values.new({})
-        mdv.label = k
-        mdv.values = results[k].map do |person|
+        values = results[k].map do |person|
           ModsDisplay::Name::Person.new(name: person.name)
         end
-        mdv
+
+        ModsDisplay::Values.new(label: k, values: values)
       end
     end
 

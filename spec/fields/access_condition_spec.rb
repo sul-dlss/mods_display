@@ -2,17 +2,7 @@ require 'spec_helper'
 
 def mods_display_access_condition(mods_record)
   ModsDisplay::AccessCondition.new(
-    mods_record,
-    ModsDisplay::Configuration::AccessCondition.new,
-    double('controller')
-  )
-end
-
-def mods_display_non_ignore_access_condition(mods_record)
-  ModsDisplay::AccessCondition.new(
-    mods_record,
-    ModsDisplay::Configuration::AccessCondition.new { display! },
-    double('controller')
+    mods_record
   )
 end
 
@@ -93,15 +83,6 @@ describe ModsDisplay::AccessCondition do
         )
         expect(fields.first.values.first).not_to include('<a.*>')
       end
-    end
-  end
-  describe 'to_html' do
-    it 'should ignore access conditions by default' do
-      expect(mods_display_access_condition(@access_condition).to_html).to be_nil
-    end
-    it 'should not ignore the access condition when ignore is set to false' do
-      html = mods_display_non_ignore_access_condition(@access_condition).to_html
-      expect(html).to match %r{<dt.*>Access condition:</dt><dd>Access Condition Note</dd>}
     end
   end
 end

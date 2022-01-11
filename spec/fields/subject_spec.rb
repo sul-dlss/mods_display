@@ -3,18 +3,7 @@ require 'fixtures/subjects_fixtures'
 include SubjectsFixtures
 
 def mods_display_subject(mods_record)
-  config = ModsDisplay::Configuration::Subject.new do
-    link :link_method, '%value%'
-  end
-  ModsDisplay::Subject.new(mods_record, config, TestController.new)
-end
-
-def mods_display_hierarchical_subject(mods_record)
-  config = ModsDisplay::Configuration::Subject.new do
-    hierarchical_link true
-    link :link_method, '%value%'
-  end
-  ModsDisplay::Subject.new(mods_record, config, TestController.new)
+  ModsDisplay::Subject.new(mods_record)
 end
 
 describe ModsDisplay::Subject do
@@ -69,44 +58,20 @@ describe ModsDisplay::Subject do
       expect(fields.first.values.first.first).to be_a(ModsDisplay::Name::Person)
       expect(fields.first.values.first.first.name).to eq('John Doe')
     end
-    it 'should link the name (and not the role) correctly' do
-      html = mods_display_subject(@name_subject).to_html
-      expect(html).to match(%r{<a href='.*\?John Doe'>John Doe</a>})
-      expect(html).to match(%r{<a href='.*\?Anonymous People'>Anonymous People</a>})
-    end
-    it 'should linke the name (and not the role) correctly when linking hierarchicaly' do
-      html = mods_display_hierarchical_subject(@name_subject).to_html
-      expect(html).to match(%r{<a href='.*\?John Doe'>John Doe</a>})
-      expect(html).to match(%r{<a href='.*\?John Doe Anonymous People'>Anonymous People</a>})
-    end
   end
 
   describe 'to_html' do
-    it 'should link the values when requested' do
-      html = mods_display_subject(@subject).to_html
-      expect(html).to match(%r{<a href='http://library.stanford.edu\?Jazz'>Jazz</a>})
-      expect(html).to match(%r{<a href='http://library.stanford.edu\?Japan'>Japan</a>})
-      expect(html).to match(%r{<a href='http://library.stanford.edu\?History and criticism'>History and criticism</a>})
-    end
-    it 'does something' do
-      html = mods_display_hierarchical_subject(@subject).to_html
-      expect(html).to match(%r{<a href='http://library.stanford.edu\?Jazz'>Jazz</a>})
-      expect(html).to match(%r{<a href='http://library.stanford.edu\?Jazz Japan'>Japan</a>})
-      expect(html).to match(
-        %r{<a href='http://library.stanford.edu\?Jazz Japan History and criticism'>History and criticism</a>}
-      )
-    end
     it 'should collapse fields into the same label' do
       html = mods_display_subject(@complex_subject).to_html
-      expect(html.scan(%r{<dt title='Subject'>Subject:</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Subject</dt>}).length).to eq(1)
       expect(html.scan(/<dd>/).length).to eq(1)
-      expect(html.scan(%r{<br/>}).length).to eq(1)
+      expect(html.scan(%r{<br />}).length).to eq(1)
       expect(html.scan(/ &gt; /).length).to eq(3)
     end
     it 'should handle complex display labels' do
       html = mods_display_subject(@display_label).to_html
-      expect(html.scan(%r{<dt title='Subject'>Subject:</dt>}).length).to eq 2
-      expect(html.scan(%r{<dt title='Subject Heading'>Subject Heading:</dt>}).length).to eq 1
+      expect(html.scan(%r{<dt>Subject</dt>}).length).to eq 2
+      expect(html.scan(%r{<dt>Subject Heading</dt>}).length).to eq 1
       expect(html.scan(/<dd>/).length).to eq(3)
     end
   end

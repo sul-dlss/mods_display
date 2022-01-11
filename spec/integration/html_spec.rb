@@ -2,11 +2,9 @@
 require 'spec_helper'
 
 def html_from_mods(xml, locale = nil)
-  model = TestModel.new
-  model.modsxml = xml
   I18n.locale = locale if locale
   I18n.fallbacks[:fr] = [:fr, :en]
-  TestController.new.render_mods_display(model)
+  ModsDisplay::Record.new(xml).mods_display_html
 end
 
 describe 'HTML Output' do
@@ -33,26 +31,26 @@ describe 'HTML Output' do
   end
   describe 'i18n' do
     it 'should get the default english translations' do
-      expect(@mods.to_html).to match(%r{<dt title='Title'>Title:</dt>})
+      expect(@mods.to_html).to match(%r{<dt>Title</dt>})
     end
     it 'should internationalize the labels when translations are available' do
-      expect(@fr_mods.to_html).to match(%r{<dt title='Résumé'>Résumé :</dt>})
+      expect(@fr_mods.to_html).to match(%r{<dt>Résumé </dt>})
     end
     it 'should get fallback to the default english translations if a translation is missing' do
-      expect(@fr_mods.to_html).to match(%r{<dt title='Title'>Title:</dt>})
+      expect(@fr_mods.to_html).to match(%r{<dt>Title</dt>})
     end
   end
   describe 'titles' do
     it 'should include both titles it regular display' do
-      expect(@multiple_titles.to_html).to include('<dd>Main Title</dd>')
-      expect(@multiple_titles.to_html).to include('<dd>Alternate Title</dd>')
+      expect(@multiple_titles.to_html).to match(%r{<dd>\s*Main Title\s*</dd>})
+      expect(@multiple_titles.to_html).to match(%r{<dd>\s*Alternate Title\s*</dd>})
     end
     it 'should return just the first title in the #title method' do
       expect(@multiple_titles.title).to eq(['Main Title'])
     end
     it 'should omit the first title and return any remaining titles in the #body' do
-      expect(@multiple_titles.body).not_to include('<dd>Main Title</dd>')
-      expect(@multiple_titles.body).to include('<dd>Alternate Title</dd>')
+      expect(@multiple_titles.body).not_to match(%r{<dd>\s*Main Title\s*</dd>})
+      expect(@multiple_titles.body).to match(%r{<dd>\s*Alternate Title\s*</dd>})
     end
 
     it 'should allow access to the subTitle independently from the title (for use with #body or fields)' do

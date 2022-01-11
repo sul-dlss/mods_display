@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_id(mods_record)
-  ModsDisplay::Identifier.new(mods_record, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Identifier.new(mods_record)
 end
 
 describe ModsDisplay::Note do

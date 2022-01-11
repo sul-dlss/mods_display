@@ -9,6 +9,10 @@ module ModsDisplay
 
     private
 
+    def delimiter
+      '<br />'
+    end
+
     def note_fields
       @values.select do |value|
         (!value.attributes['type'].respond_to?(:value) ||

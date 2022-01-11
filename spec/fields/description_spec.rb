@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def mods_display_description(mods)
-  ModsDisplay::Description.new(mods, ModsDisplay::Configuration::Base.new, double('controller'))
+  ModsDisplay::Description.new(mods)
 end
 
 describe ModsDisplay::Description do

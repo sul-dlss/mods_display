@@ -4,18 +4,7 @@ require 'fixtures/imprint_fixtures'
 include ImprintFixtures
 
 def mods_display_imprint(mods_record)
-  ModsDisplay::Imprint.new(mods_record, ModsDisplay::Configuration::Imprint.new, double('controller'))
-end
-
-def mods_display_format_date_imprint(mods_record)
-  ModsDisplay::Imprint.new(
-    mods_record,
-    ModsDisplay::Configuration::Imprint.new do
-      full_date_format('(%Y) %B, %d')
-      short_date_format('%B (%Y)')
-    end,
-    double('controller')
-  )
+  ModsDisplay::Imprint.new(mods_record)
 end
 
 describe ModsDisplay::Imprint do
@@ -199,16 +188,6 @@ describe ModsDisplay::Imprint do
             field.label == 'Date modified:'
           end.values).to eq(['Jul. 22, 2013'])
         end
-        it 'should accept date configurations' do
-          fields = mods_display_format_date_imprint(@encoded_dates).fields
-          expect(fields.length).to eq(4)
-          expect(fields.find do |field|
-            field.label == 'Date created:'
-          end.values).to eq(['(2013) July, 10'])
-          expect(fields.find do |field|
-            field.label == 'Date captured:'
-          end.values).to eq(['July (2013)'])
-        end
       end
 
       describe 'iso8601' do
@@ -276,13 +255,13 @@ describe ModsDisplay::Imprint do
       expect(html.scan(%r{<dd>The Display Form</dd>}).length).to eq(2)
     end
     it "should return the displayLabel when present if we're using the displayForm" do
-      expect(mods_display_imprint(@display_form_with_label).to_html).to match(%r{<dt title='TheLabel'>TheLabel:</dt>})
+      expect(mods_display_imprint(@display_form_with_label).to_html).to match(%r{<dt>TheLabel</dt>})
     end
     it 'should have individual dt/dd pairs for mixed content' do
       html = mods_display_imprint(@mixed).to_html
-      expect(html.scan(%r{<dt title='Imprint'>Imprint:</dt>}).length).to eq(1)
-      expect(html.scan(%r{<dt title='Issuance'>Issuance:</dt>}).length).to eq(1)
-      expect(html.scan(%r{<dt title='Date captured'>Date captured:</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Imprint</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Issuance</dt>}).length).to eq(1)
+      expect(html.scan(%r{<dt>Date captured</dt>}).length).to eq(1)
       expect(html.scan(/<dd>/).length).to eq(3)
     end
   end
