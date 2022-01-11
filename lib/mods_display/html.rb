@@ -56,7 +56,9 @@ module ModsDisplay
       view_context.render ModsDisplay::RecordComponent.new(record: self, fields: fields)
     end
 
-    MODS_DISPLAY_FIELD_MAPPING.except(:title).each do |key, _value|
+    MODS_DISPLAY_FIELD_MAPPING.each do |key, _value|
+      next if key == :title
+
       define_method(key) do |raw: false|
         field = mods_field(key)
         next field if raw
