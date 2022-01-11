@@ -38,4 +38,10 @@ I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
 I18n.load_path += Dir["#{File.expand_path('../..', __FILE__)}/config/locales/*.yml"]
 I18n.backend.load_translations
 
-require 'mods_display/engine'
+begin
+  require 'rails'
+rescue LoadError
+  #do nothing
+end
+
+require 'mods_display/engine' if defined?(Rails)
