@@ -14,7 +14,7 @@ module ModsDisplay
 
       component = ModsDisplay::FieldComponent.with_collection(f, value_transformer: value_transformer)
 
-      view_context.render component
+      view_context.render component, layout: false
     end
 
     private

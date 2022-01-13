@@ -23,7 +23,7 @@ module ModsDisplay
 
       component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) })
 
-      view_context.render component
+      view_context.render component, layout: false
     end
 
     private
@@ -39,8 +39,10 @@ module ModsDisplay
     end
 
     def related_item_body(related_item)
-      return if related_item.body == '<dl></dl>'
-      related_item.body
+      body = related_item.body
+
+      return if body == '<dl></dl>'
+      body
     end
 
     def related_item_label(item)

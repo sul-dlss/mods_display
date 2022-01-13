@@ -21,7 +21,7 @@ module ModsDisplay
     end
 
     def to_html(view_context = ApplicationController.renderer)
-      view_context.render ModsDisplay::FieldComponent.with_collection(fields, delimiter: delimiter)
+      view_context.render ModsDisplay::FieldComponent.with_collection(fields, delimiter: delimiter), layout: false
     end
 
     def render_in(view_context)
