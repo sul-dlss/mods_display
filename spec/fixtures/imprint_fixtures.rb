@@ -28,7 +28,7 @@ module ImprintFixtures
     MODS
   end
 
-  def origin_info_mods
+  def edition_and_date_mods
     <<-MODS
       <mods>
         <originInfo>
