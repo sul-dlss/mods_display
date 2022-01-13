@@ -21,7 +21,7 @@ module ModsDisplay
     def to_html(view_context = ApplicationController.renderer)
       helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context
 
-      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) })
+      component = ModsDisplay::ListFieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) }, list_html_attributes: { class: 'mods_display_nested_related_items' }, list_item_html_attributes: { class: 'mods_display_nested_related_item open' })
 
       view_context.render component
     end
