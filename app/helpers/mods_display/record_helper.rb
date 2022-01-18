@@ -73,7 +73,7 @@ module ModsDisplay
 
     # rubocop:disable Layout/LineLength
     # @private, but used in PURL currently
-    def link_urls_and_email(val, tags: %w[a dl dd dt i b em strong])
+    def link_urls_and_email(val, tags: %w[a dl dd dt i b em strong div])
       val = val.gsub(%r{<[^/> ]+}) do |possible_tag|
         # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
         if tags.include? possible_tag[1..]
@@ -98,7 +98,7 @@ module ModsDisplay
         end
       end
 
-      sanitize val, tags: tags, attributes: %w[href]
+      sanitize val, tags: tags, attributes: %w[class href]
     end
     # rubocop:enable Layout/LineLength
 
