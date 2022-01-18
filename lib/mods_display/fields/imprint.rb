@@ -273,11 +273,16 @@ module ModsDisplay
     def process_bc_ad_dates(date_fields)
       date_fields.map do |date_field|
         case
+        # special case: year zero is 1 A.D. see:
+        # https://github.com/sul-dlss/mods_display/issues/39#issuecomment-1012606117
+        when date_field.text.strip == '0'
+          date_field.content = '1 A.D.'
         when date_is_bc_edtf?(date_field)
           year = date_field.text.strip.gsub(/^-0*/, '').to_i + 1
           date_field.content = "#{year} B.C."
         when date_is_ad?(date_field)
-          date_field.content = "#{date_field.text.strip.gsub(/^0*/, '')} A.D."
+          year = date_field.text.strip.gsub(/^0*/, '').to_i
+          date_field.content = "#{year} A.D."
         end
         date_field
       end
@@ -288,7 +293,10 @@ module ModsDisplay
     end
 
     def date_is_ad?(date_field)
-      date_field.text.strip.gsub(/^0*/, '').length < 4
+      # date is 1-3 digits excluding leading zeroes, and not 2 or more zeroes.
+      # a single zero is valid, and becomes 1 A.D.
+      date_text = date_field.text.strip
+      date_text.match?(/^0*\d{1,3}$/) && !date_text.match?(/^0{2,}$/)
     end
 
     def date_is_edtf?(date_field)

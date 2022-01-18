@@ -91,6 +91,19 @@ describe ModsDisplay::Imprint do
         expect(fields.length).to eq 1
         expect(fields.first.values).to eq ['14 B.C.-44 A.D.']
       end
+
+      it 'should transform year zero dates to 1 A.D.' do
+        year_zero_date = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated>0</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(year_zero_date).fields
+        expect(fields.first.values).to eq ['1 A.D.']
+      end
     end
     describe 'duplication' do
       it 'should only return the qualified date when present' do
@@ -192,6 +205,45 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(invalid_dates).fields
         expect(fields.length).to eq(2)
         expect(fields.last.values).to eq(['1920-09-00'])
+      end
+
+      it 'should not append A.D. to empty dates' do
+        empty_date = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated/>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(empty_date).fields
+        expect(fields.first.values).to eq ['']
+      end
+      
+      it 'should not append A.D. to dates consisting of 2+ zeroes' do
+        zeroes_date = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated>0000</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(zeroes_date).fields
+        expect(fields.first.values).to eq ['0000']
+      end
+
+      it 'should not append A.D. to dates that are not integers' do
+        non_integer_date = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated>19xx</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(non_integer_date).fields
+        expect(fields.first.values).to eq ['19xx']
       end
     end
   end
