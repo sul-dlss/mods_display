@@ -39,12 +39,6 @@ describe ModsDisplay::AccessCondition do
       end
     end
     describe 'licenses' do
-      it 'should add the appropriate classes to the html around the license' do
-        fields = mods_display_access_condition(@no_link_license_note).fields
-        expect(fields.length).to eq(1)
-        expect(fields.first.values.length).to eq(1)
-        expect(fields.first.values.first).to match(%r{^<div class='unknown-something'>.*</div>$})
-      end
       it 'should identify and link CreativeCommons licenses properly' do
         fields = mods_display_access_condition(@cc_license_note).fields
         expect(fields.length).to eq(1)
