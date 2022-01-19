@@ -4,30 +4,26 @@ module ModsDisplay
     def fields
       return_fields = []
       @values.each do |value|
-        if imprint_display_form(value)
-          return_fields << imprint_display_form(value)
-        else
-          edition = edition_element(value)
-          place = place_element(value)
-          publisher = publisher_element(value)
-          parts = parts_element(value)
-          place_pub = compact_and_join_with_delimiter([place, publisher], ' : ')
-          edition_place = compact_and_join_with_delimiter([edition, place_pub], ' - ')
-          joined_place_parts = compact_and_join_with_delimiter([edition_place, parts], ', ')
-          unless joined_place_parts.empty?
+        edition = edition_element(value)
+        place = place_element(value)
+        publisher = publisher_element(value)
+        parts = parts_element(value)
+        place_pub = compact_and_join_with_delimiter([place, publisher], ' : ')
+        edition_place = compact_and_join_with_delimiter([edition, place_pub], ' - ')
+        joined_place_parts = compact_and_join_with_delimiter([edition_place, parts], ', ')
+        unless joined_place_parts.empty?
+          return_fields << ModsDisplay::Values.new(
+            label: displayLabel(value) || I18n.t('mods_display.imprint'),
+            values: [joined_place_parts]
+          )
+        end
+        return_fields.concat(dates(value)) if dates(value).length > 0
+        if other_pub_info(value).length > 0
+          other_pub_info(value).each do |pub_info|
             return_fields << ModsDisplay::Values.new(
-              label: displayLabel(value) || I18n.t('mods_display.imprint'),
-              values: [joined_place_parts]
+              label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
+              values: [pub_info.text.strip]
             )
-          end
-          return_fields.concat(dates(value)) if dates(value).length > 0
-          if other_pub_info(value).length > 0
-            other_pub_info(value).each do |pub_info|
-              return_fields << ModsDisplay::Values.new(
-                label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
-                values: [pub_info.text.strip]
-              )
-            end
           end
         end
       end
@@ -242,16 +238,6 @@ module ModsDisplay
         !term.attributes['type'].respond_to?(:value) ||
           term.attributes['type'].value == 'text'
       end
-    end
-
-    def imprint_display_form(element)
-      display_form = element.children.find do |child|
-        child.name == 'displayForm'
-      end
-      ModsDisplay::Values.new(
-        label: displayLabel(element) || I18n.t('mods_display.imprint'),
-        values: [display_form.text]
-      ) if display_form
     end
 
     private

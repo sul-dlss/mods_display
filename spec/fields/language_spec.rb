@@ -25,9 +25,6 @@ describe ModsDisplay::Language do
         <language><languageTerm type='code'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language>
       </mods>", false
     ).language
-    @display_form = Stanford::Mods::Record.new.from_str(
-      '<mods><language><languageTerm>zzzxxx</languageTerm><displayForm>Klingon</displayForm></language></mods>', false
-    ).language
   end
   describe 'fields' do
     it 'should return an array with a label/values object' do

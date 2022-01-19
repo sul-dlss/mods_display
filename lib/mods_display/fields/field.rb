@@ -9,7 +9,7 @@ module ModsDisplay
       return_fields = @values.map do |value|
         ModsDisplay::Values.new(
           label: displayLabel(value) || label,
-          values: [displayForm(@values) || value.text].flatten
+          values: [value.text]
         )
       end
       collapse_fields(return_fields)
@@ -32,12 +32,6 @@ module ModsDisplay
 
     def delimiter
       nil
-    end
-
-    def displayForm(element)
-      return element unless element # basically return nil
-      display = element.children.find { |c| c.name == 'displayForm' }
-      return display.text if display
     end
 
     def displayLabel(element)
