@@ -73,5 +73,20 @@ describe ModsDisplay::Title do
 
       expect(values.first).to eq 'The medium term expenditure framework (MTEF) for ... and the annual estimates for ... 016, Ministry of Tourism : expenditure to be met out of moneys granted and drawn from the consolidated fund, central government budget'
     end
+
+    it 'does not add space after a non-sorting part that ends in a hyphen or apostrophe' do
+      data = <<-XML
+        <mods>
+          <titleInfo>
+           <nonSort>L'</nonSort>
+           <title>Afrique dressée selon les derniers relations et suivant les nouvelles decouvertes dont les points principaux sont placez sur les observations de Messieurs de l'Academie Royal des Sciences</title>
+          </titleInfo>
+        </mods>
+      XML
+
+      values = mods_display_title(Stanford::Mods::Record.new.from_str(data, false).title_info).fields.first.values
+
+      expect(values.first).to start_with "L'Afrique dressée"
+    end
   end
 end

@@ -30,6 +30,8 @@ module ModsDisplay
         delimiter = case
         when title.empty?, title.end_with?(' ')
           nil
+        when previous_element&.name == 'nonSort' && title.ends_with?('-', '\'')
+          nil
         when title.end_with?('.', ',', ':', ';')
           ' '
         when value.name == 'subTitle'
