@@ -11,7 +11,6 @@ describe ModsDisplay::Title do
     @title_parts = Stanford::Mods::Record.new.from_str(title_parts_fixture, false).title_info
     @reverse_title_parts = Stanford::Mods::Record.new.from_str(reverse_title_parts_fixture, false).title_info
     @display_label = Stanford::Mods::Record.new.from_str(display_label_fixture, false).title_info
-    @display_form = Stanford::Mods::Record.new.from_str(display_form_fixture, false).title_info
     @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture, false).title_info
     @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture, false).title_info
     @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture, false).title_info
@@ -55,10 +54,6 @@ describe ModsDisplay::Title do
       expect(mods_display_title(@reverse_title_parts).fields.first.values).to include(
         'The Title : For. Part 62, Something'
       )
-    end
-
-    it 'should use the displayForm when available' do
-      expect(mods_display_title(@display_form).fields.first.values).to include 'The Title of This Item'
     end
 
     it 'should return the basic text held in a sub element of titleInfo' do

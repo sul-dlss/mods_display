@@ -45,17 +45,6 @@ module TitleFixtures
     XML
   end
 
-  def display_form_fixture
-    <<-XML
-      <mods>
-        <titleInfo>
-          <title>Title</title>
-          <displayForm>The Title of This Item</displayForm>
-        </titleInfo>
-      </mods>
-    XML
-  end
-
   def multi_label_fixture
     <<-XML
       <mods>

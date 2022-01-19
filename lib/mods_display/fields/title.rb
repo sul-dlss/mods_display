@@ -20,8 +20,6 @@ module ModsDisplay
     end
 
     def assemble_title(element)
-      return displayForm(element) if displayForm(element)
-
       title = ''
       previous_element = nil
 

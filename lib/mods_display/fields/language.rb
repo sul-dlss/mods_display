@@ -7,7 +7,7 @@ module ModsDisplay
           next unless term.attributes['type'].respond_to?(:value) && term.attributes['type'].value == 'code'
           ModsDisplay::Values.new(
             label: displayLabel(value) || displayLabel(term) || I18n.t('mods_display.language'),
-            values: [displayForm(value) || language_codes[term.text]].flatten
+            values: [language_codes[term.text]]
           )
         end.flatten.compact
       end.flatten.compact

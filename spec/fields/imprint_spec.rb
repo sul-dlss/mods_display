@@ -13,8 +13,6 @@ describe ModsDisplay::Imprint do
     @no_edition = Stanford::Mods::Record.new.from_str(no_edition_mods, false).origin_info
     @edition_and_date = Stanford::Mods::Record.new.from_str(origin_info_mods, false).origin_info
     @mixed = Stanford::Mods::Record.new.from_str(mixed_mods, false).origin_info
-    @display_form = Stanford::Mods::Record.new.from_str(display_form, false).origin_info
-    @display_form_with_label = Stanford::Mods::Record.new.from_str(display_form, false).origin_info
     @display_label = Stanford::Mods::Record.new.from_str(display_label, false).origin_info
     @date_range = Stanford::Mods::Record.new.from_str(date_range, false).origin_info
     @open_date_range = Stanford::Mods::Record.new.from_str(open_date_range, false).origin_info
@@ -249,14 +247,6 @@ describe ModsDisplay::Imprint do
     end
   end
   describe 'to_html' do
-    it 'should return the display form if one is available' do
-      html = mods_display_imprint(@display_form).to_html
-      expect(html.scan(/<dd>/).length).to eq(2)
-      expect(html.scan(%r{<dd>The Display Form</dd>}).length).to eq(2)
-    end
-    it "should return the displayLabel when present if we're using the displayForm" do
-      expect(mods_display_imprint(@display_form_with_label).to_html).to match(%r{<dt>TheLabel</dt>})
-    end
     it 'should have individual dt/dd pairs for mixed content' do
       html = mods_display_imprint(@mixed).to_html
       expect(html.scan(%r{<dt>Imprint</dt>}).length).to eq(1)
