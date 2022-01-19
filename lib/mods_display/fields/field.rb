@@ -46,7 +46,7 @@ module ModsDisplay
       display_fields.slice_when { |before, after| before.label != after.label }.map do |group|
         next group.first if group.length == 1
 
-        ModsDisplay::Values.new(label: group.first.label, values: group.map(&:values).flatten)
+        ModsDisplay::Values.new(label: group.first.label, values: group.map(&:values).flatten(1))
       end
     end
   end
