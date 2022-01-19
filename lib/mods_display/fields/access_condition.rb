@@ -82,19 +82,16 @@ module ModsDisplay
     def license_statement(element)
       matches = element.text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
 
-      return "<div>#{element.text}</div>" unless matches
+      return element.text unless matches
 
       code = matches[:code].downcase
       type = matches[:type].downcase
       description = license_description(code, type) || matches[:description]
       url = license_url(code, type)
-      output = "<div class='#{code}-#{type}'>"
-      output << if url
-                  "<a href='#{url}'>#{description}</a>"
-                else
-                  description
-                end
-      output << '</div>'
+
+      return "<a href='#{url}'>#{description}</a>" if url
+
+      description
     end
 
     def license_url(code, type)

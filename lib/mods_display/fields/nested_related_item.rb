@@ -21,9 +21,9 @@ module ModsDisplay
     def to_html(view_context = ApplicationController.renderer)
       helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context
 
-      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) })
+      component = ModsDisplay::ListFieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) }, list_html_attributes: { class: 'mods_display_nested_related_items' }, list_item_html_attributes: { class: 'mods_display_nested_related_item open' })
 
-      view_context.render component
+      view_context.render component, layout: false
     end
 
     private
@@ -39,8 +39,10 @@ module ModsDisplay
     end
 
     def related_item_body(related_item)
-      return if related_item.body == '<dl></dl>'
-      related_item.body
+      body = related_item.body
+
+      return if body == '<dl></dl>'
+      body
     end
 
     def related_item_label(item)

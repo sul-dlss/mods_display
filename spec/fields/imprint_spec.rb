@@ -11,7 +11,6 @@ def mods_display_imprint(mods_text)
 end
 
 describe ModsDisplay::Imprint do
-
   describe 'labels' do
     it 'should get the Imprint label by default' do
       expect(mods_display_imprint(imprint_mods).fields.first.label).to eq('Imprint:')
@@ -274,14 +273,6 @@ describe ModsDisplay::Imprint do
     end
   end
   describe 'to_html' do
-    it 'should return the display form if one is available' do
-      html = mods_display_imprint(display_form).to_html
-      expect(html.scan(/<dd>/).length).to eq(2)
-      expect(html.scan(%r{<dd>The Display Form</dd>}).length).to eq(2)
-    end
-    it "should return the displayLabel when present if we're using the displayForm" do
-      expect(mods_display_imprint(display_form).to_html).to match(%r{<dt>TheLabel</dt>})
-    end
     it 'should have individual dt/dd pairs for mixed content' do
       html = mods_display_imprint(mixed_mods).to_html
       expect(html.scan(%r{<dt>Imprint</dt>}).length).to eq(1)

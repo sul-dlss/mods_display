@@ -54,23 +54,6 @@ module ImprintFixtures
     MODS
   end
 
-  def display_form
-    <<-MODS
-      <mods>
-        <originInfo>
-          <place><placeTerm>A Place</placeTerm></place>
-          <publisher>A Publisher</publisher>
-          <displayForm>The Display Form</displayForm>
-        </originInfo>
-        <originInfo displayLabel="TheLabel">
-          <place><placeTerm>A Place</placeTerm></place>
-          <publisher>A Publisher</publisher>
-          <displayForm>The Display Form</displayForm>
-        </originInfo>
-      </mods>
-    MODS
-  end
-
   def display_label
     <<-MODS
       <mods>

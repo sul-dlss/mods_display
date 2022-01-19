@@ -46,6 +46,12 @@ describe ModsDisplay::Name do
     it 'should apply role labeling with code' do
       expect(mods_display_name(@author_role).fields.first.label).to eq('Author:')
     end
+
+    it 'should strip trailing punctuation' do
+      actual = mods_display_name(Stanford::Mods::Record.new.from_str(name_with_marc_role_terms, false).plain_name)
+
+      expect(actual.fields.map(&:label)).to eq ['Editor:', 'Publisher:']
+    end
   end
 
   describe 'fields' do

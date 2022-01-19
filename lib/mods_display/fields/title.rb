@@ -20,8 +20,6 @@ module ModsDisplay
     end
 
     def assemble_title(element)
-      return displayForm(element) if displayForm(element)
-
       title = ''
       previous_element = nil
 
@@ -31,6 +29,8 @@ module ModsDisplay
 
         delimiter = case
         when title.empty?, title.end_with?(' ')
+          nil
+        when previous_element&.name == 'nonSort' && title.ends_with?('-', '\'')
           nil
         when title.end_with?('.', ',', ':', ';')
           ' '

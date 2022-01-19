@@ -47,13 +47,13 @@ module ModsDisplay
     # Maybe have a separate class that will omit the first tite natively
     # and replace the first key in the the fields list with that.
     def body(view_context = ApplicationController.renderer)
-      view_context.render ModsDisplay::RecordComponent.new(record: self)
+      view_context.render ModsDisplay::RecordComponent.new(record: self), layout: false
     end
 
     # @deprecated
     def to_html(view_context = ApplicationController.renderer)
       fields = [:title] + ModsDisplay::RecordComponent::DEFAULT_FIELDS - [:subTitle]
-      view_context.render ModsDisplay::RecordComponent.new(record: self, fields: fields)
+      view_context.render ModsDisplay::RecordComponent.new(record: self, fields: fields), layout: false
     end
 
     MODS_DISPLAY_FIELD_MAPPING.each do |key, _value|

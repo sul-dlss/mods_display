@@ -34,7 +34,7 @@ module ModsDisplay
         value_transformer: ->(value) { value.join(' > ') }
       )
 
-      view_context.render component
+      view_context.render component, layout: false
     end
 
     def process_hierarchicalGeographic(element)

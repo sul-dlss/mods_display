@@ -2,8 +2,8 @@
   <%= tag.dt @field.label.sub(/:$/, ''), **@label_html_attributes %>
 <% end %>
 
-<%= tag.dd format_value(value), **@value_html_attributes %>
-  <% tag.ul **@list_html_attributes %>
+<%= tag.dd **@value_html_attributes do %>
+  <%= tag.ul **@list_html_attributes do %>
     <% @field.values.select(&:present?).each do |value| %>
       <%= tag.li format_value(value), **@list_item_html_attributes %>
     <% end %>

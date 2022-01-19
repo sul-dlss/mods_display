@@ -11,7 +11,6 @@ describe ModsDisplay::Title do
     @title_parts = Stanford::Mods::Record.new.from_str(title_parts_fixture, false).title_info
     @reverse_title_parts = Stanford::Mods::Record.new.from_str(reverse_title_parts_fixture, false).title_info
     @display_label = Stanford::Mods::Record.new.from_str(display_label_fixture, false).title_info
-    @display_form = Stanford::Mods::Record.new.from_str(display_form_fixture, false).title_info
     @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture, false).title_info
     @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture, false).title_info
     @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture, false).title_info
@@ -57,10 +56,6 @@ describe ModsDisplay::Title do
       )
     end
 
-    it 'should use the displayForm when available' do
-      expect(mods_display_title(@display_form).fields.first.values).to include 'The Title of This Item'
-    end
-
     it 'should return the basic text held in a sub element of titleInfo' do
       expect(mods_display_title(@title).fields.first.values).to include 'Title'
     end
@@ -77,6 +72,21 @@ describe ModsDisplay::Title do
       expect(values.length).to eq 1
 
       expect(values.first).to eq 'The medium term expenditure framework (MTEF) for ... and the annual estimates for ... 016, Ministry of Tourism : expenditure to be met out of moneys granted and drawn from the consolidated fund, central government budget'
+    end
+
+    it 'does not add space after a non-sorting part that ends in a hyphen or apostrophe' do
+      data = <<-XML
+        <mods>
+          <titleInfo>
+           <nonSort>L'</nonSort>
+           <title>Afrique dressée selon les derniers relations et suivant les nouvelles decouvertes dont les points principaux sont placez sur les observations de Messieurs de l'Academie Royal des Sciences</title>
+          </titleInfo>
+        </mods>
+      XML
+
+      values = mods_display_title(Stanford::Mods::Record.new.from_str(data, false).title_info).fields.first.values
+
+      expect(values.first).to start_with "L'Afrique dressée"
     end
   end
 end

@@ -9,7 +9,7 @@ module ModsDisplay
       return_fields = @values.map do |value|
         ModsDisplay::Values.new(
           label: displayLabel(value) || label,
-          values: [displayForm(@values) || value.text].flatten
+          values: [value.text]
         )
       end
       collapse_fields(return_fields)
@@ -21,7 +21,7 @@ module ModsDisplay
     end
 
     def to_html(view_context = ApplicationController.renderer)
-      view_context.render ModsDisplay::FieldComponent.with_collection(fields, delimiter: delimiter)
+      view_context.render ModsDisplay::FieldComponent.with_collection(fields, delimiter: delimiter), layout: false
     end
 
     def render_in(view_context)
@@ -32,12 +32,6 @@ module ModsDisplay
 
     def delimiter
       nil
-    end
-
-    def displayForm(element)
-      return element unless element # basically return nil
-      display = element.children.find { |c| c.name == 'displayForm' }
-      return display.text if display
     end
 
     def displayLabel(element)
