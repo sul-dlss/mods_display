@@ -41,8 +41,12 @@ module ModsDisplay
       default_label = I18n.t('mods_display.associated_with')
       return [default_label] unless element.role.present? && element.role.roleTerm.present?
       element.role.roleTerm.collect do |role|
-        relator_codes[role.text.downcase] || role.text.capitalize || default_label
+        relator_codes[role.text.downcase] || format_role(role) || default_label
       end.uniq
+    end
+
+    def format_role(element)
+      element.text.capitalize.sub(/[.,:;]+$/, '')
     end
 
     def role?(element)
