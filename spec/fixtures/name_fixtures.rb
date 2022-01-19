@@ -395,4 +395,20 @@ module NameFixtures
       </mods>
     XML
   end
+
+  def name_with_marc_role_terms
+    <<-XML
+    <mods>
+      <name type="personal" altRepGroup="05" script="Latn">
+        <namePart>渡邊恵章</namePart>
+        <role>
+          <roleTerm type="text">editor,</roleTerm>
+        </role>
+        <role>
+          <roleTerm type="text">publisher.</roleTerm>
+        </role>
+      </name>
+    </mods>
+    XML
+  end
 end
