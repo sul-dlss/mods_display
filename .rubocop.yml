@@ -1,4 +1,4 @@
-inherit_from: .rubocop_todo.yml
+require: rubocop-rspec
 
 AllCops:
   Exclude:
@@ -8,6 +8,7 @@ AllCops:
     - 'spec/fixtures/**/*'
     - 'vendor/**/*'
   TargetRubyVersion: 2.7
+  NewCops: enable
 
 Layout/LineLength:
   Max: 120
@@ -15,3 +16,35 @@ Layout/LineLength:
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: single_quotes
+
+# Prevent false positives because we have fields named "subject"
+RSpec/SubjectDeclaration:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+# Warn only for complexity-related metrics
+Metrics/MethodLength:
+  Severity: warning
+
+Metrics/ClassLength:
+  Severity: warning
+
+Metrics/BlockLength:
+  Severity: warning
+
+Metrics/ModuleLength:
+  Severity: warning
+
+Metrics/PerceivedComplexity:
+  Severity: warning
+
+Metrics/CyclomaticComplexity:
+  Severity: warning
+
+Metrics/AbcSize:
+  Severity: warning
+
+RSpec/ExampleLength:
+  Severity: warning
