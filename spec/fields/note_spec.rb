@@ -6,25 +6,25 @@ end
 
 describe ModsDisplay::Note do
   before(:all) do
-    @note = Stanford::Mods::Record.new.from_str('<mods><note>Note Field</note></mods>', false).note
+    @note = Stanford::Mods::Record.new.from_str('<mods xmlns="http://www.loc.gov/mods/v3"><note>Note Field</note></mods>').note
     @display_label = Stanford::Mods::Record.new.from_str(
-      "<mods><note displayLabel='Special Label'>Note Field</note></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><note displayLabel='Special Label'>Note Field</note></mods>"
     ).note
     @sor_label = Stanford::Mods::Record.new.from_str(
-      "<mods><note type='statement of responsibility'>Note Field</note></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><note type='statement of responsibility'>Note Field</note></mods>"
     ).note
     @contact_note = Stanford::Mods::Record.new.from_str(
-      "<mods><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>"
     ).note
     @type_label = Stanford::Mods::Record.new.from_str(
-      "<mods><note type='some other Type'>Note Field</note></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><note type='some other Type'>Note Field</note></mods>"
     ).note
     @complex_label = Stanford::Mods::Record.new.from_str(
-      "<mods>
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\">
         <note>Note Field</note><note>2nd Note Field</note>
         <note type='statement of responsibility'>SoR</note>
         <note>Another Note</note>
-      </mods>", false
+      </mods>"
     ).note
   end
   describe 'label' do

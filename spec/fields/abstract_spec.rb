@@ -7,10 +7,10 @@ end
 describe ModsDisplay::Abstract do
   before(:all) do
     @link = Stanford::Mods::Record.new.from_str(
-      '<mods><abstract>A link to the library (http://library.stanford.edu) should appear here</abstract></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><abstract>A link to the library (http://library.stanford.edu) should appear here</abstract></mods>'
     ).abstract
     @email = Stanford::Mods::Record.new.from_str(
-      '<mods><abstract>A link to an email address jdoe@example.com should appear here</abstract></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><abstract>A link to an email address jdoe@example.com should appear here</abstract></mods>'
     ).abstract
   end
 

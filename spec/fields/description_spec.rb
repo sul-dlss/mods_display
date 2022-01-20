@@ -7,24 +7,23 @@ end
 describe ModsDisplay::Description do
   before(:all) do
     @form = Stanford::Mods::Record.new.from_str(
-      '<mods><physicalDescription><note>Description Note</note></physicalDescription></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><physicalDescription><note>Description Note</note></physicalDescription></mods>'
     ).physical_description
     @display_label = Stanford::Mods::Record.new.from_str(
-      "<mods>
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\">
         <physicalDescription displayLabel='SpecialLabel'><note>Description Note</note></physicalDescription>
-       </mods>", false
+       </mods>"
     ).physical_description
     @child_display_label = Stanford::Mods::Record.new.from_str(
-      "<mods><physicalDescription><note displayLabel='Note Label'>Description Note</note></physicalDescription></mods>",
-      false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><physicalDescription><note displayLabel='Note Label'>Description Note</note></physicalDescription></mods>"
     ).physical_description
     @mixed = Stanford::Mods::Record.new.from_str(
-      '<mods>
+      '<mods xmlns="http://www.loc.gov/mods/v3">
         <physicalDescription>
           <note>Description Note</note>
           <digitalOrigin>Digital Origin Note</digitalOrigin>
         </physicalDescription>
-       </mods>', false
+       </mods>'
     ).physical_description
   end
   describe 'labels' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ModsDisplay::Extent do
   let(:mods) do
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <physicalDescription>
           <extent>Extent Value</extent>
           <extent>Extent Value 2</extent>
@@ -13,7 +13,7 @@ describe ModsDisplay::Extent do
   end
 
   subject do
-    parsed_mods = Stanford::Mods::Record.new.from_str(mods, false).physical_description
+    parsed_mods = Stanford::Mods::Record.new.from_str(mods).physical_description
     described_class.new(parsed_mods).fields
   end
 

@@ -1,7 +1,7 @@
 module NestedRelatedItemFixtures
   def related_item_host_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem type="host">
           <titleInfo>A host type related item</titleInfo>
           <note displayLabel="Custom Notes">A note content</note>
@@ -16,7 +16,7 @@ module NestedRelatedItemFixtures
 
   def multi_constituent_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem type="constituent">
           <titleInfo>
             <title>Polychronicon (epitome and continuation to 1429)</title>

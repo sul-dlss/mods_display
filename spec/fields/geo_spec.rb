@@ -7,7 +7,7 @@ end
 describe ModsDisplay::Geo do
   let(:mods) do
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <extension displayLabel="geo">
           <rdf:RDF xmlns:gml="http://www.opengis.net/gml/3.2/" xmlns:dc="http://purl.org/dc/elements/1.1/">
             <rdf:Description>
@@ -21,7 +21,7 @@ describe ModsDisplay::Geo do
   end
 
   subject do
-    mods_display_geo(Stanford::Mods::Record.new.from_str(mods, false).extension).fields
+    mods_display_geo(Stanford::Mods::Record.new.from_str(mods).extension).fields
   end
 
   describe 'labels' do

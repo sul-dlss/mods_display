@@ -1,7 +1,7 @@
 module CartographicsFixtures
   def full_cartographic
     <<-MODS
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <cartographics>
             <scale>The scale</scale>
@@ -15,7 +15,7 @@ module CartographicsFixtures
 
   def no_scale_cartographic
     <<-MODS
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <cartographics>
             <coordinates>the coordinates</coordinates>
@@ -28,7 +28,7 @@ module CartographicsFixtures
 
   def coordinates_only
     <<-MODS
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <cartographics>
             <coordinates>the coordinates</coordinates>
@@ -40,7 +40,7 @@ module CartographicsFixtures
 
   def scale_only
     <<-MODS
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <cartographics>
             <scale>The scale</scale>

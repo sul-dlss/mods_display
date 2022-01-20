@@ -9,24 +9,24 @@ end
 describe ModsDisplay::Name do
   include NameFixtures
   before(:all) do
-    @name = Stanford::Mods::Record.new.from_str(simple_name_fixture, false).plain_name
-    @blank_name = Stanford::Mods::Record.new.from_str(blank_name_fixture, false).plain_name
-    @primary_name = Stanford::Mods::Record.new.from_str(primary_name_fixture, false).plain_name
-    @primary_name_solo = Stanford::Mods::Record.new.from_str(primary_name_solo_fixture, false).plain_name
-    @contributor = Stanford::Mods::Record.new.from_str(contributor_fixture, false).plain_name
-    @encoded_role = Stanford::Mods::Record.new.from_str(encoded_role_fixture, false).plain_name
-    @mixed_role = Stanford::Mods::Record.new.from_str(mixed_role_fixture, false).plain_name
-    @numeral_toa = Stanford::Mods::Record.new.from_str(numural_toa_fixture, false).plain_name
-    @simple_toa = Stanford::Mods::Record.new.from_str(simple_toa_fixture, false).plain_name
-    @display_form = Stanford::Mods::Record.new.from_str(display_form_name_fixture, false).plain_name
-    @collapse_label = Stanford::Mods::Record.new.from_str(collapse_label_name_fixture, false).plain_name
-    @complex_labels = Stanford::Mods::Record.new.from_str(complex_name_label_fixture, false).plain_name
-    @complex_roles = Stanford::Mods::Record.new.from_str(complex_role_name_fixture, false).plain_name
-    @name_with_role = Stanford::Mods::Record.new.from_str(name_with_role_fixture, false).plain_name
-    @multiple_roles = Stanford::Mods::Record.new.from_str(multiple_roles_fixture, false).plain_name
-    @author_role = Stanford::Mods::Record.new.from_str(author_role_fixture, false).plain_name
-    @many_roles_and_names = Stanford::Mods::Record.new.from_str(many_roles_and_names_fixture, false).plain_name
-    @names_with_code_and_text_roles = Stanford::Mods::Record.new.from_str(names_with_code_and_text_roles_fixture, false).plain_name
+    @name = Stanford::Mods::Record.new.from_str(simple_name_fixture).plain_name
+    @blank_name = Stanford::Mods::Record.new.from_str(blank_name_fixture).plain_name
+    @primary_name = Stanford::Mods::Record.new.from_str(primary_name_fixture).plain_name
+    @primary_name_solo = Stanford::Mods::Record.new.from_str(primary_name_solo_fixture).plain_name
+    @contributor = Stanford::Mods::Record.new.from_str(contributor_fixture).plain_name
+    @encoded_role = Stanford::Mods::Record.new.from_str(encoded_role_fixture).plain_name
+    @mixed_role = Stanford::Mods::Record.new.from_str(mixed_role_fixture).plain_name
+    @numeral_toa = Stanford::Mods::Record.new.from_str(numural_toa_fixture).plain_name
+    @simple_toa = Stanford::Mods::Record.new.from_str(simple_toa_fixture).plain_name
+    @display_form = Stanford::Mods::Record.new.from_str(display_form_name_fixture).plain_name
+    @collapse_label = Stanford::Mods::Record.new.from_str(collapse_label_name_fixture).plain_name
+    @complex_labels = Stanford::Mods::Record.new.from_str(complex_name_label_fixture).plain_name
+    @complex_roles = Stanford::Mods::Record.new.from_str(complex_role_name_fixture).plain_name
+    @name_with_role = Stanford::Mods::Record.new.from_str(name_with_role_fixture).plain_name
+    @multiple_roles = Stanford::Mods::Record.new.from_str(multiple_roles_fixture).plain_name
+    @author_role = Stanford::Mods::Record.new.from_str(author_role_fixture).plain_name
+    @many_roles_and_names = Stanford::Mods::Record.new.from_str(many_roles_and_names_fixture).plain_name
+    @names_with_code_and_text_roles = Stanford::Mods::Record.new.from_str(names_with_code_and_text_roles_fixture).plain_name
   end
   let(:default_label) { 'Associated with:' }
 
@@ -48,7 +48,7 @@ describe ModsDisplay::Name do
     end
 
     it 'should strip trailing punctuation' do
-      actual = mods_display_name(Stanford::Mods::Record.new.from_str(name_with_marc_role_terms, false).plain_name)
+      actual = mods_display_name(Stanford::Mods::Record.new.from_str(name_with_marc_role_terms).plain_name)
 
       expect(actual.fields.map(&:label)).to eq ['Editor:', 'Publisher:']
     end

@@ -7,10 +7,10 @@ end
 describe ModsDisplay::Contents do
   before(:all) do
     @audience = Stanford::Mods::Record.new.from_str(
-      '<mods><targetAudience>Audience Note</targetAudience></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><targetAudience>Audience Note</targetAudience></mods>'
     ).targetAudience
     @display_label = Stanford::Mods::Record.new.from_str(
-      "<mods><targetAudience displayLabel='Special Label'>Audience Note</tableOfContents></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><targetAudience displayLabel='Special Label'>Audience Note</tableOfContents></mods>"
     ).targetAudience
   end
   describe 'label' do

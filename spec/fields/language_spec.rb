@@ -7,23 +7,23 @@ end
 describe ModsDisplay::Language do
   before(:all) do
     @language = Stanford::Mods::Record.new.from_str(
-      "<mods><language><languageTerm type='code'>eng</languageTerm></language></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><language><languageTerm type='code'>eng</languageTerm></language></mods>"
     ).language
     @display_label = Stanford::Mods::Record.new.from_str(
-      "<mods><language displayLabel='Lang'><languageTerm type='code'>eng</languageTerm></language></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><language displayLabel='Lang'><languageTerm type='code'>eng</languageTerm></language></mods>"
     ).language
     @no_lang = Stanford::Mods::Record.new.from_str(
-      "<mods><language displayLabel='Lang'><languageTerm type='code'>zzzxxx</languageTerm></language></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><language displayLabel='Lang'><languageTerm type='code'>zzzxxx</languageTerm></language></mods>"
     ).language
     @mixed = Stanford::Mods::Record.new.from_str(
-      "<mods>
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\">
         <language><languageTerm type='text'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language>
-      </mods>", false
+      </mods>"
     ).language
     @multi = Stanford::Mods::Record.new.from_str(
-      "<mods>
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\">
         <language><languageTerm type='code'>ger</languageTerm><languageTerm type='code'>eng</languageTerm></language>
-      </mods>", false
+      </mods>"
     ).language
   end
   describe 'fields' do

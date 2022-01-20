@@ -9,13 +9,13 @@ end
 describe ModsDisplay::AccessCondition do
   include AccessConditionFixtures
   before :all do
-    @access_condition = Stanford::Mods::Record.new.from_str(simple_access_condition_fixture, false).accessCondition
-    @restrict_condition = Stanford::Mods::Record.new.from_str(restricted_access_fixture, false).accessCondition
-    @copyright_note = Stanford::Mods::Record.new.from_str(copyright_access_fixture, false).accessCondition
-    @cc_license_note = Stanford::Mods::Record.new.from_str(cc_license_fixture, false).accessCondition
-    @odc_license_note = Stanford::Mods::Record.new.from_str(odc_license_fixture, false).accessCondition
-    @no_link_license_note = Stanford::Mods::Record.new.from_str(no_license_fixture, false).accessCondition
-    @garbage_license_fixture = Stanford::Mods::Record.new.from_str(garbage_license_fixture, false).accessCondition
+    @access_condition = Stanford::Mods::Record.new.from_str(simple_access_condition_fixture).accessCondition
+    @restrict_condition = Stanford::Mods::Record.new.from_str(restricted_access_fixture).accessCondition
+    @copyright_note = Stanford::Mods::Record.new.from_str(copyright_access_fixture).accessCondition
+    @cc_license_note = Stanford::Mods::Record.new.from_str(cc_license_fixture).accessCondition
+    @odc_license_note = Stanford::Mods::Record.new.from_str(odc_license_fixture).accessCondition
+    @no_link_license_note = Stanford::Mods::Record.new.from_str(no_license_fixture).accessCondition
+    @garbage_license_fixture = Stanford::Mods::Record.new.from_str(garbage_license_fixture).accessCondition
   end
   describe 'labels' do
     it 'should normalize types and assign proper labels' do

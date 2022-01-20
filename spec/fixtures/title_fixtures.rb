@@ -1,7 +1,7 @@
 module TitleFixtures
   def simple_title_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo><title>Title</title></titleInfo>
       </mods>
     XML
@@ -9,7 +9,7 @@ module TitleFixtures
 
   def title_parts_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo>
           <nonSort>The</nonSort>
           <title>Title</title>
@@ -23,7 +23,7 @@ module TitleFixtures
 
   def reverse_title_parts_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo>
           <nonSort>The</nonSort>
           <title>Title : </title>
@@ -37,7 +37,7 @@ module TitleFixtures
 
   def display_label_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo displayLabel='MyTitle'>
           <title>Title</title>
         </titleInfo>
@@ -47,7 +47,7 @@ module TitleFixtures
 
   def multi_label_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo>
           <title>Main Title</title>
         </titleInfo>
@@ -69,7 +69,7 @@ module TitleFixtures
 
   def alt_title_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo type='alternative'>
           <title>Title</title>
         </titleInfo>
@@ -79,7 +79,7 @@ module TitleFixtures
 
   def title_puncutation_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <titleInfo>
           <title>A title that ends in punctuation.</title>
           <partNumber>2015</partNumber>
@@ -90,7 +90,7 @@ module TitleFixtures
 
   def ordered_title_fixture
     <<-XML
-    <mods>
+    <mods xmlns="http://www.loc.gov/mods/v3">
       <titleInfo>
         <nonSort>The</nonSort>
         <title>medium term expenditure framework (MTEF) for ... and the annual estimates for ...</title>

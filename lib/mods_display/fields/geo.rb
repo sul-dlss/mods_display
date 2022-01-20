@@ -16,8 +16,8 @@ module ModsDisplay
     def process_geo_extension(extension)
       rdf = Nokogiri::XML(extension.children.to_s)
       [
-        rdf.xpath('//format').text[/format=(.*)$/, 1],
-        rdf.xpath('//type').text[/#(.*)$/, 1]
+        rdf.xpath('//dc:format', dc: 'http://purl.org/dc/elements/1.1/').text[/format=(.*)$/, 1],
+        rdf.xpath('//dc:type', dc: 'http://purl.org/dc/elements/1.1/').text[/#(.*)$/, 1]
       ].compact.join('; ')
     end
 

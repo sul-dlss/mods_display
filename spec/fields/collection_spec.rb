@@ -9,41 +9,37 @@ end
 describe ModsDisplay::Collection do
   let(:collection) do
     Stanford::Mods::Record.new.from_str(
-      '<mods>
+      '<mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <titleInfo><title>The Collection</title></titleInfo><typeOfResource collection="yes" />
         </relatedItem>
-      </mods>',
-      false
+      </mods>'
     ).related_item
   end
   let(:non_collection) do
     Stanford::Mods::Record.new.from_str(
-      '<mods><relatedItem><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>',
-      false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><relatedItem><titleInfo><title>Not a Collection</title></titleInfo></relatedItem></mods>'
     ).related_item
   end
   let(:display_label) do
     Stanford::Mods::Record.new.from_str(
-      '<mods>
+      '<mods xmlns="http://www.loc.gov/mods/v3">
          <relatedItem displayLabel="Special Collection">
            <titleInfo><title>Not a Collection</title></titleInfo>
          </relatedItem>
-       </mods>',
-      false
+       </mods>'
     ).related_item
   end
   let(:multiple_related_items) do
     Stanford::Mods::Record.new.from_str(
-      '<mods>
+      '<mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem displayLabel="Special Collection">
           <titleInfo><title>Not a Collection</title></titleInfo>
         </relatedItem>
         <relatedItem>
           <titleInfo><title>The Collection</title></titleInfo><typeOfResource collection="yes" />
         </relatedItem>
-      </mods>',
-      false
+      </mods>'
     ).related_item
   end
 

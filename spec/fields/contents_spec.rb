@@ -7,10 +7,10 @@ end
 describe ModsDisplay::Contents do
   before(:all) do
     @contents = Stanford::Mods::Record.new.from_str(
-      '<mods><tableOfContents>Content Note</tableOfContents></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><tableOfContents>Content Note</tableOfContents></mods>'
     ).tableOfContents
     @display_label = Stanford::Mods::Record.new.from_str(
-      "<mods><tableOfContents displayLabel='Special Label'>Content Note</tableOfContents></mods>", false
+      "<mods xmlns=\"http://www.loc.gov/mods/v3\"><tableOfContents displayLabel='Special Label'>Content Note</tableOfContents></mods>"
     ).tableOfContents
   end
   describe 'label' do
@@ -24,7 +24,7 @@ describe ModsDisplay::Contents do
   context 'multi-valued contents' do
     let(:toc) do
       Stanford::Mods::Record.new.from_str(
-              '<mods><tableOfContents>Content Note 1&#10;Content Note 2</tableOfContents></mods>', false
+              '<mods xmlns="http://www.loc.gov/mods/v3"><tableOfContents>Content Note 1&#10;Content Note 2</tableOfContents></mods>'
             ).tableOfContents
     end
     it 'should have one value with a new-line' do

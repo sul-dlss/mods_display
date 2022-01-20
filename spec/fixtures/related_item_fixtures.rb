@@ -1,7 +1,7 @@
 module RelatedItemFixtures
   def basic_related_item_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <titleInfo>A Related Item</titleInfo>
         </relatedItem>
@@ -11,7 +11,7 @@ module RelatedItemFixtures
 
   def linked_related_item_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <titleInfo>A Related Item</titleInfo>
           <location>
@@ -24,7 +24,7 @@ module RelatedItemFixtures
 
   def related_item_collection_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <titleInfo>This is a Collection</titleInfo>
           <typeOfResource collection='yes' />
@@ -35,7 +35,7 @@ module RelatedItemFixtures
 
   def related_item_display_label_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem displayLabel='Special Item'>
           <titleInfo>A Related Item</titleInfo>
         </relatedItem>
@@ -45,7 +45,7 @@ module RelatedItemFixtures
 
   def related_item_location_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <location>The Location</location>
         </relatedItem>
@@ -55,7 +55,7 @@ module RelatedItemFixtures
 
   def related_item_reference_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem type='isReferencedBy'>
           <titleInfo>The title</titleInfo>
           <note>124</note>
@@ -69,7 +69,7 @@ module RelatedItemFixtures
 
   def blank_related_item_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <titleInfo>
             <title></title>
@@ -84,7 +84,7 @@ module RelatedItemFixtures
 
   def multi_related_item_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <relatedItem>
           <titleInfo>
             <title>Library</title>

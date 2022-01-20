@@ -9,15 +9,15 @@ describe ModsDisplay::RelatedItem do
   include NestedRelatedItemFixtures
 
   before(:all) do
-    @item = Stanford::Mods::Record.new.from_str(basic_related_item_fixture, false).related_item
-    @linked_item = Stanford::Mods::Record.new.from_str(linked_related_item_fixture, false).related_item
-    @collection = Stanford::Mods::Record.new.from_str(related_item_collection_fixture, false).related_item
-    @display_label = Stanford::Mods::Record.new.from_str(related_item_display_label_fixture, false).related_item
-    @location = Stanford::Mods::Record.new.from_str(related_item_location_fixture, false).related_item
-    @reference = Stanford::Mods::Record.new.from_str(related_item_reference_fixture, false).related_item
-    @blank_item = Stanford::Mods::Record.new.from_str(blank_related_item_fixture, false).related_item
-    @multi_items = Stanford::Mods::Record.new.from_str(multi_related_item_fixture, false).related_item
-    @constituent_items = Stanford::Mods::Record.new.from_str(multi_constituent_fixture, false).related_item
+    @item = Stanford::Mods::Record.new.from_str(basic_related_item_fixture).related_item
+    @linked_item = Stanford::Mods::Record.new.from_str(linked_related_item_fixture).related_item
+    @collection = Stanford::Mods::Record.new.from_str(related_item_collection_fixture).related_item
+    @display_label = Stanford::Mods::Record.new.from_str(related_item_display_label_fixture).related_item
+    @location = Stanford::Mods::Record.new.from_str(related_item_location_fixture).related_item
+    @reference = Stanford::Mods::Record.new.from_str(related_item_reference_fixture).related_item
+    @blank_item = Stanford::Mods::Record.new.from_str(blank_related_item_fixture).related_item
+    @multi_items = Stanford::Mods::Record.new.from_str(multi_related_item_fixture).related_item
+    @constituent_items = Stanford::Mods::Record.new.from_str(multi_constituent_fixture).related_item
   end
 
   it 'excludes related items that will be rendered as a nested record' do
