@@ -89,4 +89,27 @@ describe ModsDisplay::Title do
       expect(values.first).to start_with "L'Afrique dressée"
     end
   end
+
+  describe 'uniform titles' do
+    let(:xml) do
+      Stanford::Mods::Record.new.from_str(<<-XML).title_info
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <titleInfo type="uniform" nameTitleGroup="1">
+            <title>Motets</title>
+            <partNumber>(1583)</partNumber>
+          </titleInfo>
+          <name type="personal" nameTitleGroup="1" usage="primary">
+            <namePart>Palestrina, Giovanni Pierluigi da</namePart>
+            <namePart type="date">1525?-1594</namePart>
+          </name>
+        </mods>
+      XML
+    end
+
+    it 'prepends the uniform author name' do
+      values = mods_display_title(xml).fields.first.values
+
+      expect(values.first).to eq 'Palestrina, Giovanni Pierluigi da, 1525?-1594. Motets. (1583)'
+    end
+  end
 end
