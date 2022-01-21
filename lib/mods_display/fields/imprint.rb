@@ -17,7 +17,7 @@ module ModsDisplay
             values: [joined_place_parts]
           )
         end
-        return_fields.concat(dates(value)) if dates(value).length > 0
+        return_fields.concat(date_values(value)) if date_values(value).length > 0
         if other_pub_info(value).length > 0
           other_pub_info(value).each do |pub_info|
             return_fields << ModsDisplay::Values.new(
@@ -30,7 +30,7 @@ module ModsDisplay
       collapse_fields(return_fields)
     end
 
-    def dates(element)
+    def date_values(element)
       date_field_keys.map do |date_field|
         next unless element.respond_to?(date_field)
         elements = element.send(date_field)
@@ -42,167 +42,162 @@ module ModsDisplay
       end.compact
     end
 
-    def parse_dates(date_field)
-      apply_date_qualifier_decoration(
-        dedup_dates(
-          join_date_ranges(
-            process_bc_ad_dates(
-              process_encoded_dates(ignore_bad_dates(date_field))
-            )
-          )
-        )
-      )
-    end
-
-    def ignore_bad_dates(date_fields)
-      date_fields.select do |date_field|
-        date_field.text.strip != '9999'
+    class DateValue
+      def initialize(element)
+        @element = element
       end
-    end
 
-    def process_encoded_dates(date_fields)
-      date_fields.map do |date_field|
-        if date_is_w3cdtf?(date_field)
-          process_w3cdtf_date(date_field)
-        elsif date_is_iso8601?(date_field)
-          process_iso8601_date(date_field)
-        else
-          date_field
-        end
+      # True if the element text isn't blank or the placeholder "9999".
+      def valid?
+        @element.text.strip != '9999' && !@element.text.blank?
       end
-    end
 
-    def join_date_ranges(date_fields)
-      if dates_are_range?(date_fields)
-        start_date = date_fields.find { |d| d.attributes['point'] && d.attributes['point'].value == 'start' }
-        end_date = date_fields.find { |d| d.attributes['point'] && d.attributes['point'].value == 'end' }
-        date_fields.map do |date|
-          date = date.clone # clone the date object so we don't append the same one
-          if normalize_date(date.text) == normalize_date(start_date.text)
-            date.content = [start_date.text, end_date.text].join('-')
-            date
-          elsif normalize_date(date.text) != normalize_date(end_date.text)
+      # Value of element's "point" attribute; nil if empty or not present.
+      # Points are "start" or "end" (if part of a date range)
+      def point
+        @element.attributes['point']&.value.presence
+      end
+
+      # Value of element's "qualifier" attribute; nil if empty or not present.
+      # Qualifiers are "approximate", "questionable", or "inferred"
+      def qualifier
+        @element.attributes['qualifier']&.value&.downcase.presence
+      end
+
+      # Value of element's "encoding" attribute; nil if empty or not present.
+      # Encodings are "w3cdtf", "iso8601", or "edtf"
+      def encoding
+        @element.attributes['encoding']&.value&.downcase.presence
+      end
+
+      # Element text reduced to digits and hyphen. Captures date ranges and
+      # negative (B.C.) dates. Used for comparison/deduping.
+      def base_value
+        @element.text.scan(/[\d-]/).join
+      end
+
+      # Human-formatted version of the date.
+      def decoded_value
+        date = @element.text.strip
+
+        decoded_date = if encoding == 'w3cdtf'
+          begin
+            if date =~ /^\d{4}-\d{2}-\d{2}$/
+              Date.parse(date).strftime('%B %e, %Y')
+            elsif date =~ /^\d{4}-\d{2}$/
+              Date.parse("#{date}-01").strftime('%B %Y')
+            else
+              date
+            end
+          rescue
             date
           end
-        end.compact
-      elsif dates_are_open_range?(date_fields)
-        start_date = date_fields.find { |d| d.attributes['point'] && d.attributes['point'].value == 'start' }
-        date_fields.map do |date|
-          date = date.clone # clone the date object so we don't append the same one
-          date.content = "#{start_date.text}-" if date.text == start_date.text
+            elsif encoding == 'iso8601'
+              begin
+                Date.iso8601(date).strftime('%B %e, %Y')
+              rescue
+                date
+              end
+            else
+              date
+          end
+
+        # Year zero is a special case; preserve it as "0"
+        return decoded_date if decoded_date == '0'
+
+        # Any other leading zeroes should be stripped
+        decoded_date.gsub(/^0*/, '')
+      end
+
+      # Decoded version of the date with "B.C." or "A.D." appended.
+      def bc_ad_value
+        date = decoded_value
+
+        # Negative edtf dates are B.C. and may still have leading zeroes to remove
+        if encoding == 'edtf' && date.to_i < 1
+          year = date.gsub(/^-0*/, '').to_i + 1
+          "#{year} B.C."
+
+        # Any dates before the year 1000 are explicitly marked A.D.
+        elsif date.match?(/^\d{1,3}$/)
+          "#{date} A.D."
+
+        # Leave the value alone otherwise; A.D. is implied
+        else
           date
         end
-      else
-        date_fields
       end
-    end
 
-    def apply_date_qualifier_decoration(date_fields)
-      return_fields = date_fields.map do |date|
-        date = date.clone
-        if date_is_approximate?(date)
-          date.content = "[ca. #{date.text}]"
-        elsif date_is_questionable?(date)
-          date.content = "[#{date.text}?]"
-        elsif date_is_inferred?(date)
-          date.content = "[#{date.text}]"
-        end
+      # Decoded date with "B.C." or "A.D." and qualifier markers. See (outdated):
+      # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
+      def qualified_value
+        date = bc_ad_value
+        return "[ca. #{date}]" if qualifier == 'approximate'
+        return "[#{date}?]" if qualifier == 'questionable'
+        return "[#{date}]" if qualifier == 'inferred'
         date
       end
-      return_fields.map(&:text)
     end
 
-    def date_is_approximate?(date_field)
-      date_field.attributes['qualifier'] &&
-        date_field.attributes['qualifier'].respond_to?(:value) &&
-        date_field.attributes['qualifier'].value == 'approximate'
-    end
-
-    def date_is_questionable?(date_field)
-      date_field.attributes['qualifier'] &&
-        date_field.attributes['qualifier'].respond_to?(:value) &&
-        date_field.attributes['qualifier'].value == 'questionable'
-    end
-
-    def date_is_inferred?(date_field)
-      date_field.attributes['qualifier'] &&
-        date_field.attributes['qualifier'].respond_to?(:value) &&
-        date_field.attributes['qualifier'].value == 'inferred'
-    end
-
-    def dates_are_open_range?(date_fields)
-      date_fields.any? do |field|
-        field.attributes['point'] &&
-          field.attributes['point'].respond_to?(:value) &&
-          field.attributes['point'].value == 'start'
-      end && !date_fields.any? do |field|
-        field.attributes['point'] &&
-          field.attributes['point'].respond_to?(:value) &&
-          field.attributes['point'].value == 'end'
+    class DateRange
+      def initialize(start: nil, stop: nil)
+        @start = start
+        @stop = stop
       end
-    end
 
-    def dates_are_range?(date_fields)
-      attributes = date_fields.map do |date|
-        if date.attributes['point'].respond_to?(:value)
-          date.attributes['point'].value
-        end
+      def base_value
+        "#{@start&.base_value}-#{@stop&.base_value}"
       end
-      attributes.include?('start') &&
-        attributes.include?('end')
-    end
 
-    def date_is_w3cdtf?(date_field)
-      field_is_encoded?(date_field, 'w3cdtf')
-    end
+      # The encoding value for the start date in the range.
+      def encoding
+        @start&.encoding || @stop&.encoding
+      end
 
-    def date_is_iso8601?(date_field)
-      field_is_encoded?(date_field, 'iso8601')
-    end
-
-    def process_w3cdtf_date(date_field)
-      date_field = date_field.clone
-      date_field.content = begin
-        if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
-          Date.parse(date_field.text).strftime('%B %d, %Y')
-        elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
-          Date.parse("#{date_field.text}-01").strftime('%B %Y')
+      def qualified_value
+        if @start&.qualifier != @stop&.qualifier
+          "#{@start&.qualified_value}-#{@stop&.qualified_value}"
         else
-          date_field.content
+          qualifier = @start&.qualifier || @stop&.qualifier
+          date = "#{@start&.bc_ad_value}-#{@stop&.bc_ad_value}"
+          return "[ca. #{date}]" if qualifier == 'approximate'
+          return "[#{date}?]" if qualifier == 'questionable'
+          return "[#{date}]" if qualifier == 'inferred'
+          date
         end
-      rescue
-        date_field.content
       end
-      date_field
     end
 
-    def process_iso8601_date(date_field)
-      date_field = date_field.clone
-      date_field.content = begin
-        Date.iso8601(date_field.text).strftime('%B %d, %Y')
-      rescue
-        date_field.content
-      end
-      date_field
-    end
+    def parse_dates(elements)
+      # convert to DateValue objects and keep only valid ones
+      dates = elements.map { |element| DateValue.new(element) }.select(&:valid?)
 
-    def dedup_dates(date_fields)
-      date_text = date_fields.map { |d| normalize_date(d.text) }
-      if date_text != date_text.uniq
-        if date_fields.find { |d| d.attributes['qualifier'].respond_to?(:value) }
-          [date_fields.find { |d| d.attributes['qualifier'].respond_to?(:value) }]
-        elsif date_fields.find { |d| !d.attributes['encoding'] }
-          [date_fields.find { |d| !d.attributes['encoding'] }]
+      # join any date ranges into DateRange objects
+      point, nonpoint = dates.partition { |date| date.point }
+      if point.any?
+        range = DateRange.new(start: point.find { |date| date.point == 'start' },
+                              stop: point.find { |date| date.point == 'end' })
+        nonpoint.unshift(range)
+      end
+      dates = nonpoint
+
+      # ensure dates are unique with respect to their base values
+      dates = dates.group_by(&:base_value).map do |_value, group|
+        group.first if group.one?
+
+        # if one of the duplicates wasn't encoded, use that one. see:
+        # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
+        if group.reject(&:encoding).any?
+          group.reject(&:encoding).first
+
+        # otherwise just randomly pick the first in the group
         else
-          [date_fields.first]
+          group.first
         end
-      else
-        date_fields
       end
-    end
 
-    def normalize_date(date)
-      date.strip.gsub(/^\[*ca\.\s*|c|\[|\]|\?/, '')
+      # output formatted dates with qualifiers, A.D./B.C., etc.
+      dates.map(&:qualified_value)
     end
 
     def other_pub_info(element)
@@ -254,45 +249,6 @@ module ModsDisplay
           value << delimiter
         end
       end.join.strip
-    end
-
-    def process_bc_ad_dates(date_fields)
-      date_fields.map do |date_field|
-        case
-        # special case: year zero is 1 A.D. see:
-        # https://github.com/sul-dlss/mods_display/issues/39#issuecomment-1012606117
-        when date_field.text.strip == '0'
-          date_field.content = '1 A.D.'
-        when date_is_bc_edtf?(date_field)
-          year = date_field.text.strip.gsub(/^-0*/, '').to_i + 1
-          date_field.content = "#{year} B.C."
-        when date_is_ad?(date_field)
-          year = date_field.text.strip.gsub(/^0*/, '').to_i
-          date_field.content = "#{year} A.D."
-        end
-        date_field
-      end
-    end
-
-    def date_is_bc_edtf?(date_field)
-      date_field.text.strip.start_with?('-') && date_is_edtf?(date_field)
-    end
-
-    def date_is_ad?(date_field)
-      # date is 1-3 digits excluding leading zeroes, and not 2 or more zeroes.
-      # a single zero is valid, and becomes 1 A.D.
-      date_text = date_field.text.strip
-      date_text.match?(/^0*\d{1,3}$/) && !date_text.match?(/^0{2,}$/)
-    end
-
-    def date_is_edtf?(date_field)
-      field_is_encoded?(date_field, 'edtf')
-    end
-
-    def field_is_encoded?(field, encoding)
-      field.attributes['encoding'] &&
-        field.attributes['encoding'].respond_to?(:value) &&
-        field.attributes['encoding'].value.downcase == encoding
     end
 
     def ends_in_terminating_punctuation?(value)
