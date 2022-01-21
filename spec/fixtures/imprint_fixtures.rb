@@ -71,27 +71,6 @@ module ImprintFixtures
     MODS
   end
 
-  def date_range
-    <<-MODS
-      <mods xmlns="http://www.loc.gov/mods/v3">
-        <originInfo>
-          <dateCreated point="end">1825</dateCreated>
-          <dateCreated point="start">1820</dateCreated>
-        </originInfo>
-      </mods>
-    MODS
-  end
-
-  def open_date_range
-    <<-MODS
-      <mods xmlns="http://www.loc.gov/mods/v3">
-        <originInfo>
-          <dateCreated point="start">1820</dateCreated>
-        </originInfo>
-      </mods>
-    MODS
-  end
-
   def encoded_date_range
     <<-MODS
       <mods xmlns="http://www.loc.gov/mods/v3">
@@ -177,18 +156,6 @@ module ImprintFixtures
     MODS
   end
 
-  def three_imprint_dates
-    <<-MODS
-      <mods xmlns="http://www.loc.gov/mods/v3">
-        <originInfo>
-          <dateIssued>[1820-1825]</dateIssued>
-          <dateIssued point="start" qualifier="questionable">1820</dateIssued>
-          <dateIssued point="end" qualifier="questionable">1825</dateIssued>
-        </originInfo>
-      </mods>
-    MODS
-  end
-
   def qualified_imprint_date
     <<-MODS
       <mods xmlns="http://www.loc.gov/mods/v3">
@@ -245,19 +212,6 @@ module ImprintFixtures
             <placeTerm type="code" authority="marccountry">xx</placeTerm>
           </place>
           <dateIssued>1994</dateIssued>
-        </originInfo>
-      </mods>
-    MODS
-  end
-
-  def encoded_dates
-    <<-MODS
-      <mods xmlns="http://www.loc.gov/mods/v3">
-        <originInfo>
-          <dateOther encoding="w3cDtF">2013</dateOther>
-          <dateCreated encoding="W3CdTf">2013-07-10</dateCreated>
-          <dateCaptured encoding="W3CDTF">2013-07</dateCaptured>
-          <dateModified encoding="w3cdtf">Jul. 22, 2013</dateModified>
         </originInfo>
       </mods>
     MODS
