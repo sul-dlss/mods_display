@@ -74,6 +74,19 @@ describe ModsDisplay::Imprint do
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[1820?]'])
       end
+      it 'should apply the qualifier decoration separately to each date' do
+        separate_qualifier_range = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated point="start" qualifier="approximate">1880</dateCreated>
+              <dateCreated point="end">1906</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(separate_qualifier_range).fields
+        expect(fields.first.values).to eq ['[ca. 1880]-1906']
+      end
       it 'should handle date ranges in imprints' do
         fields = mods_display_imprint(imprint_date_range).fields
         expect(fields.length).to eq(1)
@@ -127,7 +140,7 @@ describe ModsDisplay::Imprint do
       end
     end
     describe 'qualifier decoration' do
-      it "should prepend a 'c' to approximate dates" do
+      it "should prepend a 'ca.' to approximate dates" do
         fields = mods_display_imprint(approximate_date).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[ca. 1820]'])
@@ -144,6 +157,18 @@ describe ModsDisplay::Imprint do
       end
     end
     describe 'encoded dates' do
+      it 'should transform year zero dates to 1 A.D.' do
+        year_zero_date = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated>0</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(year_zero_date).fields
+        expect(fields.first.values).to eq ['1 A.D.']
+      end
       describe 'W3CDTF' do
         it 'should handle single year dates properly' do
           fields = mods_display_imprint(encoded_dates).fields
