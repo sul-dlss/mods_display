@@ -127,7 +127,7 @@ describe ModsDisplay::Imprint do
             </originInfo>
           </mods>
         MODS
-        
+
         fields = mods_display_imprint(imprint_date_range).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['1820-1825'])
@@ -164,11 +164,22 @@ describe ModsDisplay::Imprint do
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[1820?]'])
       end
-      it 'should use the non-encoded date when prsent' do
+
+      it 'should use the non-encoded date when present' do
+        dup_unencoded_date = <<-MODS
+          <mods>
+            <originInfo>
+              <dateCreated encoding="marc">1820</dateCreated>
+              <dateCreated>[ca. 1820]</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
         fields = mods_display_imprint(dup_unencoded_date).fields
+
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[ca. 1820]'])
       end
+      
       it 'should handle copyright dates correctly' do
         fields = mods_display_imprint(dup_copyright_date).fields
         expect(fields.length).to eq(1)

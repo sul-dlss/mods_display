@@ -93,17 +93,6 @@ module ImprintFixtures
     MODS
   end
 
-  def dup_unencoded_date
-    <<-MODS
-      <mods xmlns="http://www.loc.gov/mods/v3">
-        <originInfo>
-          <dateCreated encoding="marc">1820</dateCreated>
-          <dateCreated>[ca. 1820]</dateCreated>
-        </originInfo>
-      </mods>
-    MODS
-  end
-
   def dup_copyright_date
     <<-MODS
       <mods xmlns="http://www.loc.gov/mods/v3">
