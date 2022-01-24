@@ -56,7 +56,7 @@ describe ModsDisplay::Imprint do
     describe 'ranges' do
       it "should join start and end point ranges with a '-'" do
         date_range = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated point="end">1825</dateCreated>
               <dateCreated point="start">1820</dateCreated>
@@ -70,7 +70,7 @@ describe ModsDisplay::Imprint do
 
       it 'should handle open ranges properly' do
         open_date_range = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated point="start">1820</dateCreated>
             </originInfo>
@@ -83,7 +83,7 @@ describe ModsDisplay::Imprint do
 
       it 'should handle when there are more than 3 of the same date w/i a range' do
         three_imprint_dates = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateIssued>[1820-1825]</dateIssued>
               <dateIssued point="start" qualifier="questionable">1820</dateIssued>
@@ -105,7 +105,7 @@ describe ModsDisplay::Imprint do
 
       it 'should apply the qualifier decoration separately to each date' do
         separate_qualifier_range = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated point="start" qualifier="approximate">1880</dateCreated>
               <dateCreated point="end">1906</dateCreated>
@@ -119,7 +119,7 @@ describe ModsDisplay::Imprint do
 
       it 'should handle date ranges in imprints' do
         imprint_date_range = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateIssued>[1820]</dateIssued>
               <dateIssued point="start">1820</dateIssued>
@@ -145,18 +145,6 @@ describe ModsDisplay::Imprint do
         expect(fields.first.values).to eq ['14 B.C.-44 A.D.']
       end
 
-      it 'should transform year zero dates to 1 A.D.' do
-        year_zero_date = <<-MODS
-          <mods xmlns="http://www.loc.gov/mods/v3">
-            <originInfo>
-              <dateCreated>0</dateCreated>
-            </originInfo>
-          </mods>
-        MODS
-
-        fields = mods_display_imprint(year_zero_date).fields
-        expect(fields.first.values).to eq ['1 A.D.']
-      end
     end
     describe 'duplication' do
       it 'should only return the qualified date when present' do
@@ -167,7 +155,7 @@ describe ModsDisplay::Imprint do
 
       it 'should use the non-encoded date when present' do
         dup_unencoded_date = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated encoding="marc">1820</dateCreated>
               <dateCreated>[ca. 1820]</dateCreated>
@@ -211,7 +199,7 @@ describe ModsDisplay::Imprint do
     describe 'encoded dates' do
       it 'should transform year zero dates to 1 B.C.' do
         year_zero_date = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated encoding="edtf">0</dateCreated>
             </originInfo>
@@ -224,7 +212,7 @@ describe ModsDisplay::Imprint do
       describe 'W3CDTF' do
         it 'should handle single year dates properly' do
           single_year_date = <<-MODS
-            <mods>
+            <mods xmlns="http://www.loc.gov/mods/v3">
               <originInfo>
                 <dateOther encoding="w3cDtF">2013</dateOther>
               </originInfo>
@@ -236,7 +224,7 @@ describe ModsDisplay::Imprint do
 
         it 'should handle month+year dates properly' do
           month_year_date = <<-MODS
-            <mods>
+            <mods xmlns="http://www.loc.gov/mods/v3">
               <originInfo>
                 <dateCaptured encoding="W3CDTF">2013-07</dateCaptured>
               </originInfo>
@@ -249,7 +237,7 @@ describe ModsDisplay::Imprint do
 
         it 'should handle full precision dates properly' do
           full_precision_date = <<-MODS
-            <mods>
+            <mods xmlns="http://www.loc.gov/mods/v3">
               <originInfo>
                 <dateCreated encoding="W3CdTf">2013-07-10</dateCreated>
               </originInfo>
@@ -262,7 +250,7 @@ describe ModsDisplay::Imprint do
 
         it "should not try to handle dates we can't parse" do
           unparseable_date = <<-MODS
-            <mods>
+            <mods xmlns="http://www.loc.gov/mods/v3">
               <originInfo>
                 <dateModified encoding="w3cdtf">Jul. 22, 2013</dateModified>
               </originInfo>
