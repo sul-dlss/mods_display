@@ -149,6 +149,10 @@ module ModsDisplay
         "#{@start&.base_value}-#{@stop&.base_value}"
       end
 
+      def base_values
+        [@start&.base_value, @stop&.base_value].compact
+      end
+
       # The encoding value for the start date in the range.
       def encoding
         @start&.encoding || @stop&.encoding
@@ -195,6 +199,11 @@ module ModsDisplay
           group.first
         end
       end
+
+      # if any single dates are already part of a range, discard them
+      range_base_values = dates.select { |date| date.is_a?(DateRange) }
+                               .map(&:base_values).flatten
+      dates = dates.reject { |date| range_base_values.include?(date.base_value) }
 
       # output formatted dates with qualifiers, A.D./B.C., etc.
       dates.map(&:qualified_value)
