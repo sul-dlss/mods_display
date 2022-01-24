@@ -50,7 +50,18 @@ module ModsDisplay
         previous_element = value
       end
 
-      title
+      if element['type'] == 'uniform' && element['nameTitleGroup'].present?
+        [uniform_title_name_part(element), title].compact.join('. ')
+      else
+        title
+      end
+    end
+
+    def uniform_title_name_part(element)
+      names = element.xpath("//m:name[@nameTitleGroup=\"#{element['nameTitleGroup']}\"]", **Mods::Record::NS_HASH)
+      names = element.xpath("//name[@nameTitleGroup=\"#{element['nameTitleGroup']}\"]") if names.empty?
+
+      ModsDisplay::Name.new(names).fields.first&.values&.first&.to_s
     end
 
     def title_parts
