@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ModsDisplay::Location do
   let(:location_mods) do
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <location>
           <shelfLocator>On Shelf A</shelfLocator>
         </location>
@@ -13,7 +13,7 @@ describe ModsDisplay::Location do
 
   let(:url_mods) do
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <location>
           <url displayLabel='Stanford University Library'>http://library.stanford.edu</url>
         </location>
@@ -26,7 +26,7 @@ describe ModsDisplay::Location do
 
   let(:repository_mods) do
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <location>
           <physicalLocation type='repository'>Location Field</physicalLocation>
         </location>
@@ -35,17 +35,17 @@ describe ModsDisplay::Location do
   end
 
   let(:location) do
-    mods = Stanford::Mods::Record.new.from_str(location_mods, false).location
+    mods = Stanford::Mods::Record.new.from_str(location_mods).location
     described_class.new(mods).fields
   end
 
   let(:urls) do
-    mods = Stanford::Mods::Record.new.from_str(url_mods, false).location
+    mods = Stanford::Mods::Record.new.from_str(url_mods).location
     described_class.new(mods).fields
   end
 
   let(:repository_label) do
-    mods = Stanford::Mods::Record.new.from_str(repository_mods, false).location
+    mods = Stanford::Mods::Record.new.from_str(repository_mods).location
     described_class.new(mods).fields
   end
 

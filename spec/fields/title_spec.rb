@@ -7,14 +7,14 @@ end
 describe ModsDisplay::Title do
   include TitleFixtures
   before(:all) do
-    @title = Stanford::Mods::Record.new.from_str(simple_title_fixture, false).title_info
-    @title_parts = Stanford::Mods::Record.new.from_str(title_parts_fixture, false).title_info
-    @reverse_title_parts = Stanford::Mods::Record.new.from_str(reverse_title_parts_fixture, false).title_info
-    @display_label = Stanford::Mods::Record.new.from_str(display_label_fixture, false).title_info
-    @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture, false).title_info
-    @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture, false).title_info
-    @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture, false).title_info
-    @ordered_title_fixture = Stanford::Mods::Record.new.from_str(ordered_title_fixture, false).title_info
+    @title = Stanford::Mods::Record.new.from_str(simple_title_fixture).title_info
+    @title_parts = Stanford::Mods::Record.new.from_str(title_parts_fixture).title_info
+    @reverse_title_parts = Stanford::Mods::Record.new.from_str(reverse_title_parts_fixture).title_info
+    @display_label = Stanford::Mods::Record.new.from_str(display_label_fixture).title_info
+    @multi_label = Stanford::Mods::Record.new.from_str(multi_label_fixture).title_info
+    @alt_title = Stanford::Mods::Record.new.from_str(alt_title_fixture).title_info
+    @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture).title_info
+    @ordered_title_fixture = Stanford::Mods::Record.new.from_str(ordered_title_fixture).title_info
   end
   describe 'labels' do
     it 'should return a default label of Title if nothing else is available' do
@@ -76,7 +76,7 @@ describe ModsDisplay::Title do
 
     it 'does not add space after a non-sorting part that ends in a hyphen or apostrophe' do
       data = <<-XML
-        <mods>
+        <mods xmlns="http://www.loc.gov/mods/v3">
           <titleInfo>
            <nonSort>L'</nonSort>
            <title>Afrique dressée selon les derniers relations et suivant les nouvelles decouvertes dont les points principaux sont placez sur les observations de Messieurs de l'Academie Royal des Sciences</title>
@@ -84,7 +84,7 @@ describe ModsDisplay::Title do
         </mods>
       XML
 
-      values = mods_display_title(Stanford::Mods::Record.new.from_str(data, false).title_info).fields.first.values
+      values = mods_display_title(Stanford::Mods::Record.new.from_str(data).title_info).fields.first.values
 
       expect(values.first).to start_with "L'Afrique dressée"
     end

@@ -6,7 +6,7 @@ describe ModsDisplay::NestedRelatedItem do
 
   let(:nested_related_item) do
     described_class.new(
-      Stanford::Mods::Record.new.from_str(mods, false).related_item
+      Stanford::Mods::Record.new.from_str(mods).related_item
     )
   end
 

@@ -6,7 +6,7 @@ include ImprintFixtures
 def mods_display_imprint(mods_text)
   # create a new MODS from provided string and generate an Imprint field
   ModsDisplay::Imprint.new(
-    Stanford::Mods::Record.new.from_str(mods_text, false).origin_info
+    Stanford::Mods::Record.new.from_str(mods_text).origin_info
   )
 end
 
@@ -93,7 +93,7 @@ describe ModsDisplay::Imprint do
 
       it 'should transform year zero dates to 1 A.D.' do
         year_zero_date = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated>0</dateCreated>
             </originInfo>
@@ -208,7 +208,7 @@ describe ModsDisplay::Imprint do
 
       it 'should not append A.D. to empty dates' do
         empty_date = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated/>
             </originInfo>
@@ -218,10 +218,10 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(empty_date).fields
         expect(fields.first.values).to eq ['']
       end
-      
+
       it 'should not append A.D. to dates consisting of 2+ zeroes' do
         zeroes_date = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated>0000</dateCreated>
             </originInfo>
@@ -234,7 +234,7 @@ describe ModsDisplay::Imprint do
 
       it 'should not append A.D. to dates that are not integers' do
         non_integer_date = <<-MODS
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
               <dateCreated>19xx</dateCreated>
             </originInfo>

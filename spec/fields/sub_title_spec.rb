@@ -7,8 +7,7 @@ end
 describe ModsDisplay::SubTitle do
   before(:all) do
     @title = Stanford::Mods::Record.new.from_str(
-      '<mods><titleInfo><title>Main Title</title></titleInfo><titleInfo><title>Sub Title</title></titleInfo></mods>',
-      false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><titleInfo><title>Main Title</title></titleInfo><titleInfo><title>Sub Title</title></titleInfo></mods>'
     ).title_info
   end
   it 'omit the main title and only return sub titles' do

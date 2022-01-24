@@ -1,7 +1,7 @@
 module SubjectsFixtures
   def subjects
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <topic>Jazz</topic>
           <geographical>Japan</geographical>
@@ -13,7 +13,7 @@ module SubjectsFixtures
 
   def blank_subject
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <topic/>
         </subject>
@@ -23,7 +23,7 @@ module SubjectsFixtures
 
   def emdash_subjects
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <topic>Jazz -- Japan -- History and criticism</topic>
         </subject>
@@ -33,7 +33,7 @@ module SubjectsFixtures
 
   def hierarchical_geo_subjects
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <hierarchicalGeographic>
             <country>United States</country>
@@ -47,7 +47,7 @@ module SubjectsFixtures
 
   def name_subjects
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <name>
             <role>
@@ -63,7 +63,7 @@ module SubjectsFixtures
 
   def blank_name_subject
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <name>
             <namePart />
@@ -75,7 +75,7 @@ module SubjectsFixtures
 
   def complex_subjects
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <topic>Jazz</topic>
           <geographical>Japan</geographical>
@@ -91,7 +91,7 @@ module SubjectsFixtures
 
   def display_label_subjects
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <subject>
           <topic>A Subject</topic>
           <geographical>Another Subject</geographical>

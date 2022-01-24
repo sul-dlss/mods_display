@@ -8,14 +8,14 @@ end
 
 describe ModsDisplay::Subject do
   before(:all) do
-    @subject = Stanford::Mods::Record.new.from_str(subjects, false).subject
-    @blank_subject = Stanford::Mods::Record.new.from_str(blank_subject, false).subject
-    @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects, false).subject
-    @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects, false).subject
-    @name_subject = Stanford::Mods::Record.new.from_str(name_subjects, false).subject
-    @blank_name_subject = Stanford::Mods::Record.new.from_str(blank_name_subject, false).subject
-    @complex_subject = Stanford::Mods::Record.new.from_str(complex_subjects, false).subject
-    @display_label = Stanford::Mods::Record.new.from_str(display_label_subjects, false).subject
+    @subject = Stanford::Mods::Record.new.from_str(subjects).subject
+    @blank_subject = Stanford::Mods::Record.new.from_str(blank_subject).subject
+    @emdash_subject = Stanford::Mods::Record.new.from_str(emdash_subjects).subject
+    @geo_subject = Stanford::Mods::Record.new.from_str(hierarchical_geo_subjects).subject
+    @name_subject = Stanford::Mods::Record.new.from_str(name_subjects).subject
+    @blank_name_subject = Stanford::Mods::Record.new.from_str(blank_name_subject).subject
+    @complex_subject = Stanford::Mods::Record.new.from_str(complex_subjects).subject
+    @display_label = Stanford::Mods::Record.new.from_str(display_label_subjects).subject
   end
   describe 'fields' do
     it 'should split individual child elments of subject into separate parts' do

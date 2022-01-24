@@ -8,10 +8,10 @@ end
 
 describe ModsDisplay::Cartographics do
   before(:all) do
-    @cart = Stanford::Mods::Record.new.from_str(full_cartographic, false).subject
-    @scale_only = Stanford::Mods::Record.new.from_str(scale_only, false).subject
-    @no_scale = Stanford::Mods::Record.new.from_str(no_scale_cartographic, false).subject
-    @coordinates = Stanford::Mods::Record.new.from_str(coordinates_only, false).subject
+    @cart = Stanford::Mods::Record.new.from_str(full_cartographic).subject
+    @scale_only = Stanford::Mods::Record.new.from_str(scale_only).subject
+    @no_scale = Stanford::Mods::Record.new.from_str(no_scale_cartographic).subject
+    @coordinates = Stanford::Mods::Record.new.from_str(coordinates_only).subject
   end
   describe 'values' do
     it 'should get the full cartographic note' do

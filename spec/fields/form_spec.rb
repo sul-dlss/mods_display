@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ModsDisplay::Form do
   let(:mods) do
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <physicalDescription>
           <form>Form Value</form>
           <form>Form Value 2</form>
@@ -13,7 +13,7 @@ describe ModsDisplay::Form do
   end
 
   subject do
-    parsed_mods = Stanford::Mods::Record.new.from_str(mods, false).physical_description
+    parsed_mods = Stanford::Mods::Record.new.from_str(mods).physical_description
     described_class.new(parsed_mods).fields
   end
 
@@ -31,7 +31,7 @@ describe ModsDisplay::Form do
     context 'duplicated data' do
       let(:mods) do
         <<-XML
-          <mods>
+          <mods xmlns="http://www.loc.gov/mods/v3">
             <physicalDescription>
               <form authority="gmd">electronic resource.</form>
               <form authority="zxy">electronicresource!</form>

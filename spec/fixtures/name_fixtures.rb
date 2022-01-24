@@ -1,7 +1,7 @@
 module NameFixtures
   def simple_name_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
         </name>
@@ -11,7 +11,7 @@ module NameFixtures
 
   def blank_name_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart/>
           <role>
@@ -24,7 +24,7 @@ module NameFixtures
 
   def primary_name_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name usage='primary'>
           <namePart>John Doe</namePart>
           <role>
@@ -37,7 +37,7 @@ module NameFixtures
 
   def primary_name_solo_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name usage='primary'>
           <namePart>John Doe</namePart>
         </name>
@@ -47,7 +47,7 @@ module NameFixtures
 
   def contributor_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <role>
@@ -60,7 +60,7 @@ module NameFixtures
 
   def encoded_role_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <role>
@@ -73,7 +73,7 @@ module NameFixtures
 
   def mixed_role_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <role>
             <roleTerm>publisher</roleTerm>
@@ -89,7 +89,7 @@ module NameFixtures
 
   def numural_toa_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>Unqualfieid</namePart>
           <namePart type='termsOfAddress'>XVII, ToA</namePart>
@@ -103,7 +103,7 @@ module NameFixtures
 
   def simple_toa_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>Unqualfieid</namePart>
           <namePart type='termsOfAddress'>Ier, empereur</namePart>
@@ -117,7 +117,7 @@ module NameFixtures
 
   def display_form_name_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <displayForm>Mr. John Doe</displayForm>
@@ -128,7 +128,7 @@ module NameFixtures
 
   def collapse_label_name_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
         </name>
@@ -141,7 +141,7 @@ module NameFixtures
 
   def complex_name_label_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
         </name>
@@ -163,7 +163,7 @@ module NameFixtures
 
   def complex_role_name_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <role>
@@ -177,7 +177,7 @@ module NameFixtures
 
   def name_with_role_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <role>
@@ -190,7 +190,7 @@ module NameFixtures
 
   def multiple_roles_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <role>
@@ -205,7 +205,7 @@ module NameFixtures
   end
   def author_role_fixture
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name>
           <namePart>John Doe</namePart>
           <role>
@@ -217,7 +217,7 @@ module NameFixtures
   end
   def many_roles_and_names_fixture # from fs947tw3404
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name type="corporate">
           <namePart>United States Coast Survey</namePart>
         </name>
@@ -363,7 +363,7 @@ module NameFixtures
   end
   def names_with_code_and_text_roles_fixture # from vn199zb9806
     <<-XML
-      <mods>
+      <mods xmlns="http://www.loc.gov/mods/v3">
         <name type="personal" usage="primary" authority="naf" authorityURI="http://id.loc.gov/authorities/names" valueURI="http://id.loc.gov/authorities/names/n78095825" nameTitleGroup="1">
           <namePart>Johnson, Samuel, 1709-1784</namePart>
           <role>
@@ -398,7 +398,7 @@ module NameFixtures
 
   def name_with_marc_role_terms
     <<-XML
-    <mods>
+    <mods xmlns="http://www.loc.gov/mods/v3">
       <name type="personal" altRepGroup="05" script="Latn">
         <namePart>渡邊恵章</namePart>
         <role>

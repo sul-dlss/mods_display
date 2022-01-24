@@ -11,7 +11,7 @@ describe 'HTML Output' do
   before(:all) do
     @multiple_titles = html_from_mods(
       <<-MODS
-        <mods>
+        <mods xmlns="http://www.loc.gov/mods/v3">
           <titleInfo>
             <title>Main Title</title>
           </titleInfo>
@@ -21,8 +21,8 @@ describe 'HTML Output' do
         </mods>
       MODS
     )
-    @abstract = html_from_mods("<mods><abstract>Hey. I'm an abstract.</abstract></mods>")
-    mods = "<mods><titleInfo><title>Main Title</title></titleInfo><abstract>Hey. I'm an abstract.</abstract></mods>"
+    @abstract = html_from_mods("<mods xmlns=\"http://www.loc.gov/mods/v3\"><abstract>Hey. I'm an abstract.</abstract></mods>")
+    mods = "<mods xmlns=\"http://www.loc.gov/mods/v3\"><titleInfo><title>Main Title</title></titleInfo><abstract>Hey. I'm an abstract.</abstract></mods>"
     @mods = html_from_mods(mods)
     @fr_mods = html_from_mods(mods, :fr)
   end

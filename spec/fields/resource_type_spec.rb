@@ -7,13 +7,13 @@ end
 describe ModsDisplay::ResourceType do
   before(:all) do
     @type = Stanford::Mods::Record.new.from_str(
-      '<mods><typeOfResource>Resource Type</typeOfResource></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><typeOfResource>Resource Type</typeOfResource></mods>'
     ).typeOfResource
     @downcase = Stanford::Mods::Record.new.from_str(
-      '<mods><typeOfResource>resource type</typeOfResource></mods>', false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><typeOfResource>resource type</typeOfResource></mods>'
     ).typeOfResource
     @display_label = Stanford::Mods::Record.new.from_str(
-      "<mods><typeOfResource displayLabel='Special label'>Resource Type</typeOfResource></mods>", false
+      '<mods xmlns="http://www.loc.gov/mods/v3"><typeOfResource displayLabel="Special label">Resource Type</typeOfResource></mods>'
     ).typeOfResource
   end
   it "should default to a label of 'Type of resource'" do

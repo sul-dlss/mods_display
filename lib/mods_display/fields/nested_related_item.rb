@@ -29,7 +29,7 @@ module ModsDisplay
     private
 
     def related_item_mods_object(value)
-      mods = ::Stanford::Mods::Record.new.tap { |r| r.from_str("<mods>#{value.children.to_xml}</mods>", false) }
+      mods = ::Stanford::Mods::Record.new.tap { |r| r.from_str("<mods xmlns=\"http://www.loc.gov/mods/v3\">#{value.children.to_xml}</mods>") }
       related_item = ModsDisplay::HTML.new(mods)
 
       ModsDisplay::Values.new(
