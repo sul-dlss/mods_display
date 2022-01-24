@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_id(mods_record)
@@ -25,29 +27,33 @@ describe ModsDisplay::Note do
       </mods>"
     ).identifier
   end
+
   describe 'label' do
-    it 'should have a default label' do
+    it 'has a default label' do
       expect(mods_display_id(@id).fields.first.label).to eq('Identifier:')
     end
-    it 'should use the displayLabel attribute when one is available' do
+
+    it 'uses the displayLabel attribute when one is available' do
       expect(mods_display_id(@display_label).fields.first.label).to eq('Special Label:')
     end
-    it 'should use get a label from a list of translations' do
+
+    it 'uses get a label from a list of translations' do
       expect(mods_display_id(@issue_label).fields.first.label).to eq('Issue number:')
     end
-    it 'should use use the raw type attribute if one is present' do
+
+    it 'uses use the raw type attribute if one is present' do
       expect(mods_display_id(@type_label).fields.first.label).to eq('Some other Type:')
     end
   end
 
   describe 'fields' do
-    it 'should handle matching adjacent labels' do
+    it 'handles matching adjacent labels' do
       fields = mods_display_id(@complex_label).fields
       expect(fields.length).to eq(3)
 
       expect(fields.first.label).to eq('Identifier:')
       expect(fields.first.values.length).to eq(2)
-      expect(fields.first.values).to eq(%w(12345 54321))
+      expect(fields.first.values).to eq(%w[12345 54321])
 
       expect(fields[1].label).to eq('Issue number:')
       expect(fields[1].values.length).to eq(1)

@@ -14,6 +14,7 @@ module ModsDisplay
 
     def mods_record
       return if xml.nil?
+
       @mods_record ||= Stanford::Mods::Record.new.tap { |mods| mods.from_str(xml) }
     end
 

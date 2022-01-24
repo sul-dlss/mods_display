@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Extent < Field
     def fields
       return [] unless extent_fields.present?
+
       [
         ModsDisplay::Values.new(
           label: I18n.t('mods_display.extent'),

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class HTML
     MODS_DISPLAY_FIELD_MAPPING = {
@@ -33,9 +35,8 @@ module ModsDisplay
     end
 
     def title
-      unless mods_field(:title).fields.empty?
-        return mods_field(:title).fields.first.values
-      end
+      return mods_field(:title).fields.first.values unless mods_field(:title).fields.empty?
+
       ''
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_genre(mods_record)
@@ -12,20 +14,23 @@ describe ModsDisplay::Abstract do
       "<mods xmlns=\"http://www.loc.gov/mods/v3\"><genre displayLabel='Special label'>Catographic</genre></mods>"
     ).genre
   end
+
   describe 'labels' do
-    it "should return a default 'Genre' label" do
+    it "returns a default 'Genre' label" do
       fields = mods_display_genre(@genre).fields
       expect(fields.length).to eq(1)
       expect(fields.first.label).to eq('Genre:')
     end
-    it 'should use a display label when one is available' do
+
+    it 'uses a display label when one is available' do
       fields = mods_display_genre(@display_label).fields
       expect(fields.length).to eq(1)
       expect(fields.first.label).to eq('Special label:')
     end
   end
+
   describe 'fields' do
-    it 'should capitalize the first letter in a genre' do
+    it 'capitalizes the first letter in a genre' do
       fields = mods_display_genre(@downcase).fields
       expect(fields.length).to eq(1)
       expect(fields.first.values).to eq(['Map data'])

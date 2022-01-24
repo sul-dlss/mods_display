@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   module RelatedItemConcerns
     private
@@ -16,12 +18,12 @@ module ModsDisplay
 
     def related_item_is_a_constituent?(item)
       item.attributes['type'].respond_to?(:value) &&
-      item.attributes['type'].value == 'constituent'
+        item.attributes['type'].value == 'constituent'
     end
 
     def related_item_is_host?(item)
       item.attributes['type'].respond_to?(:value) &&
-      item.attributes['type'].value == 'host'
+        item.attributes['type'].value == 'host'
     end
   end
 end

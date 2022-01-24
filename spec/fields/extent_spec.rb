@@ -1,6 +1,13 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe ModsDisplay::Extent do
+  subject do
+    parsed_mods = Stanford::Mods::Record.new.from_str(mods).physical_description
+    described_class.new(parsed_mods).fields
+  end
+
   let(:mods) do
     <<-XML
       <mods xmlns="http://www.loc.gov/mods/v3">
@@ -10,11 +17,6 @@ describe ModsDisplay::Extent do
         </physicalDescription>
       </mods>
     XML
-  end
-
-  subject do
-    parsed_mods = Stanford::Mods::Record.new.from_str(mods).physical_description
-    described_class.new(parsed_mods).fields
   end
 
   describe 'label' do

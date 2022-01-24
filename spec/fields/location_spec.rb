@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe ModsDisplay::Location do
@@ -50,28 +52,28 @@ describe ModsDisplay::Location do
   end
 
   describe 'label' do
-    it 'should have a default label' do
+    it 'has a default label' do
       expect(location.first.label).to eq 'Location:'
     end
 
-    it 'should handle the URL labels correctly' do
+    it 'handles the URL labels correctly' do
       expect(urls.map(&:label)).to eq ['Location:', 'PURL:']
     end
 
-    it 'should use get a label from a list of translations' do
+    it 'uses get a label from a list of translations' do
       expect(repository_label.first.label).to eq 'Repository:'
     end
   end
 
   describe 'fields' do
     describe 'URLs' do
-      it 'should link and use the displayLabel as text' do
+      it 'links and use the displayLabel as text' do
         expect(urls.length).to eq(2)
         field = urls.find { |f| f.label == 'Location:' }
         expect(field.values).to eq(["<a href='http://library.stanford.edu'>Stanford University Library</a>"])
       end
 
-      it 'should link the URL itself in the absence of a displayLabel on the url element' do
+      it 'links the URL itself in the absence of a displayLabel on the url element' do
         expect(urls.length).to eq(2)
         field = urls.find { |f| f.label == 'PURL:' }
         expect(field.values).to eq(["<a href='http://purl.stanford.edu'>http://purl.stanford.edu</a>"])

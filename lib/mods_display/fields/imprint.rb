@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Imprint < Field
     include ModsDisplay::CountryCodes
@@ -17,14 +19,14 @@ module ModsDisplay
             values: [joined_place_parts]
           )
         end
-        return_fields.concat(dates(value)) if dates(value).length > 0
-        if other_pub_info(value).length > 0
-          other_pub_info(value).each do |pub_info|
-            return_fields << ModsDisplay::Values.new(
-              label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
-              values: [pub_info.text.strip]
-            )
-          end
+        return_fields.concat(dates(value)) if dates(value).length.positive?
+        next unless other_pub_info(value).length.positive?
+
+        other_pub_info(value).each do |pub_info|
+          return_fields << ModsDisplay::Values.new(
+            label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
+            values: [pub_info.text.strip]
+          )
         end
       end
       collapse_fields(return_fields)
@@ -33,8 +35,10 @@ module ModsDisplay
     def dates(element)
       date_field_keys.map do |date_field|
         next unless element.respond_to?(date_field)
+
         elements = element.send(date_field)
         next if elements.empty?
+
         ModsDisplay::Values.new(
           label: displayLabel(element) || pub_info_labels[elements.first.name.to_sym],
           values: parse_dates(elements)
@@ -55,8 +59,8 @@ module ModsDisplay
     end
 
     def ignore_bad_dates(date_fields)
-      date_fields.select do |date_field|
-        date_field.text.strip != '9999'
+      date_fields.reject do |date_field|
+        date_field.text.strip == '9999'
       end
     end
 
@@ -113,40 +117,33 @@ module ModsDisplay
     end
 
     def date_is_approximate?(date_field)
-      date_field.attributes['qualifier'] &&
-        date_field.attributes['qualifier'].respond_to?(:value) &&
+      date_field.attributes['qualifier'].respond_to?(:value) &&
         date_field.attributes['qualifier'].value == 'approximate'
     end
 
     def date_is_questionable?(date_field)
-      date_field.attributes['qualifier'] &&
-        date_field.attributes['qualifier'].respond_to?(:value) &&
+      date_field.attributes['qualifier'].respond_to?(:value) &&
         date_field.attributes['qualifier'].value == 'questionable'
     end
 
     def date_is_inferred?(date_field)
-      date_field.attributes['qualifier'] &&
-        date_field.attributes['qualifier'].respond_to?(:value) &&
+      date_field.attributes['qualifier'].respond_to?(:value) &&
         date_field.attributes['qualifier'].value == 'inferred'
     end
 
     def dates_are_open_range?(date_fields)
       date_fields.any? do |field|
-        field.attributes['point'] &&
-          field.attributes['point'].respond_to?(:value) &&
+        field.attributes['point'].respond_to?(:value) &&
           field.attributes['point'].value == 'start'
-      end && !date_fields.any? do |field|
-        field.attributes['point'] &&
-          field.attributes['point'].respond_to?(:value) &&
+      end && date_fields.none? do |field|
+        field.attributes['point'].respond_to?(:value) &&
           field.attributes['point'].value == 'end'
       end
     end
 
     def dates_are_range?(date_fields)
       attributes = date_fields.map do |date|
-        if date.attributes['point'].respond_to?(:value)
-          date.attributes['point'].value
-        end
+        date.attributes['point'].value if date.attributes['point'].respond_to?(:value)
       end
       attributes.include?('start') &&
         attributes.include?('end')
@@ -163,14 +160,15 @@ module ModsDisplay
     def process_w3cdtf_date(date_field)
       date_field = date_field.clone
       date_field.content = begin
-        if date_field.text.strip =~ /^\d{4}-\d{2}-\d{2}$/
+        case date_field.text.strip
+        when /^\d{4}-\d{2}-\d{2}$/
           Date.parse(date_field.text).strftime('%B %d, %Y')
-        elsif date_field.text.strip =~ /^\d{4}-\d{2}$/
+        when /^\d{4}-\d{2}$/
           Date.parse("#{date_field.text}-01").strftime('%B %Y')
         else
           date_field.content
         end
-      rescue
+      rescue StandardError
         date_field.content
       end
       date_field
@@ -180,7 +178,7 @@ module ModsDisplay
       date_field = date_field.clone
       date_field.content = begin
         Date.iso8601(date_field.text).strftime('%B %d, %Y')
-      rescue
+      rescue StandardError
         date_field.content
       end
       date_field
@@ -188,16 +186,14 @@ module ModsDisplay
 
     def dedup_dates(date_fields)
       date_text = date_fields.map { |d| normalize_date(d.text) }
-      if date_text != date_text.uniq
-        if date_fields.find { |d| d.attributes['qualifier'].respond_to?(:value) }
-          [date_fields.find { |d| d.attributes['qualifier'].respond_to?(:value) }]
-        elsif date_fields.find { |d| !d.attributes['encoding'] }
-          [date_fields.find { |d| !d.attributes['encoding'] }]
-        else
-          [date_fields.first]
-        end
-      else
+      if date_text == date_text.uniq
         date_fields
+      elsif date_fields.find { |d| d.attributes['qualifier'].respond_to?(:value) }
+        [date_fields.find { |d| d.attributes['qualifier'].respond_to?(:value) }]
+      elsif date_fields.find { |d| !d.attributes['encoding'] }
+        [date_fields.find { |d| !d.attributes['encoding'] }]
+      else
+        [date_fields.first]
       end
     end
 
@@ -214,6 +210,7 @@ module ModsDisplay
     def place_terms(element)
       return [] unless element.respond_to?(:place) &&
                        element.place.respond_to?(:placeTerm)
+
       if unencoded_place_terms?(element)
         element.place.placeTerm.select do |term|
           !term.attributes['type'].respond_to?(:value) ||
@@ -226,6 +223,7 @@ module ModsDisplay
                       term.attributes['authority'].respond_to?(:value) &&
                       term.attributes['authority'].value == 'marccountry' &&
                       country_codes.include?(term.text.strip)
+
           term = term.clone
           term.content = country_codes[term.text.strip]
           term
@@ -246,27 +244,27 @@ module ModsDisplay
       compact_values = values.compact.reject { |v| v.strip.empty? }
       return compact_values.join(delimiter) if compact_values.length == 1 ||
                                                !ends_in_terminating_punctuation?(delimiter)
+
       compact_values.each_with_index.map do |value, i|
-        if (compact_values.length - 1) == i || # last item?
-           ends_in_terminating_punctuation?(value)
-          value << ' '
-        else
-          value << delimiter
-        end
+        value << if (compact_values.length - 1) == i || # last item?
+                    ends_in_terminating_punctuation?(value)
+                   ' '
+                 else
+                   delimiter
+                 end
       end.join.strip
     end
 
     def process_bc_ad_dates(date_fields)
       date_fields.map do |date_field|
-        case
         # special case: year zero is 1 A.D. see:
         # https://github.com/sul-dlss/mods_display/issues/39#issuecomment-1012606117
-        when date_field.text.strip == '0'
+        if date_field.text.strip == '0'
           date_field.content = '1 A.D.'
-        when date_is_bc_edtf?(date_field)
+        elsif date_is_bc_edtf?(date_field)
           year = date_field.text.strip.gsub(/^-0*/, '').to_i + 1
           date_field.content = "#{year} B.C."
-        when date_is_ad?(date_field)
+        elsif date_is_ad?(date_field)
           year = date_field.text.strip.gsub(/^0*/, '').to_i
           date_field.content = "#{year} A.D."
         end
@@ -290,8 +288,7 @@ module ModsDisplay
     end
 
     def field_is_encoded?(field, encoding)
-      field.attributes['encoding'] &&
-        field.attributes['encoding'].respond_to?(:value) &&
+      field.attributes['encoding'].respond_to?(:value) &&
         field.attributes['encoding'].value.downcase == encoding
     end
 
@@ -307,6 +304,7 @@ module ModsDisplay
 
     def place_element(value)
       return if value.place.text.strip.empty?
+
       places = place_terms(value).reject do |p|
         p.text.strip.empty?
       end.map(&:text)
@@ -315,6 +313,7 @@ module ModsDisplay
 
     def publisher_element(value)
       return if value.publisher.text.strip.empty?
+
       publishers = value.publisher.reject do |p|
         p.text.strip.empty?
       end.map(&:text)
@@ -322,8 +321,9 @@ module ModsDisplay
     end
 
     def parts_element(value)
-      date_elements = %w(dateIssued dateOther).map do |date_field_name|
+      date_elements = %w[dateIssued dateOther].map do |date_field_name|
         next unless value.respond_to?(date_field_name.to_sym)
+
         parse_dates(value.send(date_field_name.to_sym))
       end.flatten.compact.reject do |date|
         date.strip.empty?
@@ -332,11 +332,11 @@ module ModsDisplay
     end
 
     def pub_info_parts
-      [:issuance, :frequency]
+      %i[issuance frequency]
     end
 
     def date_field_keys
-      [:dateCreated, :dateCaptured, :dateValid, :dateModified, :copyrightDate]
+      %i[dateCreated dateCaptured dateValid dateModified copyrightDate]
     end
 
     def pub_info_labels
@@ -346,8 +346,7 @@ module ModsDisplay
         dateModified: I18n.t('mods_display.date_modified'),
         copyrightDate: I18n.t('mods_display.copyright_date'),
         issuance: I18n.t('mods_display.issuance'),
-        frequency: I18n.t('mods_display.frequency')
-      }
+        frequency: I18n.t('mods_display.frequency') }
     end
   end
 end

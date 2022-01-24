@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Description < Field
     def fields
@@ -21,8 +23,7 @@ module ModsDisplay
 
     def labels
       { digitalOrigin: I18n.t('mods_display.digital_origin'),
-        note: I18n.t('mods_display.note')
-       }
+        note: I18n.t('mods_display.note') }
     end
   end
 end

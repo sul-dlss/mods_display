@@ -1,14 +1,14 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Title < Field
     def fields
       return_values = []
-      if @values
-        @values.each do |value|
-          return_values << ModsDisplay::Values.new(
-            label: displayLabel(value) || title_label(value),
-            values: [assemble_title(value)]
-          )
-        end
+      @values&.each do |value|
+        return_values << ModsDisplay::Values.new(
+          label: displayLabel(value) || title_label(value),
+          values: [assemble_title(value)]
+        )
       end
       collapse_fields(return_values)
     end
@@ -27,22 +27,21 @@ module ModsDisplay
         str = value.text.strip
         next if str.empty?
 
-        delimiter = case
-        when title.empty?, title.end_with?(' ')
-          nil
-        when previous_element&.name == 'nonSort' && title.ends_with?('-', '\'')
-          nil
-        when title.end_with?('.', ',', ':', ';')
-          ' '
-        when value.name == 'subTitle'
-          ' : '
-        when value.name == 'partName' && previous_element.name == 'partNumber'
-          ', '
-        when value.name == 'partNumber', value.name == 'partName'
-          '. '
-        else
-          ' '
-        end
+        delimiter = if title.empty? || title.end_with?(' ')
+                      nil
+                    elsif previous_element&.name == 'nonSort' && title.ends_with?('-', '\'')
+                      nil
+                    elsif title.end_with?('.', ',', ':', ';')
+                      ' '
+                    elsif value.name == 'subTitle'
+                      ' : '
+                    elsif value.name == 'partName' && previous_element.name == 'partNumber'
+                      ', '
+                    elsif value.name == 'partNumber' || value.name == 'partName'
+                      '. '
+                    else
+                      ' '
+                    end
 
         title += delimiter if delimiter
         title += str
@@ -73,14 +72,15 @@ module ModsDisplay
          title_labels.key?(element.attributes['type'].value)
         return title_labels[element.attributes['type'].value]
       end
+
       I18n.t('mods_display.title')
     end
 
     def title_labels
       { 'abbreviated' => I18n.t('mods_display.abbreviated_title'),
-        'translated'  => I18n.t('mods_display.translated_title'),
+        'translated' => I18n.t('mods_display.translated_title'),
         'alternative' => I18n.t('mods_display.alternative_title'),
-        'uniform'     => I18n.t('mods_display.uniform_title') }
+        'uniform' => I18n.t('mods_display.uniform_title') }
     end
   end
 end

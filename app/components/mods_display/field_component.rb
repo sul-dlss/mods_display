@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class FieldComponent < ViewComponent::Base
     with_collection_parameter :field

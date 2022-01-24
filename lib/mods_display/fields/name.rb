@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Name < Field
     include ModsDisplay::RelatorCodes
     def fields
       return_fields = @values.map do |value|
-        person = if value.displayForm.length > 0
+        person = if value.displayForm.length.positive?
                    ModsDisplay::Name::Person.new(name: value.displayForm.text)
                  elsif !name_parts(value).empty?
                    ModsDisplay::Name::Person.new(name: name_parts(value))
@@ -40,6 +42,7 @@ module ModsDisplay
     def role_labels(element)
       default_label = I18n.t('mods_display.associated_with')
       return [default_label] unless element.role.present? && element.role.roleTerm.present?
+
       element.role.collect do |role|
         codes, text = role.roleTerm.partition { |term| term['type'] == 'code' }
 
@@ -68,10 +71,9 @@ module ModsDisplay
     end
 
     def name_parts(element)
-      output = ''
-      output << [unqualified_name_parts(element),
-                 qualified_name_parts(element, 'family'),
-                 qualified_name_parts(element, 'given')].flatten.compact.join(', ')
+      output = [unqualified_name_parts(element),
+                qualified_name_parts(element, 'family'),
+                qualified_name_parts(element, 'given')].flatten.compact.join(', ')
       terms = qualified_name_parts(element, 'termsOfAddress')
       unless terms.empty?
         term_delimiter = ', '
@@ -79,9 +81,7 @@ module ModsDisplay
         output = [output, terms.join(', ')].flatten.compact.join(term_delimiter)
       end
       dates = qualified_name_parts(element, 'date')
-      unless dates.empty?
-        output = [output, qualified_name_parts(element, 'date')].flatten.compact.join(', ')
-      end
+      output = [output, qualified_name_parts(element, 'date')].flatten.compact.join(', ') unless dates.empty?
       output
     end
 
@@ -103,7 +103,7 @@ module ModsDisplay
     def name_part_begins_with_roman_numeral?(part)
       first_part = part.split(/\s|,/).first.strip
       first_part.chars.all? do |char|
-        %w(I X C L V).include? char
+        %w[I X C L V].include? char
       end
     end
 
@@ -111,14 +111,16 @@ module ModsDisplay
       roles = element.role.map do |role|
         role.roleTerm.find do |term|
           term.attributes['type'].respond_to?(:value) &&
-          term.attributes['type'].value == 'text'
+            term.attributes['type'].value == 'text'
         end
       end.compact
-      roles = element.role.map do |role|
-        role.roleTerm.find do |term|
-          !term.attributes['type'].respond_to?(:value)
-        end
-      end.compact if roles.empty?
+      if roles.empty?
+        roles = element.role.map do |role|
+          role.roleTerm.find do |term|
+            !term.attributes['type'].respond_to?(:value)
+          end
+        end.compact
+      end
       roles.map { |t| t.text.strip }
     end
 
@@ -143,7 +145,7 @@ module ModsDisplay
     # Normalize label headings by filtering out some punctuation and ending in :
     def normalize_labels(label_order, results)
       label_order.uniq.map do |k|
-        label = k.tr('.', '').tr(':', '').strip + ':'
+        label = "#{k.tr('.', '').tr(':', '').strip}:"
         if label != k
           results[label] = results[k]
           results.delete(k)
@@ -165,8 +167,9 @@ module ModsDisplay
 
     class Person
       attr_accessor :name
+
       def initialize(data)
-        @name =  data[:name]
+        @name = data[:name]
       end
 
       def to_s

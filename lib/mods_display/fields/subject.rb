@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Subject < Field
     def fields
@@ -7,21 +9,17 @@ module ModsDisplay
         label = displayLabel(value) || I18n.t('mods_display.subject')
         return_text = []
         selected_subjects(value).each do |child|
-          if self.respond_to?(:"process_#{child.name}")
+          if respond_to?(:"process_#{child.name}")
             method_send = send(:"process_#{child.name}", child)
             return_text << method_send unless method_send.to_s.empty?
+          elsif child.text.include?('--')
+            return_text << child.text.split('--').map(&:strip)
           else
-            if child.text.include?('--')
-              return_text << child.text.split('--').map(&:strip)
-            else
-              return_text << child.text unless child.text.empty?
-            end
+            return_text << child.text unless child.text.empty?
           end
         end
         return_values << return_text.flatten unless return_text.empty?
-        unless return_values.empty?
-          return_fields << ModsDisplay::Values.new(label: label, values: return_values)
-        end
+        return_fields << ModsDisplay::Values.new(label: label, values: return_values) unless return_values.empty?
       end
       collapse_fields return_fields
     end
@@ -44,7 +42,7 @@ module ModsDisplay
     def process_name(element)
       name = ModsDisplay::Name.new([element]).fields.first
 
-      name.values.first if name
+      name&.values&.first
     end
 
     private
@@ -56,23 +54,23 @@ module ModsDisplay
     def values_from_subjects(element)
       return_values = []
       selected_subjects(element).each do |child|
-        if child.text.include?('--')
-          return_values << child.text.split('--').map(&:strip)
-        else
-          return_values << child.text.strip
-        end
+        return_values << if child.text.include?('--')
+                           child.text.split('--').map(&:strip)
+                         else
+                           child.text.strip
+                         end
       end
       return_values
     end
 
     def selected_subjects(element = @value)
-      element.children.select do |child|
-        !omit_elements.include?(child.name.to_sym)
+      element.children.reject do |child|
+        omit_elements.include?(child.name.to_sym)
       end
     end
 
     def omit_elements
-      [:cartographics, :geographicCode, :text]
+      %i[cartographics geographicCode text]
     end
   end
 end

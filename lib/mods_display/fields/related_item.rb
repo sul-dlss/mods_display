@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class RelatedItem < Field
     include ModsDisplay::RelatedItemConcerns
@@ -6,10 +8,10 @@ module ModsDisplay
       return_fields = @values.map do |value|
         next if related_item_is_a_collection?(value)
         next if render_nested_related_item?(value)
-        case
-        when related_item_is_a_location?(value)
+
+        if related_item_is_a_location?(value)
           process_location value
-        when related_item_is_a_reference?(value)
+        elsif related_item_is_a_reference?(value)
           process_reference value
         else
           process_related_item(value)
@@ -33,12 +35,13 @@ module ModsDisplay
     end
 
     def process_related_item(item)
-      return unless item.titleInfo.length > 0
+      return unless item.titleInfo.length.positive?
+
       title = item.titleInfo.text.strip
       return_text = title
       location = nil
-      location = item.location.url.text if item.location.length > 0 &&
-                                           item.location.url.length > 0
+      location = item.location.url.text if item.location.length.positive? &&
+                                           item.location.url.length.positive?
       return_text = "<a href='#{location}'>#{title}</a>" if location && !title.empty?
 
       ModsDisplay::Values.new(label: related_item_label(item), values: [return_text]) unless return_text.empty?
@@ -54,8 +57,8 @@ module ModsDisplay
     def related_item_is_a_location?(item)
       !related_item_is_a_collection?(item) &&
         !related_item_is_a_reference?(item) &&
-        item.location.length > 0 &&
-        item.titleInfo.length < 1
+        item.location.length.positive? &&
+        item.titleInfo.empty?
     end
 
     def related_item_is_a_reference?(item)
@@ -66,7 +69,7 @@ module ModsDisplay
 
     def related_item_label(item)
       if displayLabel(item)
-        return displayLabel(item)
+        displayLabel(item)
       else
         case
         when related_item_is_a_location?(item)

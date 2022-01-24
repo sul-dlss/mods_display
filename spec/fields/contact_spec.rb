@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_contact(mods_record)
@@ -10,12 +12,14 @@ describe ModsDisplay::Contact do
       "<mods xmlns=\"http://www.loc.gov/mods/v3\"><note type='contact'>jdoe@example.com</note><note>Note Field</note></mods>"
     ).note
   end
-  it 'should only get contact fields' do
+
+  it 'onlies get contact fields' do
     fields = mods_display_contact(@contact_note).fields
     expect(fields.length).to eq(1)
     expect(fields.first.values).to include('jdoe@example.com')
   end
-  it 'should not get any non-contact fields' do
+
+  it 'does not get any non-contact fields' do
     fields = mods_display_contact(@contact_note).fields
     expect(fields.length).to eq(1)
     expect(fields.first.values).not_to include('Note Field')

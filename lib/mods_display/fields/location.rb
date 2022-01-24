@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Location < Field
     def fields
@@ -5,6 +7,7 @@ module ModsDisplay
       @values.each do |location|
         location.children.each do |child|
           next unless location_field_keys.include?(child.name.to_sym)
+
           if child.name.to_sym == :url
             loc_label = displayLabel(location) || I18n.t('mods_display.location')
             value = "<a href='#{child.text}'>#{(displayLabel(child) || child.text).gsub(/:$/, '')}</a>"
@@ -24,7 +27,7 @@ module ModsDisplay
     private
 
     def location_field_keys
-      [:physicalLocation, :url, :shelfLocator, :holdingSimple, :holdingExternal]
+      %i[physicalLocation url shelfLocator holdingSimple holdingExternal]
     end
 
     def location_label(element)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class ListFieldComponent < ModsDisplay::FieldComponent
     def initialize(field:, list_html_attributes: {}, list_item_html_attributes: {}, **args)
