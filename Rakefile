@@ -6,6 +6,7 @@ require 'rubocop/rake_task'
 
 RuboCop::RakeTask.new do |task|
   task.requires << 'rubocop-rspec'
+  task.options = ['--fail-level', 'error']
 end
 
 RSpec::Core::RakeTask.new(:spec)
