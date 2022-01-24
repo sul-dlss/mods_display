@@ -132,11 +132,9 @@ describe ModsDisplay::Name do
         expect(fields.last.values.length).to eq(1)
         expect(fields.first.values.first.name).to eq fields.last.values.first.name
       end
-      it 'should handle code and text roleTerms together correctly' do
+      it 'should prefer to use the coded roleTerm when generating labels' do
         fields = mods_display_name(@complex_roles).fields
-        expect(fields.length).to eq 2
-        expect(fields.first.label).to eq 'Depicted:'
-        expect(fields.last.label).to eq 'Depositor:'
+        expect(fields.map(&:label)).to eq ['Depositor:']
         expect(fields.first.values.first.name).to eq fields.last.values.first.name
       end
       it 'should handle consolidation of many roles and names' do

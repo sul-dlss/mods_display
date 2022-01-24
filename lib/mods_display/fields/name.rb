@@ -40,8 +40,17 @@ module ModsDisplay
     def role_labels(element)
       default_label = I18n.t('mods_display.associated_with')
       return [default_label] unless element.role.present? && element.role.roleTerm.present?
-      element.role.roleTerm.collect do |role|
-        relator_codes[role.text.downcase] || format_role(role) || default_label
+      element.role.collect do |role|
+        codes, text = role.roleTerm.partition { |term| term['type'] == 'code' }
+
+        # prefer mappable role term codes
+        label = codes.map { |term| relator_codes[term.text.downcase] }.first
+
+        # but fall back to given text
+        label ||= text.map { |term| format_role(term) }.first
+
+        # or just the default
+        label || default_label
       end.uniq
     end
 
