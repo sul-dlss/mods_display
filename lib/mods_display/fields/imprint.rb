@@ -145,19 +145,23 @@ module ModsDisplay
         @stop = stop
       end
 
+      # Base value as hyphen-joined string. Used for comparison/deduping.
       def base_value
         "#{@start&.base_value}-#{@stop&.base_value}"
       end
 
+      # Base values as array. Used for comparison/deduping of individual dates.
       def base_values
         [@start&.base_value, @stop&.base_value].compact
       end
 
-      # The encoding value for the start date in the range.
+      # The encoding value for the start of the range, or stop if not present.
       def encoding
         @start&.encoding || @stop&.encoding
       end
 
+      # Decoded dates with "B.C." or "A.D." and qualifier markers applied to
+      # the entire range, or individually if dates differ.
       def qualified_value
         if @start&.qualifier != @stop&.qualifier
           "#{@start&.qualified_value}-#{@stop&.qualified_value}"
