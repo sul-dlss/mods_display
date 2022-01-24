@@ -23,7 +23,7 @@ module ModsDisplay
           return_fields << ModsDisplay::Values.new(label: label, values: return_values)
         end
       end
-      collapse_subjects return_fields
+      collapse_fields return_fields
     end
 
     # Would really like to clean this up, but it works and is tested for now.
@@ -73,37 +73,6 @@ module ModsDisplay
 
     def omit_elements
       [:cartographics, :geographicCode, :text]
-    end
-
-    # Providing subject specific collapsing method so we can
-    # collapse the labels w/o flattening all the subject fields.
-    def collapse_subjects(display_fields)
-      return_values = []
-      current_label = nil
-      prev_label = nil
-      buffer = []
-      display_fields.each_with_index do |field, index|
-        current_label = field.label
-        current_values = field.values
-        if display_fields.length == 1
-          return_values << ModsDisplay::Values.new(label: current_label, values: current_values)
-        elsif index == (display_fields.length - 1)
-          # need to deal w/ when we have a last element but we have separate labels in the buffer.
-          if current_label != prev_label
-            return_values << ModsDisplay::Values.new(label: prev_label, values: [buffer.flatten(1)])
-            return_values << ModsDisplay::Values.new(label: current_label, values: current_values)
-          else
-            buffer.concat(current_values)
-            return_values << ModsDisplay::Values.new(label: current_label, values: buffer.flatten(0))
-          end
-        elsif prev_label && (current_label != prev_label)
-          return_values << ModsDisplay::Values.new(label: prev_label, values: buffer.flatten(0))
-          buffer = []
-        end
-        buffer.concat(current_values)
-        prev_label = current_label
-      end
-      return_values
     end
   end
 end
