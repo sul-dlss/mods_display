@@ -76,36 +76,24 @@ module ModsDisplay
         @element.text.scan(/[\d-]/).join
       end
 
-      # Human-formatted version of the date.
+      # Decoded version of the date, if it was encoded. Strips leading zeroes.
       def decoded_value
-        date = @element.text.strip
-
-        decoded_date = if encoding == 'w3cdtf'
-          begin
-            if date =~ /^\d{4}-\d{2}-\d{2}$/
-              Date.parse(date).strftime('%B %e, %Y')
-            elsif date =~ /^\d{4}-\d{2}$/
-              Date.parse("#{date}-01").strftime('%B %Y')
-            else
-              date
-            end
-          rescue
-            date
-          end
-            elsif encoding == 'iso8601'
-              begin
-                Date.iso8601(date).strftime('%B %e, %Y')
-              rescue
-                date
-              end
-            else
-              date
-          end
+        # Delegate to the appropriate decoding method, if any
+        decoded_date = case encoding
+                       when 'w3cdtf'
+                         decode_w3cdtf
+                       when 'iso8601'
+                         decode_iso8601
+                       when 'edtf'
+                         decode_edtf
+                       else
+                         @element.text.strip
+                       end
 
         # Year zero is a special case; preserve it as "0"
         return decoded_date if decoded_date == '0'
 
-        # Any other leading zeroes should be stripped
+        # Otherwise strip leading zeroes and return
         decoded_date.gsub(/^0*/, '')
       end
 
@@ -136,6 +124,45 @@ module ModsDisplay
         return "[#{date}?]" if qualifier == 'questionable'
         return "[#{date}]" if qualifier == 'inferred'
         date
+      end
+
+      private
+
+      # Decode a date in W3C Date and Time Format (W3CDTF). See:
+      # https://www.w3.org/TR/NOTE-datetime
+      def decode_w3cdtf
+        date = @element.text.strip
+
+        begin
+          if date =~ /^\d{4}-\d{2}-\d{2}$/
+            return Date.parse(date).strftime('%B %e, %Y')
+          end
+          if date =~ /^\d{4}-\d{2}$/
+            return Date.parse("#{date}-01").strftime('%B %Y')
+          end
+        rescue
+          date
+        end
+
+        date
+      end
+  
+      # Decode a date in ISO 8601 format. See:
+      # https://en.wikipedia.org/wiki/ISO_8601
+      def decode_iso8601
+        date = @element.text.strip
+
+        begin
+          Date.iso8601(date).strftime('%B %e, %Y')
+        rescue
+          date
+        end
+      end
+
+      # TODO expanded edtf parsing; see:
+      # https://github.com/sul-dlss/mods_display/issues/10
+      def decode_edtf
+        decode_w3cdtf
       end
     end
 
