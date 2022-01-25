@@ -49,7 +49,7 @@ module ModsDisplay
 
       # True if the element text isn't blank or the placeholder "9999".
       def valid?
-        @element.text.strip != '9999' && !@element.text.blank?
+        @element.text.present? && @element.text.strip != '9999'
       end
 
       # Value of element's "point" attribute; nil if empty or not present.
