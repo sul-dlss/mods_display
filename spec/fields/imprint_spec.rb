@@ -55,34 +55,88 @@ describe ModsDisplay::Imprint do
   describe 'date processing' do
     describe 'ranges' do
       it "should join start and end point ranges with a '-'" do
+        date_range = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated point="end">1825</dateCreated>
+              <dateCreated point="start">1820</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
         fields = mods_display_imprint(date_range).fields
-        expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['1820-1825'])
       end
+
       it 'should handle open ranges properly' do
+        open_date_range = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated point="start">1820</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
         fields = mods_display_imprint(open_date_range).fields
-        expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['1820-'])
       end
+
       it 'should handle when there are more than 3 of the same date w/i a range' do
+        three_imprint_dates = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateIssued>[1820-1825]</dateIssued>
+              <dateIssued point="start" qualifier="questionable">1820</dateIssued>
+              <dateIssued point="end" qualifier="questionable">1825</dateIssued>
+            </originInfo>
+          </mods>
+        MODS
+
         fields = mods_display_imprint(three_imprint_dates).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[1820-1825?]'])
       end
+
       it 'should apply the qualifier decoration in the imprints' do
         fields = mods_display_imprint(qualified_imprint_date).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[1820?]'])
       end
+
+      it 'should apply the qualifier decoration separately to each date' do
+        separate_qualifier_range = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated point="start" qualifier="approximate">1880</dateCreated>
+              <dateCreated point="end">1906</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(separate_qualifier_range).fields
+        expect(fields.first.values).to eq ['[ca. 1880]-1906']
+      end
+
       it 'should handle date ranges in imprints' do
+        imprint_date_range = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateIssued>[1820]</dateIssued>
+              <dateIssued point="start">1820</dateIssued>
+              <dateIssued point="end">1825</dateIssued>
+            </originInfo>
+          </mods>
+        MODS
+
         fields = mods_display_imprint(imprint_date_range).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['1820-1825'])
       end
+
       it 'should handle encoded dates properly' do
         fields = mods_display_imprint(encoded_date_range).fields
         expect(fields.length).to eq 1
-        expect(fields.first.values).to eq ['February 01, 2008-December 02, 2009']
+        expect(fields.first.values).to eq ['February  1, 2008-December  2, 2009']
       end
 
       it 'should handle B.C. and A.D. dates appropriately' do
@@ -91,18 +145,6 @@ describe ModsDisplay::Imprint do
         expect(fields.first.values).to eq ['14 B.C.-44 A.D.']
       end
 
-      it 'should transform year zero dates to 1 A.D.' do
-        year_zero_date = <<-MODS
-          <mods xmlns="http://www.loc.gov/mods/v3">
-            <originInfo>
-              <dateCreated>0</dateCreated>
-            </originInfo>
-          </mods>
-        MODS
-
-        fields = mods_display_imprint(year_zero_date).fields
-        expect(fields.first.values).to eq ['1 A.D.']
-      end
     end
     describe 'duplication' do
       it 'should only return the qualified date when present' do
@@ -110,11 +152,22 @@ describe ModsDisplay::Imprint do
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[1820?]'])
       end
-      it 'should use the non-encoded date when prsent' do
+
+      it 'should use the non-encoded date when present' do
+        dup_unencoded_date = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated encoding="marc">1820</dateCreated>
+              <dateCreated>[ca. 1820]</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
         fields = mods_display_imprint(dup_unencoded_date).fields
+
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[ca. 1820]'])
       end
+      
       it 'should handle copyright dates correctly' do
         fields = mods_display_imprint(dup_copyright_date).fields
         expect(fields.length).to eq(1)
@@ -127,7 +180,7 @@ describe ModsDisplay::Imprint do
       end
     end
     describe 'qualifier decoration' do
-      it "should prepend a 'c' to approximate dates" do
+      it "should prepend a 'ca.' to approximate dates" do
         fields = mods_display_imprint(approximate_date).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values).to eq(['[ca. 1820]'])
@@ -144,34 +197,68 @@ describe ModsDisplay::Imprint do
       end
     end
     describe 'encoded dates' do
+      it 'should transform year zero dates to 1 B.C.' do
+        year_zero_date = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated encoding="edtf">0</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(year_zero_date).fields
+        expect(fields.first.values).to eq ['1 B.C.']
+      end
       describe 'W3CDTF' do
         it 'should handle single year dates properly' do
-          fields = mods_display_imprint(encoded_dates).fields
-          expect(fields.length).to eq(4)
-          expect(fields.find do |field|
-            field.label == 'Imprint:'
-          end.values).to eq(['2013'])
+          single_year_date = <<-MODS
+            <mods xmlns="http://www.loc.gov/mods/v3">
+              <originInfo>
+                <dateOther encoding="w3cDtF">2013</dateOther>
+              </originInfo>
+            </mods>
+          MODS
+          fields = mods_display_imprint(single_year_date).fields
+          expect(fields.first.values).to eq ['2013']
         end
+
         it 'should handle month+year dates properly' do
-          fields = mods_display_imprint(encoded_dates).fields
-          expect(fields.length).to eq(4)
-          expect(fields.find do |field|
-            field.label == 'Date captured:'
-          end.values).to eq(['July 2013'])
+          month_year_date = <<-MODS
+            <mods xmlns="http://www.loc.gov/mods/v3">
+              <originInfo>
+                <dateCaptured encoding="W3CDTF">2013-07</dateCaptured>
+              </originInfo>
+            </mods>
+          MODS
+
+          fields = mods_display_imprint(month_year_date).fields
+          expect(fields.first.values).to eq ['July 2013']
         end
-        it 'should handle full dates properly' do
-          fields = mods_display_imprint(encoded_dates).fields
-          expect(fields.length).to eq(4)
-          expect(fields.find do |field|
-            field.label == 'Date created:'
-          end.values).to eq(['July 10, 2013'])
+
+        it 'should handle full precision dates properly' do
+          full_precision_date = <<-MODS
+            <mods xmlns="http://www.loc.gov/mods/v3">
+              <originInfo>
+                <dateCreated encoding="W3CdTf">2013-07-10</dateCreated>
+              </originInfo>
+            </mods>
+          MODS
+
+          fields = mods_display_imprint(full_precision_date).fields
+          expect(fields.first.values).to eq ['July 10, 2013']
         end
+
         it "should not try to handle dates we can't parse" do
-          fields = mods_display_imprint(encoded_dates).fields
-          expect(fields.length).to eq(4)
-          expect(fields.find do |field|
-            field.label == 'Date modified:'
-          end.values).to eq(['Jul. 22, 2013'])
+          unparseable_date = <<-MODS
+            <mods xmlns="http://www.loc.gov/mods/v3">
+              <originInfo>
+                <dateModified encoding="w3cdtf">Jul. 22, 2013</dateModified>
+              </originInfo>
+            </mods>
+          MODS
+
+          fields = mods_display_imprint(unparseable_date).fields
+          expect(fields.first.values).to eq ['Jul. 22, 2013']
         end
       end
 
@@ -200,13 +287,8 @@ describe ModsDisplay::Imprint do
           expect(field.values.join).not_to include '9999'
         end
       end
-      it 'should handle invalid dates by returning the original value' do
-        fields = mods_display_imprint(invalid_dates).fields
-        expect(fields.length).to eq(2)
-        expect(fields.last.values).to eq(['1920-09-00'])
-      end
 
-      it 'should not append A.D. to empty dates' do
+      it 'should ignore blank date values' do
         empty_date = <<-MODS
           <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
@@ -216,20 +298,26 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(empty_date).fields
-        expect(fields.first.values).to eq ['']
+        expect(fields.first.values).to eq []
       end
 
-      it 'should not append A.D. to dates consisting of 2+ zeroes' do
+      it 'should handle invalid dates by returning the original value' do
+        fields = mods_display_imprint(invalid_dates).fields
+        expect(fields.length).to eq(2)
+        expect(fields.last.values).to eq(['1920-09-00'])
+      end
+      
+      it 'should mark dates consisting solely of zeroes as 1 B.C.' do
         zeroes_date = <<-MODS
           <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
-              <dateCreated>0000</dateCreated>
+              <dateCreated encoding="edtf">0000</dateCreated>
             </originInfo>
           </mods>
         MODS
 
         fields = mods_display_imprint(zeroes_date).fields
-        expect(fields.first.values).to eq ['0000']
+        expect(fields.first.values).to eq ['1 B.C.']
       end
 
       it 'should not append A.D. to dates that are not integers' do
