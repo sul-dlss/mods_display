@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_description(mods)
@@ -26,26 +28,31 @@ describe ModsDisplay::Description do
        </mods>'
     ).physical_description
   end
+
   describe 'labels' do
-    it 'should use the displayLabel if one is provided' do
+    it 'uses the displayLabel if one is provided' do
       expect(mods_display_description(@display_label).fields.first.label).to eq('SpecialLabel:')
     end
-    it 'should get the default label for a child element' do
+
+    it 'gets the default label for a child element' do
       expect(mods_display_description(@form).fields.first.label).to eq('Note:')
     end
-    it 'should get multiple lables for mixed content' do
+
+    it 'gets multiple lables for mixed content' do
       expect(mods_display_description(@mixed).fields.map(&:label)).to eq(['Note:', 'Digital origin:'])
     end
-    it 'should get the display label from child elements' do
+
+    it 'gets the display label from child elements' do
       expect(mods_display_description(@child_display_label).fields.map(&:label)).to eq(['Note Label:'])
     end
   end
 
   describe 'fields' do
-    it 'should get the value from a field in physicalDescription' do
+    it 'gets the value from a field in physicalDescription' do
       expect(mods_display_description(@form).fields.first.values).to eq(['Description Note'])
     end
-    it 'should get multiple values for mixed content' do
+
+    it 'gets multiple values for mixed content' do
       expect(mods_display_description(@mixed).fields.map(&:values)).to eq(
         [['Description Note'], ['Digital Origin Note']]
       )

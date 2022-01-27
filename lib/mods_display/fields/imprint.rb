@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Imprint < Field
     include ModsDisplay::CountryCodes
@@ -17,14 +19,14 @@ module ModsDisplay
             values: [joined_place_parts]
           )
         end
-        return_fields.concat(date_values(value)) if date_values(value).length > 0
-        if other_pub_info(value).length > 0
-          other_pub_info(value).each do |pub_info|
-            return_fields << ModsDisplay::Values.new(
-              label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
-              values: [pub_info.text.strip]
-            )
-          end
+        return_fields.concat(date_values(value)) if date_values(value).length.positive?
+        next unless other_pub_info(value).length.positive?
+
+        other_pub_info(value).each do |pub_info|
+          return_fields << ModsDisplay::Values.new(
+            label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
+            values: [pub_info.text.strip]
+          )
         end
       end
       collapse_fields(return_fields)
@@ -33,8 +35,10 @@ module ModsDisplay
     def date_values(element)
       date_field_keys.map do |date_field|
         next unless element.respond_to?(date_field)
+
         elements = element.send(date_field)
         next if elements.empty?
+
         ModsDisplay::Values.new(
           label: displayLabel(element) || pub_info_labels[elements.first.name.to_sym],
           values: parse_dates(elements)
@@ -123,6 +127,7 @@ module ModsDisplay
         return "[ca. #{date}]" if qualifier == 'approximate'
         return "[#{date}?]" if qualifier == 'questionable'
         return "[#{date}]" if qualifier == 'inferred'
+
         date
       end
 
@@ -134,19 +139,15 @@ module ModsDisplay
         date = @element.text.strip
 
         begin
-          if date =~ /^\d{4}-\d{2}-\d{2}$/
-            return Date.parse(date).strftime('%B %e, %Y')
-          end
-          if date =~ /^\d{4}-\d{2}$/
-            return Date.parse("#{date}-01").strftime('%B %Y')
-          end
-        rescue
+          return Date.parse(date).strftime('%B %e, %Y') if date =~ /^\d{4}-\d{2}-\d{2}$/
+          return Date.parse("#{date}-01").strftime('%B %Y') if date =~ /^\d{4}-\d{2}$/
+        rescue StandardError
           date
         end
 
         date
       end
-  
+
       # Decode a date in ISO 8601 format. See:
       # https://en.wikipedia.org/wiki/ISO_8601
       def decode_iso8601
@@ -154,12 +155,12 @@ module ModsDisplay
 
         begin
           Date.iso8601(date).strftime('%B %e, %Y')
-        rescue
+        rescue StandardError
           date
         end
       end
 
-      # TODO expanded edtf parsing; see:
+      # TODO: expanded edtf parsing; see:
       # https://github.com/sul-dlss/mods_display/issues/10
       def decode_edtf
         decode_w3cdtf
@@ -190,15 +191,16 @@ module ModsDisplay
       # Decoded dates with "B.C." or "A.D." and qualifier markers applied to
       # the entire range, or individually if dates differ.
       def qualified_value
-        if @start&.qualifier != @stop&.qualifier
-          "#{@start&.qualified_value}-#{@stop&.qualified_value}"
-        else
+        if @start&.qualifier == @stop&.qualifier
           qualifier = @start&.qualifier || @stop&.qualifier
           date = "#{@start&.bc_ad_value}-#{@stop&.bc_ad_value}"
           return "[ca. #{date}]" if qualifier == 'approximate'
           return "[#{date}?]" if qualifier == 'questionable'
           return "[#{date}]" if qualifier == 'inferred'
+
           date
+        else
+          "#{@start&.qualified_value}-#{@stop&.qualified_value}"
         end
       end
     end
@@ -208,7 +210,7 @@ module ModsDisplay
       dates = elements.map { |element| DateValue.new(element) }.select(&:valid?)
 
       # join any date ranges into DateRange objects
-      point, nonpoint = dates.partition { |date| date.point }
+      point, nonpoint = dates.partition(&:point)
       if point.any?
         range = DateRange.new(start: point.find { |date| date.point == 'start' },
                               stop: point.find { |date| date.point == 'end' })
@@ -249,6 +251,7 @@ module ModsDisplay
     def place_terms(element)
       return [] unless element.respond_to?(:place) &&
                        element.place.respond_to?(:placeTerm)
+
       if unencoded_place_terms?(element)
         element.place.placeTerm.select do |term|
           !term.attributes['type'].respond_to?(:value) ||
@@ -261,6 +264,7 @@ module ModsDisplay
                       term.attributes['authority'].respond_to?(:value) &&
                       term.attributes['authority'].value == 'marccountry' &&
                       country_codes.include?(term.text.strip)
+
           term = term.clone
           term.content = country_codes[term.text.strip]
           term
@@ -281,13 +285,14 @@ module ModsDisplay
       compact_values = values.compact.reject { |v| v.strip.empty? }
       return compact_values.join(delimiter) if compact_values.length == 1 ||
                                                !ends_in_terminating_punctuation?(delimiter)
+
       compact_values.each_with_index.map do |value, i|
-        if (compact_values.length - 1) == i || # last item?
-           ends_in_terminating_punctuation?(value)
-          value << ' '
-        else
-          value << delimiter
-        end
+        value << if (compact_values.length - 1) == i || # last item?
+                    ends_in_terminating_punctuation?(value)
+                   ' '
+                 else
+                   delimiter
+                 end
       end.join.strip
     end
 
@@ -303,6 +308,7 @@ module ModsDisplay
 
     def place_element(value)
       return if value.place.text.strip.empty?
+
       places = place_terms(value).reject do |p|
         p.text.strip.empty?
       end.map(&:text)
@@ -311,6 +317,7 @@ module ModsDisplay
 
     def publisher_element(value)
       return if value.publisher.text.strip.empty?
+
       publishers = value.publisher.reject do |p|
         p.text.strip.empty?
       end.map(&:text)
@@ -318,8 +325,9 @@ module ModsDisplay
     end
 
     def parts_element(value)
-      date_elements = %w(dateIssued dateOther).map do |date_field_name|
+      date_elements = %w[dateIssued dateOther].map do |date_field_name|
         next unless value.respond_to?(date_field_name.to_sym)
+
         parse_dates(value.send(date_field_name.to_sym))
       end.flatten.compact.reject do |date|
         date.strip.empty?
@@ -328,11 +336,11 @@ module ModsDisplay
     end
 
     def pub_info_parts
-      [:issuance, :frequency]
+      %i[issuance frequency]
     end
 
     def date_field_keys
-      [:dateCreated, :dateCaptured, :dateValid, :dateModified, :copyrightDate]
+      %i[dateCreated dateCaptured dateValid dateModified copyrightDate]
     end
 
     def pub_info_labels
@@ -342,8 +350,7 @@ module ModsDisplay
         dateModified: I18n.t('mods_display.date_modified'),
         copyrightDate: I18n.t('mods_display.copyright_date'),
         issuance: I18n.t('mods_display.issuance'),
-        frequency: I18n.t('mods_display.frequency')
-      }
+        frequency: I18n.t('mods_display.frequency') }
     end
   end
 end

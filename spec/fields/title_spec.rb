@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_title(mods_record)
@@ -16,17 +18,21 @@ describe ModsDisplay::Title do
     @title_punctuation = Stanford::Mods::Record.new.from_str(title_puncutation_fixture).title_info
     @ordered_title_fixture = Stanford::Mods::Record.new.from_str(ordered_title_fixture).title_info
   end
+
   describe 'labels' do
-    it 'should return a default label of Title if nothing else is available' do
+    it 'returns a default label of Title if nothing else is available' do
       expect(mods_display_title(@title).fields.first.label).to eq('Title:')
     end
-    it 'should return an appropriate label from the type attribute' do
+
+    it 'returns an appropriate label from the type attribute' do
       expect(mods_display_title(@alt_title).fields.first.label).to eq('Alternative title:')
     end
-    it 'should return the label held in the displayLabel attribute of the titleInfo element when available' do
+
+    it 'returns the label held in the displayLabel attribute of the titleInfo element when available' do
       expect(mods_display_title(@display_label).fields.first.label).to eq('MyTitle:')
     end
-    it 'should collapse adjacent identical labels' do
+
+    it 'collapses adjacent identical labels' do
       fields = mods_display_title(@multi_label).fields
       expect(fields.length).to eq(4)
       expect(fields[0].label).to eq('Title:')
@@ -36,8 +42,9 @@ describe ModsDisplay::Title do
       expect(fields[3].values).to eq(['Another Alt Title', 'Yet Another Alt Title'])
     end
   end
+
   describe 'fields' do
-    it 'should return an array of label/value objects' do
+    it 'returns an array of label/value objects' do
       values = mods_display_title(@display_label).fields
       expect(values.length).to eq(1)
       expect(values.first).to be_a ModsDisplay::Values
@@ -45,22 +52,23 @@ describe ModsDisplay::Title do
       expect(values.first.values).to eq(['Title'])
     end
   end
+
   describe 'text' do
-    it 'should construct all the elements in titleInfo' do
+    it 'constructs all the elements in titleInfo' do
       expect(mods_display_title(@title_parts).fields.first.values).to include 'The Title : For. Something. Part 62'
     end
 
-    it 'should use the correct delimiter in the case that a partNumber comes before a partName' do
+    it 'uses the correct delimiter in the case that a partNumber comes before a partName' do
       expect(mods_display_title(@reverse_title_parts).fields.first.values).to include(
         'The Title : For. Part 62, Something'
       )
     end
 
-    it 'should return the basic text held in a sub element of titleInfo' do
+    it 'returns the basic text held in a sub element of titleInfo' do
       expect(mods_display_title(@title).fields.first.values).to include 'Title'
     end
 
-    it 'should not duplicate delimiter punctuation' do
+    it 'does not duplicate delimiter punctuation' do
       values = mods_display_title(@title_punctuation).fields.first.values
       expect(values.length).to eq 1
       expect(values.first).not_to include '..'

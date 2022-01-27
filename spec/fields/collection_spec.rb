@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_collection(mods_record)
@@ -44,27 +46,27 @@ describe ModsDisplay::Collection do
   end
 
   describe 'label' do
-    it 'should default to Collection' do
+    it 'defaults to Collection' do
       expect(mods_display_collection(collection).fields.first.label).to eq('Collection:')
     end
 
-    it 'should get the displayLabel if available' do
+    it 'gets the displayLabel if available' do
       expect(mods_display_collection(display_label).label).to eq('Special Collection:')
     end
 
-    it 'should get the proper titles of all items when there is a displayLabel present' do
+    it 'gets the proper titles of all items when there is a displayLabel present' do
       expect(mods_display_collection(multiple_related_items).fields.first.label).to eq 'Collection:'
     end
   end
 
   describe 'fields' do
-    it 'should get a collection title if there is an appropriate typeOfResource field with the collection attribute' do
+    it 'gets a collection title if there is an appropriate typeOfResource field with the collection attribute' do
       fields = mods_display_collection(collection).fields
       expect(fields.length).to eq(1)
       expect(fields.first.values).to eq(['The Collection'])
     end
 
-    it 'should be blank if the there is not an appropriate typeOfResource field with the collection attribute' do
+    it 'is blank if the there is not an appropriate typeOfResource field with the collection attribute' do
       expect(mods_display_collection(non_collection).fields).to eq([])
     end
   end

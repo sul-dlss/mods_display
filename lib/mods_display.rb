@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mods_display/version'
 require 'mods_display/html'
 require 'mods_display/country_codes'
@@ -34,14 +36,14 @@ require 'stanford-mods'
 
 require 'i18n'
 require 'i18n/backend/fallbacks'
-I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
-I18n.load_path += Dir["#{File.expand_path('../..', __FILE__)}/config/locales/*.yml"]
+I18n::Backend::Simple.include I18n::Backend::Fallbacks
+I18n.load_path += Dir["#{File.expand_path('..', __dir__)}/config/locales/*.yml"]
 I18n.backend.load_translations
 
 begin
   require 'rails'
 rescue LoadError
-  #do nothing
+  # do nothing
 end
 
 require 'mods_display/engine' if defined?(Rails)

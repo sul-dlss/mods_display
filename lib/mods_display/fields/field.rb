@@ -1,4 +1,5 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 module ModsDisplay
   class Field
     def initialize(values)
@@ -17,6 +18,7 @@ module ModsDisplay
 
     def label
       return nil if @values.nil?
+
       displayLabel(@values.first)
     end
 
@@ -37,6 +39,7 @@ module ModsDisplay
     def displayLabel(element)
       return unless element.respond_to?(:attributes) &&
                     element.attributes['displayLabel'].respond_to?(:value)
+
       "#{element.attributes['displayLabel'].value}:"
     end
 

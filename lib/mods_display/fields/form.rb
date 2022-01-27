@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Form < Field
     def fields
       return [] unless form_fields.present?
+
       [
         ModsDisplay::Values.new(
           label: I18n.t('mods_display.form'),

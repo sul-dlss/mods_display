@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_access_condition(mods_record)
@@ -17,8 +19,9 @@ describe ModsDisplay::AccessCondition do
     @no_link_license_note = Stanford::Mods::Record.new.from_str(no_license_fixture).accessCondition
     @garbage_license_fixture = Stanford::Mods::Record.new.from_str(garbage_license_fixture).accessCondition
   end
+
   describe 'labels' do
-    it 'should normalize types and assign proper labels' do
+    it 'normalizes types and assign proper labels' do
       fields = mods_display_access_condition(@restrict_condition).fields
       expect(fields.length).to eq(1)
       expect(fields.first.label).to eq('Restriction on access:')
@@ -27,9 +30,10 @@ describe ModsDisplay::AccessCondition do
       end
     end
   end
+
   describe 'fields' do
     describe 'copyright' do
-      it "should replace instances of '(c) copyright' with the HTML copyright entity" do
+      it "replaces instances of '(c) copyright' with the HTML copyright entity" do
         fields = mods_display_access_condition(@copyright_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
@@ -38,8 +42,9 @@ describe ModsDisplay::AccessCondition do
         )
       end
     end
+
     describe 'licenses' do
-      it 'should identify and link CreativeCommons licenses properly' do
+      it 'identifies and link CreativeCommons licenses properly' do
         fields = mods_display_access_condition(@cc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
@@ -48,7 +53,8 @@ describe ModsDisplay::AccessCondition do
           'This work is licensed under a Creative Commons Attribution-Share Alike 3.0 Unported License'
         )
       end
-      it 'should identify and link OpenDataCommons licenses properly' do
+
+      it 'identifies and link OpenDataCommons licenses properly' do
         fields = mods_display_access_condition(@odc_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)
@@ -58,7 +64,7 @@ describe ModsDisplay::AccessCondition do
         )
       end
 
-      it 'should not attempt unknown license types' do
+      it 'does not attempt unknown license types' do
         fields = mods_display_access_condition(@no_link_license_note).fields
         expect(fields.length).to eq(1)
         expect(fields.first.values.length).to eq(1)

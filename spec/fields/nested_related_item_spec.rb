@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe ModsDisplay::NestedRelatedItem do
@@ -27,12 +29,13 @@ describe ModsDisplay::NestedRelatedItem do
   end
 
   describe '#fields' do
-    let(:mods) { multi_constituent_fixture }
     subject(:fields) { nested_related_item.fields }
+
+    let(:mods) { multi_constituent_fixture }
 
     describe 'memoization' do
       it 'only calls related_item_mods_object once per item regardless of how many times the method is called' do
-        expect(nested_related_item).to receive(:related_item_mods_object).exactly(2).times
+        expect(nested_related_item).to receive(:related_item_mods_object).twice
 
         5.times { nested_related_item.fields }
       end
@@ -62,6 +65,7 @@ describe ModsDisplay::NestedRelatedItem do
 
   describe '#to_html' do
     subject(:html) { Capybara.string(nested_related_item.to_html) }
+
     let(:mods) { related_item_host_fixture }
 
     it 'renders an unordered list with an embedded dl containing the metadata of the related item' do

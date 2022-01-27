@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_geo(mods_record)
@@ -5,6 +7,10 @@ def mods_display_geo(mods_record)
 end
 
 describe ModsDisplay::Geo do
+  subject do
+    mods_display_geo(Stanford::Mods::Record.new.from_str(mods).extension).fields
+  end
+
   let(:mods) do
     <<-XML
       <mods xmlns="http://www.loc.gov/mods/v3">
@@ -18,10 +24,6 @@ describe ModsDisplay::Geo do
         </extension>
       </mods>
     XML
-  end
-
-  subject do
-    mods_display_geo(Stanford::Mods::Record.new.from_str(mods).extension).fields
   end
 
   describe 'labels' do

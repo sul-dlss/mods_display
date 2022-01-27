@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   ###
   #  Collection class to parse collection data out of Mods relatedItem fields
@@ -11,6 +13,7 @@ module ModsDisplay
       return_fields = []
       @values.each do |value|
         next unless related_item_is_a_collection?(value)
+
         return_fields << ModsDisplay::Values.new(
           label: collection_label(value),
           values: [value.titleInfo.text.strip]
@@ -27,8 +30,9 @@ module ModsDisplay
 
     def resource_type_is_collection?(value)
       return unless value.respond_to?(:typeOfResource)
-      return unless value.typeOfResource.attributes.length > 0
-      value.typeOfResource.attributes.length > 0 &&
+      return unless value.typeOfResource.attributes.length.positive?
+
+      value.typeOfResource.attributes.length.positive? &&
         value.typeOfResource.attributes.first.key?('collection') &&
         value.typeOfResource.attributes.first['collection'].value == 'yes'
     end

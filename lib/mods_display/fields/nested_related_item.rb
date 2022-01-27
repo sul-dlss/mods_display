@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   ##
   # This class will hopefully take over for related item support more broadly.
@@ -21,7 +23,12 @@ module ModsDisplay
     def to_html(view_context = ApplicationController.renderer)
       helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context
 
-      component = ModsDisplay::ListFieldComponent.with_collection(fields, value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) }, list_html_attributes: { class: 'mods_display_nested_related_items' }, list_item_html_attributes: { class: 'mods_display_nested_related_item open' })
+      component = ModsDisplay::ListFieldComponent.with_collection(
+        fields,
+        value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) },
+        list_html_attributes: { class: 'mods_display_nested_related_items' },
+        list_item_html_attributes: { class: 'mods_display_nested_related_item open' }
+      )
 
       view_context.render component, layout: false
     end
@@ -29,7 +36,9 @@ module ModsDisplay
     private
 
     def related_item_mods_object(value)
-      mods = ::Stanford::Mods::Record.new.tap { |r| r.from_str("<mods xmlns=\"http://www.loc.gov/mods/v3\">#{value.children.to_xml}</mods>") }
+      mods = ::Stanford::Mods::Record.new.tap do |r|
+        r.from_str("<mods xmlns=\"http://www.loc.gov/mods/v3\">#{value.children.to_xml}</mods>")
+      end
       related_item = ModsDisplay::HTML.new(mods)
 
       ModsDisplay::Values.new(
@@ -42,6 +51,7 @@ module ModsDisplay
       body = related_item.body
 
       return if body == '<dl></dl>'
+
       body
     end
 

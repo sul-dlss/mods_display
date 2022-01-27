@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Geo < Field
     def fields
       return [] unless geo_extensions.present?
+
       extensions = geo_extensions.map(&method(:process_geo_extension))
       [
         ModsDisplay::Values.new(

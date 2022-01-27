@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class AccessCondition < Field
     LICENSES = {
@@ -111,21 +113,22 @@ module ModsDisplay
     def access_label(element)
       type = normalize_type(element)
       return access_labels[type] if access_labels.key?(type)
+
       I18n.t('mods_display.access_condition')
     end
 
     def normalize_type(element)
       type = element.attributes['type']
       return type.value.strip.gsub(/\s*/, '').downcase if type.respond_to?(:value)
+
       ''
     end
 
     def access_labels
-      { 'useandreproduction'  => I18n.t('mods_display.use_and_reproduction'),
+      { 'useandreproduction' => I18n.t('mods_display.use_and_reproduction'),
         'restrictiononaccess' => I18n.t('mods_display.restriction_on_access'),
-        'copyright'           => I18n.t('mods_display.copyright'),
-        'license'             => I18n.t('mods_display.license')
-       }
+        'copyright' => I18n.t('mods_display.copyright'),
+        'license' => I18n.t('mods_display.license') }
     end
   end
 end

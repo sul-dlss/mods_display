@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 def mods_display_language(mods_record)
@@ -26,23 +28,26 @@ describe ModsDisplay::Language do
       </mods>"
     ).language
   end
+
   describe 'fields' do
-    it 'should return an array with a label/values object' do
+    it 'returns an array with a label/values object' do
       values = mods_display_language(@display_label).fields
       expect(values.length).to eq(1)
       expect(values.first).to be_a ModsDisplay::Values
       expect(values.first.label).to eq('Lang:')
       expect(values.first.values).to eq(['English'])
     end
-    it "should not return any non type='code' languageTerms from the XML" do
+
+    it "does not return any non type='code' languageTerms from the XML" do
       values = mods_display_language(@mixed).fields
       expect(values.length).to eq(1)
       expect(values.first.values).to eq(['English'])
     end
-    it 'should handle multiple languages correctly' do
+
+    it 'handles multiple languages correctly' do
       values = mods_display_language(@multi).fields
       expect(values.length).to eq(1)
-      expect(values.first.values).to eq(%w(German English))
+      expect(values.first.values).to eq(%w[German English])
     end
   end
 end

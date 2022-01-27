@@ -15,7 +15,7 @@ module ModsDisplay
       render component.new(field: field, delimiter: delimiter, value_transformer: block)
     end
 
-    def mods_name_field(field, &block)
+    def mods_name_field(field)
       mods_record_field(field) do |name|
         block_given? ? capture { yield(name.name) } : name.name
       end
@@ -55,15 +55,13 @@ module ModsDisplay
       link_buffer = []
       linked_subjects = []
       subjects.each do |subject|
-        if subject.present?
-          linked_subjects << link_to_mods_subject(subject, link_buffer, &block)
-        end
+        linked_subjects << link_to_mods_subject(subject, link_buffer, &block) if subject.present?
       end
       linked_subjects
     end
 
     # @private
-    def link_to_mods_subject(subject, buffer = [], &block)
+    def link_to_mods_subject(subject, buffer = [])
       subject_text = subject.respond_to?(:name) ? subject.name : subject
       link = block_given? ? capture { yield(subject_text, buffer) } : subject_text
       buffer << subject_text.strip
@@ -101,6 +99,5 @@ module ModsDisplay
       sanitize val, tags: tags, attributes: %w[href]
     end
     # rubocop:enable Layout/LineLength
-
   end
 end

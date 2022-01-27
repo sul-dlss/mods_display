@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ModsDisplay
   class Contents < Field
     def to_html(view_context = ApplicationController.renderer)
