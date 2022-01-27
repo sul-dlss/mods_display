@@ -13,7 +13,7 @@ describe ModsDisplay::Contact do
     ).note
   end
 
-  it 'onlies get contact fields' do
+  it 'gets contact fields only' do
     fields = mods_display_contact(@contact_note).fields
     expect(fields.length).to eq(1)
     expect(fields.first.values).to include('jdoe@example.com')
