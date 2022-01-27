@@ -101,7 +101,7 @@ describe ModsDisplay::Name do
       # rubocop:enable Style/HashEachMethods
     end
 
-    it 'perseves order and separation of non-adjesent matching labels' do
+    it 'preserves order and separation of non-adjesent matching labels' do
       fields = mods_display_name(@complex_labels).fields
 
       expect(fields.length).to eq(2)
