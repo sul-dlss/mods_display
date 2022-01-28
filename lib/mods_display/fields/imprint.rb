@@ -3,9 +3,15 @@
 module ModsDisplay
   class Imprint < Field
     include ModsDisplay::CountryCodes
+
     def fields
-      return_fields = []
-      @values.each do |value|
+      collapse_fields(origin_info_data.flatten)
+    end
+
+    def origin_info_data
+      @values.map do |value|
+        return_fields = []
+
         edition = edition_element(value)
         place = place_element(value)
         publisher = publisher_element(value)
@@ -13,14 +19,14 @@ module ModsDisplay
         place_pub = compact_and_join_with_delimiter([place, publisher], ' : ')
         edition_place = compact_and_join_with_delimiter([edition, place_pub], ' - ')
         joined_place_parts = compact_and_join_with_delimiter([edition_place, parts], ', ')
+
         unless joined_place_parts.empty?
           return_fields << ModsDisplay::Values.new(
             label: displayLabel(value) || I18n.t('mods_display.imprint'),
             values: [joined_place_parts]
           )
         end
-        return_fields.concat(date_values(value)) if date_values(value).length.positive?
-        next unless other_pub_info(value).length.positive?
+        return_fields.concat(date_values(value))
 
         other_pub_info(value).each do |pub_info|
           return_fields << ModsDisplay::Values.new(
@@ -28,8 +34,9 @@ module ModsDisplay
             values: [pub_info.text.strip]
           )
         end
+
+        return_fields.compact
       end
-      collapse_fields(return_fields)
     end
 
     def date_values(element)
