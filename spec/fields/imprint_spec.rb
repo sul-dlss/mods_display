@@ -347,7 +347,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(non_integer_date).fields
-        expect(fields.first.values).to eq ['19xx']
+        expect(fields.first.values).to eq ['20th century']
       end
     end
   end
