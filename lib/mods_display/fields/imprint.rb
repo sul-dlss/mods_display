@@ -54,167 +54,114 @@ module ModsDisplay
     end
 
     class DateValue
-      def initialize(element)
-        @element = element
-      end
+        attr_reader :value
+        delegate :text, :date, :point, :qualifier, :encoding, to: :value
 
-      # True if the element text isn't blank or the placeholder "9999".
-      def valid?
-        @element.text.present? && @element.text.strip != '9999'
-      end
-
-      # Value of element's "point" attribute; nil if empty or not present.
-      # Points are "start" or "end" (if part of a date range)
-      def point
-        @element.attributes['point']&.value.presence
-      end
-
-      # Value of element's "qualifier" attribute; nil if empty or not present.
-      # Qualifiers are "approximate", "questionable", or "inferred"
-      def qualifier
-        @element.attributes['qualifier']&.value&.downcase.presence
-      end
-
-      # Value of element's "encoding" attribute; nil if empty or not present.
-      # Encodings are "w3cdtf", "iso8601", or "edtf"
-      def encoding
-        @element.attributes['encoding']&.value&.downcase.presence
-      end
-
-      # Element text reduced to digits and hyphen. Captures date ranges and
-      # negative (B.C.) dates. Used for comparison/deduping.
-      def base_value
-        @element.text.scan(/[\d-]/).join
-      end
-
-      # Decoded version of the date, if it was encoded. Strips leading zeroes.
-      def decoded_value
-        # Delegate to the appropriate decoding method, if any
-        decoded_date = case encoding
-                       when 'w3cdtf'
-                         decode_w3cdtf
-                       when 'iso8601'
-                         decode_iso8601
-                       when 'edtf'
-                         decode_edtf
-                       else
-                         @element.text.strip
-                       end
-
-        # Year zero is a special case; preserve it as "0"
-        return decoded_date if decoded_date == '0'
-
-        # Otherwise strip leading zeroes and return
-        decoded_date.gsub(/^0*/, '')
-      end
-
-      # Decoded version of the date with "B.C." or "A.D." appended.
-      def bc_ad_value
-        date = decoded_value
-
-        # Negative edtf dates are B.C. and may still have leading zeroes to remove
-        if encoding == 'edtf' && date.to_i < 1
-          year = date.gsub(/^-0*/, '').to_i + 1
-          "#{year} B.C."
-
-        # Any dates before the year 1000 are explicitly marked A.D.
-        elsif date.match?(/^\d{1,3}$/)
-          "#{date} A.D."
-
-        # Leave the value alone otherwise; A.D. is implied
-        else
-          date
-        end
-      end
-
-      # Decoded date with "B.C." or "A.D." and qualifier markers. See (outdated):
-      # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
-      def qualified_value
-        date = bc_ad_value
-        return "[ca. #{date}]" if qualifier == 'approximate'
-        return "[#{date}?]" if qualifier == 'questionable'
-        return "[#{date}]" if qualifier == 'inferred'
-
-        date
-      end
-
-      private
-
-      # Decode a date in W3C Date and Time Format (W3CDTF). See:
-      # https://www.w3.org/TR/NOTE-datetime
-      def decode_w3cdtf
-        date = @element.text.strip
-
-        begin
-          return Date.parse(date).strftime('%B %e, %Y') if date =~ /^\d{4}-\d{2}-\d{2}$/
-          return Date.parse("#{date}-01").strftime('%B %Y') if date =~ /^\d{4}-\d{2}$/
-        rescue StandardError
-          date
+        def initialize(value)
+          @value = value
         end
 
-        date
-      end
-
-      # Decode a date in ISO 8601 format. See:
-      # https://en.wikipedia.org/wiki/ISO_8601
-      def decode_iso8601
-        date = @element.text.strip
-
-        begin
-          Date.iso8601(date).strftime('%B %e, %Y')
-        rescue StandardError
-          date
+        # True if the element text isn't blank or the placeholder "9999".
+        def valid?
+          text.present? && !['9999', '0000-00-00', 'uuuu'].include?(text.strip)
         end
-      end
 
-      # TODO: expanded edtf parsing; see:
-      # https://github.com/sul-dlss/mods_display/issues/10
-      def decode_edtf
-        decode_w3cdtf
-      end
-    end
+        # Element text reduced to digits and hyphen. Captures date ranges and
+        # negative (B.C.) dates. Used for comparison/deduping.
+        def base_value
+          if text =~ /^\[?1\d{3}-\d{2}\??\]?$/
+            return text.sub(/(\d{2})(\d{2})-(\d{2})/, '\1\2-\1\3')
+          end
 
-    class DateRange
-      def initialize(start: nil, stop: nil)
-        @start = start
-        @stop = stop
-      end
+          text.gsub(/(?<![\d])(\d{1,3})([xu-]{1,3})/i) { "#{$1}#{'0' * $2.length}"}.scan(/[\d-]/).join
+        end
 
-      # Base value as hyphen-joined string. Used for comparison/deduping.
-      def base_value
-        "#{@start&.base_value}-#{@stop&.base_value}"
-      end
+        # Decoded version of the date, if it was encoded. Strips leading zeroes.
+        def decoded_value
+          return text.strip unless date
 
-      # Base values as array. Used for comparison/deduping of individual dates.
-      def base_values
-        [@start&.base_value, @stop&.base_value].compact
-      end
+          unless encoding.present?
+            return text.strip unless text =~ /^-?\d+$/ || text =~ /^[\dXxu?-]{4}$/
+          end
 
-      # The encoding value for the start of the range, or stop if not present.
-      def encoding
-        @start&.encoding || @stop&.encoding
-      end
+          # Delegate to the appropriate decoding method, if any
+          case value.precision
+          when :day
+            date.strftime('%B %e, %Y')
+          when :month
+            date.strftime('%B %Y')
+          when :year
+            year = date.year
+            if year < 1
+              "#{year.abs + 1} B.C."
+            # Any dates before the year 1000 are explicitly marked A.D.
+            elsif year > 1 && year < 1000
+              "#{year} A.D."
+            else
+              year.to_s
+            end
+          when :century
+            return "#{(date.to_s[0..1].to_i + 1).ordinalize} century"
+          when :decade
+            return "#{date.year}s"
+          else
+            text.strip
+          end
+        end
 
-      # Decoded dates with "B.C." or "A.D." and qualifier markers applied to
-      # the entire range, or individually if dates differ.
-      def qualified_value
-        if @start&.qualifier == @stop&.qualifier
-          qualifier = @start&.qualifier || @stop&.qualifier
-          date = "#{@start&.bc_ad_value}-#{@stop&.bc_ad_value}"
+        # Decoded date with "B.C." or "A.D." and qualifier markers. See (outdated):
+        # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
+        def qualified_value
+          date = decoded_value
+
           return "[ca. #{date}]" if qualifier == 'approximate'
           return "[#{date}?]" if qualifier == 'questionable'
           return "[#{date}]" if qualifier == 'inferred'
 
           date
-        else
-          "#{@start&.qualified_value}-#{@stop&.qualified_value}"
         end
       end
-    end
 
+      class DateRange
+        def initialize(start: nil, stop: nil)
+          @start = start
+          @stop = stop
+        end
+
+        # Base value as hyphen-joined string. Used for comparison/deduping.
+        def base_value
+          "#{@start&.base_value}-#{@stop&.base_value}"
+        end
+
+        # Base values as array. Used for comparison/deduping of individual dates.
+        def base_values
+          [@start&.base_value, @stop&.base_value].compact
+        end
+
+        # The encoding value for the start of the range, or stop if not present.
+        def encoding
+          @start&.encoding || @stop&.encoding
+        end
+
+        # Decoded dates with "B.C." or "A.D." and qualifier markers applied to
+        # the entire range, or individually if dates differ.
+        def qualified_value
+          if @start&.qualifier == @stop&.qualifier
+            qualifier = @start&.qualifier || @stop&.qualifier
+            date = "#{@start&.decoded_value}-#{@stop&.decoded_value}"
+            return "[ca. #{date}]" if qualifier == 'approximate'
+            return "[#{date}?]" if qualifier == 'questionable'
+            return "[#{date}]" if qualifier == 'inferred'
+
+            date
+          else
+            "#{@start&.qualified_value}-#{@stop&.qualified_value}"
+          end
+        end
+      end
     def parse_dates(elements)
       # convert to DateValue objects and keep only valid ones
-      dates = elements.map { |element| DateValue.new(element) }.select(&:valid?)
+      dates = elements.map(&:as_object).flatten.map { |element| DateValue.new(element) }.select(&:valid?)
 
       # join any date ranges into DateRange objects
       point, nonpoint = dates.partition(&:point)
@@ -234,9 +181,9 @@ module ModsDisplay
         if group.reject(&:encoding).any?
           group.reject(&:encoding).first
 
-        # otherwise just randomly pick the first in the group
+        # otherwise just randomly pick the last in the group
         else
-          group.first
+          group.last
         end
       end
 
