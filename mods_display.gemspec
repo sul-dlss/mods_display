@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'stanford-mods', '~> 2.1'
+  gem.add_dependency 'stanford-mods', '>= 3.0.0.alpha1', '< 4'
   gem.add_dependency 'i18n'
   gem.add_dependency 'view_component'
 

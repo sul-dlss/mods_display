@@ -291,7 +291,7 @@ describe ModsDisplay::Imprint do
           expect(fields.length).to eq(2)
           expect(fields.find do |field|
             field.label == 'Date modified:'
-          end.values).to eq(['Jul. 22, 2013'])
+          end.values).to eq(['Jul. 32, 2013'])
         end
       end
     end
@@ -321,7 +321,7 @@ describe ModsDisplay::Imprint do
       it 'handles invalid dates by returning the original value' do
         fields = mods_display_imprint(invalid_dates).fields
         expect(fields.length).to eq(2)
-        expect(fields.last.values).to eq(['1920-09-00'])
+        expect(fields.last.values).to eq(['1920-09-32'])
       end
 
       it 'marks dates consisting solely of zeroes as 1 B.C.' do
@@ -347,7 +347,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(non_integer_date).fields
-        expect(fields.first.values).to eq ['19xx']
+        expect(fields.first.values).to eq ['20th century']
       end
     end
   end

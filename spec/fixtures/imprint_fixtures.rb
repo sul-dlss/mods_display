@@ -211,7 +211,7 @@ module ImprintFixtures
       <mods xmlns="http://www.loc.gov/mods/v3">
         <originInfo>
           <dateCreated encoding="iso8601">20131114161429</dateCreated>
-          <dateModified encoding="iso8601">Jul. 22, 2013</dateModified>
+          <dateModified encoding="iso8601">Jul. 32, 2013</dateModified>
         </originInfo>
       </mods>
     MODS
@@ -242,7 +242,7 @@ module ImprintFixtures
           <place>
              <placeTerm>United States</placeTerm>
            </place>
-           <dateModified encoding="w3cdtf">1920-09-00</dateModified>
+           <dateModified encoding="w3cdtf">1920-09-32</dateModified>
         </originInfo>
       </mods>
     MODS
