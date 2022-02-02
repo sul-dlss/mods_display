@@ -29,7 +29,7 @@ module ModsDisplay
 
         delimiter = if title.empty? || title.end_with?(' ')
                       nil
-                    elsif previous_element&.name == 'nonSort' && title.ends_with?('-', '\'')
+                    elsif previous_element&.name == 'nonSort' && title.end_with?('-', '\'')
                       nil
                     elsif title.end_with?('.', ',', ':', ';')
                       ' '
