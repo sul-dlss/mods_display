@@ -77,5 +77,19 @@ describe ModsDisplay::NestedRelatedItem do
         end
       end
     end
+
+    describe 'with a namespace prefix' do
+      let(:mods) { namespace_prefixed_related_item_fixture }
+
+      it 'renders the list' do
+        within(html.first('dd')) do |dd|
+          expect(dd).to have_css('ul.mods_display_nested_related_items')
+          within(dd.find('ul.mods_display_nested_related_items li')) do |li|
+            expect(li).to have_css('dl dt', text: 'Constituent Title:')
+            expect(li).to have_css('dl dd', text: 'Constituent note')
+          end
+        end
+      end
+    end
   end
 end
