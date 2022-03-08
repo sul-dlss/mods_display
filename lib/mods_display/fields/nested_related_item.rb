@@ -37,7 +37,13 @@ module ModsDisplay
 
     def related_item_mods_object(value)
       mods = ::Stanford::Mods::Record.new.tap do |r|
-        r.from_str("<mods xmlns=\"http://www.loc.gov/mods/v3\">#{value.children.to_xml}</mods>")
+        # dup'ing the value adds the appropriate namespaces, but...
+        munged_node = value.dup.tap do |x|
+          # ... the mods gem also expects the root of the document to have the root tag <mods>
+          x.name = 'mods'
+        end
+
+        r.from_nk_node(munged_node)
       end
       related_item = ModsDisplay::HTML.new(mods)
 

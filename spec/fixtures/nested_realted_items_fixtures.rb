@@ -14,6 +14,19 @@ module NestedRelatedItemFixtures
     XML
   end
 
+  def namespace_prefixed_related_item_fixture
+    <<-XML
+      <mods:mods xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
+        <mods:relatedItem type="constituent">
+          <mods:titleInfo>
+            <mods:title>Constituent Title</mods:title>
+          </mods:titleInfo>
+          <mods:note>Constituent note</mods:note>
+        </mods:relatedItem>
+      </mods:mods>
+    XML
+  end
+
   def multi_constituent_fixture
     <<-XML
       <mods xmlns="http://www.loc.gov/mods/v3">
