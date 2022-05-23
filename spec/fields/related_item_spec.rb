@@ -20,6 +20,7 @@ describe ModsDisplay::RelatedItem do
     @blank_item = Stanford::Mods::Record.new.from_str(blank_related_item_fixture).related_item
     @multi_items = Stanford::Mods::Record.new.from_str(multi_related_item_fixture).related_item
     @constituent_items = Stanford::Mods::Record.new.from_str(multi_constituent_fixture).related_item
+    @citation = Stanford::Mods::Record.new.from_str(citation_fixture).related_item
   end
 
   it 'excludes related items that will be rendered as a nested record' do
@@ -69,6 +70,12 @@ describe ModsDisplay::RelatedItem do
       fields = mods_display_item(@reference).fields
       expect(fields.length).to eq(1)
       expect(fields.first.values).to eq(['The title DATE 124'])
+    end
+
+    it 'returns the preferred citation if there is no title' do
+      fields = mods_display_item(@citation).fields
+      expect(fields.length).to eq(1)
+      expect(fields.first.values).to include(/^Sarah Beller, 401 Forbidden/)
     end
 
     it 'collapses labels down into the same record' do

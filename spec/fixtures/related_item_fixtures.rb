@@ -104,4 +104,14 @@ module RelatedItemFixtures
       </mods>
     XML
   end
+
+  def citation_fixture
+    <<-XML
+      <mods xmlns="http://www.loc.gov/mods/v3">
+        <relatedItem>
+          <note type="preferred citation">Sarah Beller, 401 Forbidden: An Empirical Study of Foreign Intelligence Surveillance Act Notices, 1990-2020, 13 Harv. Nat'l Security J. 158 (2021)</note>
+        </relatedItem>
+      </mods>
+    XML
+  end
 end
