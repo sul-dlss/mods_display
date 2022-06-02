@@ -10,7 +10,7 @@ module ModsDisplay
       return_fields = @values.map do |value|
         ModsDisplay::Values.new(
           label: displayLabel(value) || label,
-          values: [value.text]
+          values: [element_text(value)]
         )
       end
       collapse_fields(return_fields)
@@ -51,6 +51,10 @@ module ModsDisplay
 
         ModsDisplay::Values.new(label: group.first.label, values: group.map(&:values).flatten(1))
       end
+    end
+
+    def element_text(element)
+      element.xpath('.//text()').to_html.strip
     end
   end
 end

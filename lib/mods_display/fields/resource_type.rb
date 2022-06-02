@@ -4,7 +4,7 @@ module ModsDisplay
   class ResourceType < Field
     def fields
       return_fields = @values.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [value.text.strip])
+        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [element_text(value)])
       end
       collapse_fields(return_fields)
     end

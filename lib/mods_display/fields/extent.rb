@@ -8,7 +8,7 @@ module ModsDisplay
       [
         ModsDisplay::Values.new(
           label: I18n.t('mods_display.extent'),
-          values: extent_fields.map(&:text)
+          values: extent_fields.map { |x| element_text(x) }
         )
       ]
     end

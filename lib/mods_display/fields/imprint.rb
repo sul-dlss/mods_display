@@ -31,7 +31,7 @@ module ModsDisplay
         other_pub_info(value).each do |pub_info|
           return_fields << ModsDisplay::Values.new(
             label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
-            values: [pub_info.text.strip]
+            values: [element_text(pub_info)]
           )
         end
 

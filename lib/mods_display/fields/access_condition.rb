@@ -73,18 +73,18 @@ module ModsDisplay
       when 'license'
         license_statement(element)
       else
-        element.text
+        element_text(element)
       end
     end
 
     def copyright_statement(element)
-      element.text.gsub(/\(c\) copyright/i, '&copy;').gsub(/\(c\)/i, '&copy;')
+      element_text(element).gsub(/\(c\) copyright/i, '&copy;').gsub(/\(c\)/i, '&copy;')
     end
 
     def license_statement(element)
-      matches = element.text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
+      matches = element_text(element).match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
 
-      return element.text unless matches
+      return element_text(element) unless matches
 
       code = matches[:code].downcase
       type = matches[:type].downcase

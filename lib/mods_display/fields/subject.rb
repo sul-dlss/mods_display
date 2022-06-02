@@ -12,10 +12,10 @@ module ModsDisplay
           if respond_to?(:"process_#{child.name}")
             method_send = send(:"process_#{child.name}", child)
             return_text << method_send unless method_send.to_s.empty?
-          elsif child.text.include?('--')
-            return_text << child.text.split('--').map(&:strip)
+          elsif element_text(child).include?('--')
+            return_text << element_text(child).split('--').map(&:strip)
           else
-            return_text << child.text unless child.text.empty?
+            return_text << element_text(child) unless element_text(child).empty?
           end
         end
         return_values << return_text.flatten unless return_text.empty?
@@ -54,10 +54,10 @@ module ModsDisplay
     def values_from_subjects(element)
       return_values = []
       selected_subjects(element).each do |child|
-        return_values << if child.text.include?('--')
-                           child.text.split('--').map(&:strip)
+        return_values << if element_text(child).include?('--')
+                           element_text(child).split('--').map(&:strip)
                          else
-                           child.text.strip
+                           element_text(child)
                          end
       end
       return_values

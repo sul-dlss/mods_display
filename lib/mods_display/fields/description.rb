@@ -4,7 +4,7 @@ module ModsDisplay
   class Description < Field
     def fields
       return_fields = description_fields.map do |value|
-        ModsDisplay::Values.new(label: description_label(value), values: [value.text])
+        ModsDisplay::Values.new(label: description_label(value), values: [element_text(value)])
       end
       collapse_fields(return_fields)
     end

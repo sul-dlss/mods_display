@@ -10,10 +10,10 @@ module ModsDisplay
 
           if child.name.to_sym == :url
             loc_label = displayLabel(location) || I18n.t('mods_display.location')
-            value = "<a href='#{child.text}'>#{(displayLabel(child) || child.text).gsub(/:$/, '')}</a>"
+            value = "<a href='#{element_text(child)}'>#{(displayLabel(child) || element_text(child)).gsub(/:$/, '')}</a>"
           else
             loc_label = location_label(child) || displayLabel(location) || I18n.t('mods_display.location')
-            value = child.text
+            value = element_text(child)
           end
           return_fields << ModsDisplay::Values.new(
             label: loc_label || displayLabel(location) || I18n.t('mods_display.location'),

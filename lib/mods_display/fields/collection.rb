@@ -16,7 +16,7 @@ module ModsDisplay
 
         return_fields << ModsDisplay::Values.new(
           label: collection_label(value),
-          values: [value.titleInfo.text.strip]
+          values: [element_text(value.titleInfo)]
         )
       end
       collapse_fields(return_fields)

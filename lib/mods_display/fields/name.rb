@@ -6,7 +6,7 @@ module ModsDisplay
     def fields
       return_fields = @values.map do |value|
         person = if value.displayForm.length.positive?
-                   ModsDisplay::Name::Person.new(name: value.displayForm.text)
+                   ModsDisplay::Name::Person.new(name: element_text(value.displayForm))
                  elsif !name_parts(value).empty?
                    ModsDisplay::Name::Person.new(name: name_parts(value))
                  end
@@ -58,7 +58,7 @@ module ModsDisplay
     end
 
     def format_role(element)
-      element.text.capitalize.sub(/[.,:;]+$/, '')
+      element_text(element).capitalize.sub(/[.,:;]+$/, '')
     end
 
     def role?(element)
@@ -87,7 +87,7 @@ module ModsDisplay
 
     def unqualified_name_parts(element)
       element.namePart.map do |part|
-        part.text unless part.attributes['type']
+        element_text(part) unless part.attributes['type']
       end.compact
     end
 
@@ -95,7 +95,7 @@ module ModsDisplay
       element.namePart.map do |part|
         if part.attributes['type'].respond_to?(:value) &&
            part.attributes['type'].value == type
-          part.text
+          element_text(part)
         end
       end.compact
     end
@@ -121,7 +121,7 @@ module ModsDisplay
           end
         end.compact
       end
-      roles.map { |t| t.text.strip }
+      roles.map { |t| element_text(t) }
     end
 
     def unencoded_role_term?(element)

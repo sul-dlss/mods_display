@@ -26,14 +26,14 @@ module ModsDisplay
 
     def related_item_value(item)
       if related_item_is_a_location?(item)
-        item.location.text.strip
+        element_text(item.location)
       elsif related_item_is_a_reference?(item)
         reference_title(item)
       elsif item.titleInfo.any?
-        title = item.titleInfo.text.strip
+        title = element_text(item.titleInfo)
         location = nil
-        location = item.location.url.text if item.location.length.positive? &&
-                                             item.location.url.length.positive?
+        location = element_text(item.location.url) if item.location.length.positive? &&
+                                                      item.location.url.length.positive?
 
         return if title.empty?
 
@@ -45,7 +45,7 @@ module ModsDisplay
       elsif item.note.any?
         citation = item.note.find { |note| note['type'] == 'preferred citation' }
 
-        citation&.text&.strip
+        element_text(citation) if citation
       end
     end
 

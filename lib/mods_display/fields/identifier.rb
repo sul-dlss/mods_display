@@ -4,7 +4,7 @@ module ModsDisplay
   class Identifier < Field
     def fields
       return_fields = @values.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || identifier_label(value), values: [value.text])
+        ModsDisplay::Values.new(label: displayLabel(value) || identifier_label(value), values: [element_text(value)])
       end
       collapse_fields(return_fields)
     end

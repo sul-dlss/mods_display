@@ -24,7 +24,7 @@ module ModsDisplay
       previous_element = nil
 
       element.children.select { |value| title_parts.include? value.name }.each do |value|
-        str = value.text.strip
+        str = element_text(value)
         next if str.empty?
 
         delimiter = if title.empty? || title.end_with?(' ')

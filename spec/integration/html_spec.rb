@@ -97,4 +97,36 @@ describe 'HTML Output' do
       expect(@abstract.abstract(raw: true)).to be_a ModsDisplay::Abstract
     end
   end
+
+  describe 'embedded html' do
+    subject(:html) { html_from_mods(mods).to_html }
+
+    context 'with xml entities' do
+      let(:mods) do
+        <<-XML
+          <mods xmlns=\"http://www.loc.gov/mods/v3\">
+            <abstract>&gt;i:&lt;</abstract>
+          </mods>
+        XML
+      end
+
+      it 'passes xml entities through' do
+        expect(html).to match(%r{<dd>&gt;i:&lt;</dd>})
+      end
+    end
+
+    context 'with cdata-wrapped XML' do
+      let(:mods) do
+        <<-XML
+          <mods xmlns=\"http://www.loc.gov/mods/v3\">
+            <abstract><![CDATA[<i>]]>Some title<![CDATA[</i>]]> in an abstract</abstract>
+          </mods>
+        XML
+      end
+
+      it 'passes xml entities through' do
+        expect(html).to match(%r{<dd><i>Some title</i> in an abstract</dd>})
+      end
+    end
+  end
 end

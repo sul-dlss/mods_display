@@ -8,7 +8,7 @@ module ModsDisplay
       [
         ModsDisplay::Values.new(
           label: I18n.t('mods_display.form'),
-          values: form_fields.map(&:text).uniq { |x| x.downcase.gsub(/\s/, '').gsub(/[[:punct:]]/, '') }
+          values: form_fields.map { |x| element_text(x) }.uniq { |x| x.downcase.gsub(/\s/, '').gsub(/[[:punct:]]/, '') }
         )
       ]
     end

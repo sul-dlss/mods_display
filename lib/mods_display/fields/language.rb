@@ -11,7 +11,7 @@ module ModsDisplay
 
           ModsDisplay::Values.new(
             label: displayLabel(value) || displayLabel(term) || I18n.t('mods_display.language'),
-            values: [language_codes[term.text]]
+            values: [language_codes[element_text(term)]]
           )
         end.flatten.compact
       end.flatten.compact

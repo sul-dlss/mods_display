@@ -4,7 +4,10 @@ module ModsDisplay
   class Contact < Field
     def fields
       return_fields = contact_fields.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || I18n.t('mods_display.contact'), values: [value.text])
+        ModsDisplay::Values.new(
+          label: displayLabel(value) || I18n.t('mods_display.contact'),
+          values: [element_text(value)]
+        )
       end
       collapse_fields(return_fields)
     end

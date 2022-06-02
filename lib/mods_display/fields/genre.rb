@@ -4,7 +4,7 @@ module ModsDisplay
   class Genre < Field
     def fields
       return_fields = @values.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [value.text.strip.capitalize].flatten)
+        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [element_text(value).capitalize].flatten)
       end
       collapse_fields(return_fields)
     end
