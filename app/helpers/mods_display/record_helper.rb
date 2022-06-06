@@ -91,6 +91,8 @@ module ModsDisplay
           if match =~ email
             val.gsub!(match, "<a href='mailto:#{match}'>#{match}</a>")
           else
+            match = match.delete_suffix('&gt')
+
             val.gsub!(match, "<a href='#{match}'>#{match}</a>")
           end
         end

@@ -231,5 +231,11 @@ describe ModsDisplay::RecordHelper, type: :helper do
     it 'links email addresses' do
       expect(link_urls_and_email(email)).to eq 'This is a field that contains an <a href="mailto:email@email.com">email@email.com</a> address'
     end
+
+    it 'leaves closing punction out of the url' do
+      value = 'Dustin Schroeder and the Scott Polar Research Institute, 2018. &lt;"Multidecadal observations of the Antarctic ice sheet from restored analog radar records" https://doi.org/10.1073/pnas.1821646116&gt;'
+      expected = 'Dustin Schroeder and the Scott Polar Research Institute, 2018. &lt;"Multidecadal observations of the Antarctic ice sheet from restored analog radar records" <a href="https://doi.org/10.1073/pnas.1821646116">https://doi.org/10.1073/pnas.1821646116</a>&gt;'
+      expect(link_urls_and_email(value)).to eq expected
+    end
   end
 end
