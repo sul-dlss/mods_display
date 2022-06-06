@@ -19,6 +19,9 @@ describe 'HTML Output' do
           <titleInfo type='alternative'>
             <title>Alternate Title</title>
           </titleInfo>
+          <titleInfo type='alternative'>
+            <title>Second Alternate Title</title>
+          </titleInfo>
         </mods>
       MODS
     )
@@ -47,9 +50,9 @@ describe 'HTML Output' do
   end
 
   describe 'titles' do
-    it 'includes both titles it regular display' do
+    it 'includes all titles it regular display' do
       expect(@multiple_titles.to_html).to match(%r{<dd>\s*Main Title\s*</dd>})
-      expect(@multiple_titles.to_html).to match(%r{<dd>\s*Alternate Title\s*</dd>})
+      expect(@multiple_titles.to_html).to match(%r{<dd>\s*Alternate Title<br />Second Alternate Title\s*</dd>})
     end
 
     it 'returns just the first title in the #title method' do
@@ -58,7 +61,7 @@ describe 'HTML Output' do
 
     it 'omits the first title and return any remaining titles in the #body' do
       expect(@multiple_titles.body).not_to match(%r{<dd>\s*Main Title\s*</dd>})
-      expect(@multiple_titles.body).to match(%r{<dd>\s*Alternate Title\s*</dd>})
+      expect(@multiple_titles.body).to match(%r{<dd>\s*Alternate Title<br />Second Alternate Title\s*</dd>})
     end
 
     it 'allows access to the subTitle independently from the title (for use with #body or fields)' do
@@ -66,7 +69,7 @@ describe 'HTML Output' do
       expect(sub_title.length).to eq 1
       expect(sub_title.first).to be_a ModsDisplay::Values
       expect(sub_title.first.label).to match(/^Alternative title/i)
-      expect(sub_title.first.values).to eq(['Alternate Title'])
+      expect(sub_title.first.values).to eq(['Alternate Title', 'Second Alternate Title'])
     end
   end
 

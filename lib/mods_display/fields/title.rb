@@ -16,7 +16,7 @@ module ModsDisplay
     private
 
     def delimiter
-      '<br />'
+      '<br />'.html_safe
     end
 
     def assemble_title(element)
