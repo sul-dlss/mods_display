@@ -9,13 +9,11 @@ module ModsDisplay
         next if related_item_is_a_collection?(value)
         next if render_nested_related_item?(value)
 
-        if related_item_is_a_location?(value)
-          process_location value
-        elsif related_item_is_a_reference?(value)
-          process_reference value
-        else
-          process_related_item(value)
-        end
+        text = related_item_value(value)
+
+        next if text.nil? || text.empty?
+
+        ModsDisplay::Values.new(label: related_item_label(value), values: [text])
       end.compact
       collapse_fields(return_fields)
     end
@@ -23,28 +21,32 @@ module ModsDisplay
     private
 
     def delimiter
-      '<br />'
+      '<br />'.html_safe
     end
 
-    def process_location(item)
-      ModsDisplay::Values.new(label: related_item_label(item), values: [item.location.text.strip])
-    end
+    def related_item_value(item)
+      if related_item_is_a_location?(item)
+        item.location.text.strip
+      elsif related_item_is_a_reference?(item)
+        reference_title(item)
+      elsif item.titleInfo.any?
+        title = item.titleInfo.text.strip
+        location = nil
+        location = item.location.url.text if item.location.length.positive? &&
+                                             item.location.url.length.positive?
 
-    def process_reference(item)
-      ModsDisplay::Values.new(label: related_item_label(item), values: [reference_title(item)])
-    end
+        return if title.empty?
 
-    def process_related_item(item)
-      return unless item.titleInfo.length.positive?
+        if location
+          "<a href='#{location}'>#{title}</a>".html_safe
+        else
+          title
+        end
+      elsif item.note.any?
+        citation = item.note.find { |note| note['type'] == 'preferred citation' }
 
-      title = item.titleInfo.text.strip
-      return_text = title
-      location = nil
-      location = item.location.url.text if item.location.length.positive? &&
-                                           item.location.url.length.positive?
-      return_text = "<a href='#{location}'>#{title}</a>" if location && !title.empty?
-
-      ModsDisplay::Values.new(label: related_item_label(item), values: [return_text]) unless return_text.empty?
+        citation&.text&.strip
+      end
     end
 
     def reference_title(item)
