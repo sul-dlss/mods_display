@@ -12,7 +12,7 @@ module ModsDisplay
     private
 
     def delimiter
-      '<br />'
+      '<br />'.html_safe
     end
 
     def note_fields
