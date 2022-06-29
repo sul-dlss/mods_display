@@ -349,6 +349,20 @@ describe ModsDisplay::Imprint do
         fields = mods_display_imprint(non_integer_date).fields
         expect(fields.first.values).to eq ['20th century']
       end
+
+      it 'renders BC ranges' do
+        bc_range = <<-MODS
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated encoding="edtf" qualifier="approximate" keyDate="yes" point="start">-0249</dateCreated>
+              <dateCreated encoding="edtf" qualifier="approximate" point="end">-0099</dateCreated>
+            </originInfo>
+          </mods>
+        MODS
+
+        fields = mods_display_imprint(bc_range).fields
+        expect(fields.first.values).to eq ['[ca. 250 B.C.-100 B.C.]']
+      end
     end
   end
 
