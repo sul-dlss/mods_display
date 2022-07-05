@@ -67,7 +67,7 @@ module ModsDisplay
         end
 
         # Element text reduced to digits and hyphen. Captures date ranges and
-        # negative (B.C.) dates. Used for comparison/deduping.
+        # negative (BCE) dates. Used for comparison/deduping.
         def base_value
           if text =~ /^\[?1\d{3}-\d{2}\??\]?$/
             return text.sub(/(\d{2})(\d{2})-(\d{2})/, '\1\2-\1\3')
@@ -93,10 +93,10 @@ module ModsDisplay
           when :year
             year = date.year
             if year < 1
-              "#{year.abs + 1} B.C."
-            # Any dates before the year 1000 are explicitly marked A.D.
+              "#{year.abs + 1} BCE"
+            # Any dates before the year 1000 are explicitly marked CE
             elsif year > 1 && year < 1000
-              "#{year} A.D."
+              "#{year} CE"
             else
               year.to_s
             end
@@ -109,7 +109,7 @@ module ModsDisplay
           end
         end
 
-        # Decoded date with "B.C." or "A.D." and qualifier markers. See (outdated):
+        # Decoded date with "BCE" or "CE" and qualifier markers. See (outdated):
         # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
         def qualified_value
           date = decoded_value
@@ -143,7 +143,7 @@ module ModsDisplay
           @start&.encoding || @stop&.encoding
         end
 
-        # Decoded dates with "B.C." or "A.D." and qualifier markers applied to
+        # Decoded dates with "BCE" or "CE" and qualifier markers applied to
         # the entire range, or individually if dates differ.
         def qualified_value
           if @start&.qualifier == @stop&.qualifier
@@ -192,7 +192,7 @@ module ModsDisplay
                                .map(&:base_values).flatten
       dates = dates.reject { |date| range_base_values.include?(date.base_value) }
 
-      # output formatted dates with qualifiers, A.D./B.C., etc.
+      # output formatted dates with qualifiers, CE/BCE, etc.
       dates.map(&:qualified_value)
     end
 

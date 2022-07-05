@@ -148,10 +148,10 @@ describe ModsDisplay::Imprint do
         expect(fields.first.values).to eq ['February  1, 2008-December  2, 2009']
       end
 
-      it 'handles B.C. and A.D. dates appropriately' do
+      it 'handles BCE and CE dates appropriately' do
         fields = mods_display_imprint(bc_ad_imprint_date_fixture).fields
         expect(fields.length).to eq 1
-        expect(fields.first.values).to eq ['14 B.C.-44 A.D.']
+        expect(fields.first.values).to eq ['14 BCE-44 CE']
       end
     end
 
@@ -211,7 +211,7 @@ describe ModsDisplay::Imprint do
     end
 
     describe 'encoded dates' do
-      it 'transforms year zero dates to 1 B.C.' do
+      it 'transforms year zero dates to 1 BCE' do
         year_zero_date = <<-MODS
           <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
@@ -221,7 +221,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(year_zero_date).fields
-        expect(fields.first.values).to eq ['1 B.C.']
+        expect(fields.first.values).to eq ['1 BCE']
       end
 
       describe 'W3CDTF' do
@@ -324,7 +324,7 @@ describe ModsDisplay::Imprint do
         expect(fields.last.values).to eq(['1920-09-32'])
       end
 
-      it 'marks dates consisting solely of zeroes as 1 B.C.' do
+      it 'marks dates consisting solely of zeroes as 1 BCE' do
         zeroes_date = <<-MODS
           <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
@@ -334,10 +334,10 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(zeroes_date).fields
-        expect(fields.first.values).to eq ['1 B.C.']
+        expect(fields.first.values).to eq ['1 BCE']
       end
 
-      it 'does not append A.D. to dates that are not integers' do
+      it 'does not append CE to dates that are not integers' do
         non_integer_date = <<-MODS
           <mods xmlns="http://www.loc.gov/mods/v3">
             <originInfo>
@@ -361,7 +361,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(bc_range).fields
-        expect(fields.first.values).to eq ['[ca. 250 B.C.-100 B.C.]']
+        expect(fields.first.values).to eq ['[ca. 250 BCE-100 BCE]']
       end
     end
   end
