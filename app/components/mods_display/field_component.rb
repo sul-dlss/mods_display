@@ -22,7 +22,7 @@ module ModsDisplay
       if @value_transformer
         @value_transformer.call(value)
       else
-        helpers.link_urls_and_email(value)
+        helpers.format_mods_html(value, field: @field)
       end
     end
   end

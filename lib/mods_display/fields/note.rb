@@ -4,7 +4,7 @@ module ModsDisplay
   class Note < Field
     def fields
       return_fields = note_fields.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || note_label(value), values: [element_text(value)])
+        ModsDisplay::Values.new(label: displayLabel(value) || note_label(value), values: [element_text(value)], field: self)
       end
       collapse_fields(return_fields)
     end

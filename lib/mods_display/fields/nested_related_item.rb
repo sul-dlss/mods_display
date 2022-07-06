@@ -25,7 +25,7 @@ module ModsDisplay
 
       component = ModsDisplay::ListFieldComponent.with_collection(
         fields,
-        value_transformer: ->(value) { helpers.link_urls_and_email(value.to_s) },
+        value_transformer: ->(value) { helpers.format_mods_html(value.to_s) },
         list_html_attributes: { class: 'mods_display_nested_related_items' },
         list_item_html_attributes: { class: 'mods_display_nested_related_item open' }
       )
