@@ -74,7 +74,16 @@ module ModsDisplay
     def link_urls_and_email(val, tags: %w[a dl dd dt i b em strong cite br])
       val = val.gsub(%r{<[^/> ]+}) do |possible_tag|
         # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
-        if tags.include? possible_tag[1..]
+        if tags.include?(possible_tag[1..])
+          possible_tag
+        else
+          "&lt;#{possible_tag[1..]}"
+        end
+      end
+
+      val = val.gsub(%r{</[^> ]+}) do |possible_tag|
+        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
+        if tags.include?(possible_tag[2..])
           possible_tag
         else
           "&lt;#{possible_tag[1..]}"

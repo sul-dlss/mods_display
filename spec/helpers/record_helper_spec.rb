@@ -237,5 +237,9 @@ describe ModsDisplay::RecordHelper, type: :helper do
       expected = 'Dustin Schroeder and the Scott Polar Research Institute, 2018. &lt;"Multidecadal observations of the Antarctic ice sheet from restored analog radar records" <a href="https://doi.org/10.1073/pnas.1821646116">https://doi.org/10.1073/pnas.1821646116</a>&gt;'
       expect(link_urls_and_email(value)).to eq expected
     end
+
+    it 'strips out paragraph tags' do
+      expect(format_mods_html('<p>blah</p>')).to eq '&lt;p&gt;blah&lt;/p&gt;'
+    end
   end
 end
