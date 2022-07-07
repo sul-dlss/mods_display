@@ -69,12 +69,19 @@ module ModsDisplay
       link
     end
 
-    # rubocop:disable Layout/LineLength
-    # @private, but used in PURL currently
-    def link_urls_and_email(val, tags: %w[a dl dd dt i b em strong cite br])
+    def format_mods_html(val, tags: %w[a dl dd dt i b em strong cite br], field: nil)
       val = val.gsub(%r{<[^/> ]+}) do |possible_tag|
         # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
-        if tags.include? possible_tag[1..]
+        if tags.include?(possible_tag[1..])
+          possible_tag
+        else
+          "&lt;#{possible_tag[1..]}"
+        end
+      end
+
+      val = val.gsub(%r{</[^> ]+}) do |possible_tag|
+        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
+        if tags.include?(possible_tag[2..])
           possible_tag
         else
           "&lt;#{possible_tag[1..]}"
@@ -98,7 +105,24 @@ module ModsDisplay
         end
       end
 
-      sanitize val, tags: tags, attributes: %w[href]
+      formatted_val = sanitize val, tags: tags, attributes: %w[href]
+
+      # Martin Wong data has significant linebreaks in abstracts and notes that we want
+      # to preserve and display in HTML.
+      #
+      # See https://github.com/sul-dlss/mods_display/issues/78
+      simple_formatted_fields = [ModsDisplay::Abstract, ModsDisplay::Contents, ModsDisplay::Note]
+      if simple_formatted_fields.any? { |klass| field&.field.is_a? klass } && formatted_val.include?("\n")
+        simple_format(formatted_val, {}, sanitize: false)
+      else
+        formatted_val
+      end
+    end
+
+    # rubocop:disable Layout/LineLength
+    # @private, but used in PURL currently
+    def link_urls_and_email(val, tags: %w[a dl dd dt i b em strong cite br])
+      format_mods_html(val, tags: tags)
     end
     # rubocop:enable Layout/LineLength
   end

@@ -30,7 +30,7 @@ describe ModsDisplay::RecordHelper, type: :helper do
   describe 'mods_record_field' do
     let(:mods_field) { OpenStruct.new(label: 'test', values: ['hello, there']) }
     let(:url_field) { OpenStruct.new(label: 'test', values: ['https://library.stanford.edu']) }
-    let(:multi_values) { double(label: 'test', values: %w[123 321]) }
+    let(:multi_values) { double(label: 'test', values: %w[123 321], field: nil) }
 
     it 'returns correct content' do
       expect(helper.mods_record_field(mods_field)).to have_css('dt', text: 'test')
@@ -220,22 +220,38 @@ describe ModsDisplay::RecordHelper, type: :helper do
     end
   end
 
-  describe '#link_urls_and_email' do
+  describe '#format_mods_html' do
     let(:url) { 'This is a field that contains an https://library.stanford.edu URL' }
     let(:email) { 'This is a field that contains an email@email.com address' }
 
     it 'links URLs' do
-      expect(link_urls_and_email(url)).to eq 'This is a field that contains an <a href="https://library.stanford.edu">https://library.stanford.edu</a> URL'
+      expect(format_mods_html(url)).to eq 'This is a field that contains an <a href="https://library.stanford.edu">https://library.stanford.edu</a> URL'
     end
 
     it 'links email addresses' do
-      expect(link_urls_and_email(email)).to eq 'This is a field that contains an <a href="mailto:email@email.com">email@email.com</a> address'
+      expect(format_mods_html(email)).to eq 'This is a field that contains an <a href="mailto:email@email.com">email@email.com</a> address'
     end
 
     it 'leaves closing punction out of the url' do
       value = 'Dustin Schroeder and the Scott Polar Research Institute, 2018. &lt;"Multidecadal observations of the Antarctic ice sheet from restored analog radar records" https://doi.org/10.1073/pnas.1821646116&gt;'
       expected = 'Dustin Schroeder and the Scott Polar Research Institute, 2018. &lt;"Multidecadal observations of the Antarctic ice sheet from restored analog radar records" <a href="https://doi.org/10.1073/pnas.1821646116">https://doi.org/10.1073/pnas.1821646116</a>&gt;'
-      expect(link_urls_and_email(value)).to eq expected
+      expect(format_mods_html(value)).to eq expected
+    end
+
+    it 'ignores new lines in most fields' do
+      expect(format_mods_html("this\nthat")).to eq "this\nthat"
+    end
+
+    it 'formats newline characters for abstracts' do
+      expect(format_mods_html("this\nthat", field: ModsDisplay::Values.new(field: ModsDisplay::Abstract.new(nil)))).to eq "<p>this\n<br />that</p>"
+    end
+
+    it 'formats newline characters for notes' do
+      expect(format_mods_html("this\nthat", field: ModsDisplay::Values.new(field: ModsDisplay::Note.new(nil)))).to eq "<p>this\n<br />that</p>"
+    end
+
+    it 'strips out paragraph tags' do
+      expect(format_mods_html('<p>blah</p>')).to eq '&lt;p&gt;blah&lt;/p&gt;'
     end
   end
 end

@@ -4,7 +4,7 @@ module ModsDisplay
   class Contents < Field
     def to_html(view_context = ApplicationController.renderer)
       f = fields.map do |field|
-        ModsDisplay::Values.new(label: field.label, values: [field.values.join("\n\n")])
+        ModsDisplay::Values.new(label: field.label, values: [field.values.join("\n\n")], field: self)
       end
 
       helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context

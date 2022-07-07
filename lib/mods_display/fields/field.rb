@@ -10,7 +10,8 @@ module ModsDisplay
       return_fields = @values.map do |value|
         ModsDisplay::Values.new(
           label: displayLabel(value) || label,
-          values: [element_text(value)]
+          values: [element_text(value)],
+          field: self
         )
       end
       collapse_fields(return_fields)

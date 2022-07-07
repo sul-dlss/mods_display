@@ -128,5 +128,19 @@ describe 'HTML Output' do
         expect(html).to match(%r{<dd><i>Some title</i> in an abstract</dd>})
       end
     end
+
+    context 'with consecutive new line characters' do
+      let(:mods) do
+        <<-XML
+          <mods xmlns=\"http://www.loc.gov/mods/v3\">
+            <abstract>blah\n\nblah</abstract>
+          </mods>
+        XML
+      end
+
+      it 'passes xml entities through' do
+        expect(html).to match(%r{<dd><p>blah</p>\n\n<p>blah</p></dd>})
+      end
+    end
   end
 end
