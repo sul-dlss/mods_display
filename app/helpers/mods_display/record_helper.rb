@@ -111,7 +111,8 @@ module ModsDisplay
       # to preserve and display in HTML.
       #
       # See https://github.com/sul-dlss/mods_display/issues/78
-      if (field&.field.is_a?(ModsDisplay::Abstract) || field&.field.is_a?(ModsDisplay::Note)) && formatted_val.include?("\n")
+      simple_formatted_fields = [ModsDisplay::Abstract, ModsDisplay::Contents, ModsDisplay::Note]
+      if simple_formatted_fields.any? { |klass| field&.field.is_a? klass } && formatted_val.include?("\n")
         simple_format(formatted_val, {}, sanitize: false)
       else
         formatted_val
