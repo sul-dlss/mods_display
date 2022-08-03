@@ -74,7 +74,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(date_range).fields
-        expect(fields.first.values).to eq(['1820-1825'])
+        expect(fields.first.values).to eq(['1820 - 1825'])
       end
 
       it 'handles open ranges properly' do
@@ -87,7 +87,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(open_date_range).fields
-        expect(fields.first.values).to eq(['1820-'])
+        expect(fields.first.values).to eq(['1820 - '])
       end
 
       it 'handles when there are more than 3 of the same date w/i a range' do
@@ -103,7 +103,7 @@ describe ModsDisplay::Imprint do
 
         fields = mods_display_imprint(three_imprint_dates).fields
         expect(fields.length).to eq(1)
-        expect(fields.first.values).to eq(['[1820-1825?]'])
+        expect(fields.first.values).to eq(['[1820 - 1825?]'])
       end
 
       it 'applies the qualifier decoration in the imprints' do
@@ -123,7 +123,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(separate_qualifier_range).fields
-        expect(fields.first.values).to eq ['[ca. 1880]-1906']
+        expect(fields.first.values).to eq ['[ca. 1880] - 1906']
       end
 
       it 'handles date ranges in imprints' do
@@ -139,19 +139,19 @@ describe ModsDisplay::Imprint do
 
         fields = mods_display_imprint(imprint_date_range).fields
         expect(fields.length).to eq(1)
-        expect(fields.first.values).to eq(['1820-1825'])
+        expect(fields.first.values).to eq(['1820 - 1825'])
       end
 
       it 'handles encoded dates properly' do
         fields = mods_display_imprint(encoded_date_range).fields
         expect(fields.length).to eq 1
-        expect(fields.first.values).to eq ['February  1, 2008-December  2, 2009']
+        expect(fields.first.values).to eq ['February  1, 2008 - December  2, 2009']
       end
 
       it 'handles BCE and CE dates appropriately' do
         fields = mods_display_imprint(bc_ad_imprint_date_fixture).fields
         expect(fields.length).to eq 1
-        expect(fields.first.values).to eq ['14 BCE-44 CE']
+        expect(fields.first.values).to eq ['14 BCE - 44 CE']
       end
     end
 
@@ -299,7 +299,7 @@ describe ModsDisplay::Imprint do
     describe 'bad dates' do
       it 'ignores date values' do
         fields = mods_display_imprint(bad_dates).fields
-        expect(fields.length).to eq(2)
+        expect(fields.length).to eq(1)
         fields.each do |field|
           expect(field.values.join).not_to include '9999'
         end
@@ -315,7 +315,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(empty_date).fields
-        expect(fields.first.values).to eq []
+        expect(fields).to be_empty
       end
 
       it 'handles invalid dates by returning the original value' do
@@ -361,7 +361,7 @@ describe ModsDisplay::Imprint do
         MODS
 
         fields = mods_display_imprint(bc_range).fields
-        expect(fields.first.values).to eq ['[ca. 250 BCE-100 BCE]']
+        expect(fields.first.values).to eq ['[ca. 250 BCE - 100 BCE]']
       end
     end
   end
