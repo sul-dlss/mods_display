@@ -70,6 +70,11 @@ describe ModsDisplay::Name do
       expect(fields.first.values.first.name).to eq('Mr. John Doe')
     end
 
+    it 'decodes XML entities' do
+      fields = mods_display_name(Stanford::Mods::Record.new.from_str(entities_name_fixture).plain_name).fields
+      expect(fields.first.values.first.name).to eq('J. & C. Walker')
+    end
+
     it 'does not add blank names' do
       expect(mods_display_name(@blank_name).fields).to eq([])
     end
