@@ -126,6 +126,16 @@ module NameFixtures
     XML
   end
 
+  def entities_name_fixture
+    <<-XML
+      <mods xmlns="http://www.loc.gov/mods/v3">
+        <name type="corporate">
+          <namePart>J. &amp; C. Walker</namePart>
+        </name>
+      </mods>
+    XML
+  end
+
   def collapse_label_name_fixture
     <<-XML
       <mods xmlns="http://www.loc.gov/mods/v3">

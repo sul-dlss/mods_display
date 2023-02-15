@@ -30,6 +30,11 @@ module ModsDisplay
       '<br />'
     end
 
+    # Override of Field#element_text to get text rather than HTML
+    def element_text(element)
+      element.text.strip
+    end
+
     def collapse_roles(fields)
       return [] if fields.blank?
 
