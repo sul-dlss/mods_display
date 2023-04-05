@@ -242,11 +242,13 @@ describe ModsDisplay::RecordHelper, type: :helper do
     end
 
     it 'formats newline characters for abstracts' do
-      expect(format_mods_html("this\nthat", field: ModsDisplay::Values.new(field: ModsDisplay::Abstract.new(nil)))).to eq "<p>this\n<br />that</p>"
+      expect(format_mods_html("this\nthat",
+                              field: ModsDisplay::Values.new(field: ModsDisplay::Abstract.new(nil)))).to eq "<p>this\n<br />that</p>"
     end
 
     it 'formats newline characters for notes' do
-      expect(format_mods_html("this\nthat", field: ModsDisplay::Values.new(field: ModsDisplay::Note.new(nil)))).to eq "<p>this\n<br />that</p>"
+      expect(format_mods_html("this\nthat",
+                              field: ModsDisplay::Values.new(field: ModsDisplay::Note.new(nil)))).to eq "<p>this\n<br />that</p>"
     end
 
     it 'strips out paragraph tags' do

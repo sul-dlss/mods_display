@@ -14,9 +14,9 @@ RSpec.describe 'HTML Output' do
   end
 
   describe 'i18n' do
-    let(:instance) { html_from_mods(mods) }
     subject(:html) { instance.to_html }
 
+    let(:instance) { html_from_mods(mods) }
     let(:mods) do
       <<~XML
         <mods xmlns="http://www.loc.gov/mods/v3">
@@ -157,7 +157,7 @@ RSpec.describe 'HTML Output' do
     subject(:genre) { instance.genre }
 
     let(:instance) do
-      html_from_mods("<mods xmlns=\"http://www.loc.gov/mods/v3\"></mods>")
+      html_from_mods('<mods xmlns="http://www.loc.gov/mods/v3"></mods>')
     end
 
     context 'when no data is available' do

@@ -12,13 +12,13 @@ RSpec.describe ModsDisplay::Record do
 
   describe '#mods_record' do
     it 'returns the stanford mods record' do
-      expect(record.mods_record).to be_a_kind_of(Stanford::Mods::Record)
+      expect(record.mods_record).to be_a(Stanford::Mods::Record)
     end
   end
 
   describe '#mods_display_html' do
     it 'returns the ModsDisplay::HTML representation' do
-      expect(record.mods_display_html).to be_a_kind_of(ModsDisplay::HTML)
+      expect(record.mods_display_html).to be_a(ModsDisplay::HTML)
     end
 
     it 'returns a single <dl>' do
