@@ -35,9 +35,8 @@ module ModsDisplay
     end
 
     def title
-      return mods_field(:title).fields.first.values unless mods_field(:title).fields.empty?
-
-      ''
+      title_fields = mods_field(:title).fields
+      title_fields.empty? ? '' : title_fields.first.values
     end
 
     def render_in(view_context)
@@ -45,7 +44,7 @@ module ModsDisplay
     end
 
     # Need to figure out how to get the 1st title out of the list.
-    # Maybe have a separate class that will omit the first tite natively
+    # Maybe have a separate class that will omit the first title natively
     # and replace the first key in the the fields list with that.
     def body(view_context = ApplicationController.renderer)
       view_context.render ModsDisplay::RecordComponent.new(record: self), layout: false
