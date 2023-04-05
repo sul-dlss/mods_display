@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/sul-dlss/mods_display.png?branch=master)](https://travis-ci.org/sul-dlss/mods_display)
-
 # ModsDisplay
 
 A gem for displaying MODS Metadata in a configurable way.
