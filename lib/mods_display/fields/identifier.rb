@@ -12,9 +12,7 @@ module ModsDisplay
     private
 
     def identifier_label(element)
-      if element.attributes['type'].respond_to?(:value)
-        return identifier_labels[element.attributes['type'].value] || "#{element.attributes['type'].value}:"
-      end
+      return identifier_labels[element.attributes['type'].value] || "#{element.attributes['type'].value}:" if element.attributes['type'].respond_to?(:value)
 
       I18n.t('mods_display.identifier')
     end

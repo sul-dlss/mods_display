@@ -44,7 +44,7 @@ describe ModsDisplay::Form do
       end
 
       it 'uses only unique form values, ignore differences in case, punctuation or whitespace' do
-        expect(subject.first.values).to match_array ['electronic resource.']
+        expect(subject.first.values).to contain_exactly('electronic resource.')
       end
     end
   end

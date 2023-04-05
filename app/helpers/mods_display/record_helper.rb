@@ -89,7 +89,7 @@ module ModsDisplay
       end
 
       # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-      url = %r{(?i)\b(?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])}i
+      url = %r{(?i)\b(?:https?://|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])}i
       # http://www.regular-expressions.info/email.html
       email = %r{[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b}i
       matches = [val.scan(url), val.scan(email)].flatten.uniq
@@ -119,11 +119,9 @@ module ModsDisplay
       end
     end
 
-    # rubocop:disable Layout/LineLength
     # @private, but used in PURL currently
     def link_urls_and_email(val, tags: %w[a dl dd dt i b em strong cite br])
       format_mods_html(val, tags: tags)
     end
-    # rubocop:enable Layout/LineLength
   end
 end

@@ -4,7 +4,8 @@ module ModsDisplay
   class Note < Field
     def fields
       return_fields = note_fields.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || note_label(value), values: [element_text(value)], field: self)
+        ModsDisplay::Values.new(label: displayLabel(value) || note_label(value), values: [element_text(value)],
+                                field: self)
       end
       collapse_fields(return_fields)
     end
@@ -24,9 +25,7 @@ module ModsDisplay
     end
 
     def note_label(element)
-      if element.attributes['type'].respond_to?(:value)
-        return note_labels[element.attributes['type'].value] || "#{element.attributes['type'].value.capitalize}:"
-      end
+      return note_labels[element.attributes['type'].value] || "#{element.attributes['type'].value.capitalize}:" if element.attributes['type'].respond_to?(:value)
 
       I18n.t('mods_display.note')
     end
