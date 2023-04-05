@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'byebug'
 
 describe ModsDisplay::RecordHelper, type: :helper do
   let(:empty_field) { OpenStruct.new(label: 'test', values: ['']) }
