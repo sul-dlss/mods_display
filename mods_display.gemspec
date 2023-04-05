@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.version       = ModsDisplay::VERSION
   gem.authors       = ['Jessie Keck']
   gem.email         = ['jessie.keck@gmail.com']
-  gem.description   = 'MODS Display is a gem to centralize the display logic of MODS medadata.'
+  gem.description   = 'MODS Display is a gem to centralize the display logic of MODS metadata.'
   gem.summary       = 'The MODS Display gem allows implementers to configure a customized display of MODS metadata.  This display implements the specifications defined at Stanford for how to display MODS.'
   gem.homepage      = 'https://github.com/sul-dlss/mods_display'
 
