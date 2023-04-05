@@ -3,9 +3,8 @@
 module ModsDisplay
   class Title < Field
     def fields
-      return_values = []
-      @values&.each do |value|
-        return_values << ModsDisplay::Values.new(
+      return_values = sorted_values.map do |value|
+        ModsDisplay::Values.new(
           label: displayLabel(value) || title_label(value),
           values: [assemble_title(value)]
         )
@@ -14,6 +13,11 @@ module ModsDisplay
     end
 
     private
+
+    # If there is a node with usage="primary", then it should come first.
+    def sorted_values
+      Array(@values).sort_by { |node| node['usage'] == 'primary' ? 0 : 1 }
+    end
 
     def delimiter
       '<br />'.html_safe
