@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module ModsDisplay
-  module RelatorCodes
-    def relator_codes
+  module RelatorCodes # rubocop:disable Metrics/ModuleLength
+    def relator_codes # rubocop:disable Metrics/MethodLength
       { 'abr' => 'Abridger',
         'acp' => 'Art copyist',
         'act' => 'Actor',
