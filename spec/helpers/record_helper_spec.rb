@@ -227,6 +227,10 @@ describe ModsDisplay::RecordHelper, type: :helper do
       expect(format_mods_html(url)).to eq 'This is a field that contains an <a href="https://library.stanford.edu">https://library.stanford.edu</a> URL'
     end
 
+    it 'allows stuff' do
+      expect(format_mods_html('<something>blah')).to eq '&lt;something&gt;blah'
+    end
+
     it 'links email addresses' do
       expect(format_mods_html(email)).to eq 'This is a field that contains an <a href="mailto:email@email.com">email@email.com</a> address'
     end
