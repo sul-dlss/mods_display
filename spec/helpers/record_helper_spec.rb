@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe ModsDisplay::RecordHelper, type: :helper do
+RSpec.describe ModsDisplay::RecordHelper, type: :helper do
   let(:empty_field) { OpenStruct.new(label: 'test', values: ['']) }
 
   describe 'mods_display_label' do
@@ -251,8 +251,12 @@ describe ModsDisplay::RecordHelper, type: :helper do
                               field: ModsDisplay::Values.new(field: ModsDisplay::Note.new(nil)))).to eq "<p>this\n<br />that</p>"
     end
 
-    it 'strips out paragraph tags' do
-      expect(format_mods_html('<p>blah</p>')).to eq '&lt;p&gt;blah&lt;/p&gt;'
+    context 'when the tags are not permitted' do
+      let(:data) { "This article explains how to inject html like: <script>document.querySelector('body').style.backgroundColor = 'pink'</script>" }
+
+      it 'escapes non-permitted tags' do
+        expect(format_mods_html(data)).to eq "This article explains how to inject html like: &lt;script&gt;document.querySelector('body').style.backgroundColor = 'pink'&lt;/script&gt;"
+      end
     end
   end
 end
