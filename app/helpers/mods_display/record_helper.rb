@@ -2,6 +2,8 @@
 
 module ModsDisplay
   module RecordHelper
+    PERMITTED_TAGS = %w[a dl dd dt i b em strong cite br].freeze
+
     def mods_display_label(label)
       content_tag(:dt, label.delete(':')) + "\n".html_safe
     end
@@ -69,31 +71,14 @@ module ModsDisplay
       link
     end
 
-    def format_mods_html(val, tags: %w[a dl dd dt i b em strong cite br], field: nil)
-      val = val.gsub(%r{<[^/> ]+}) do |possible_tag|
-        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
-        if tags.include?(possible_tag[1..])
-          possible_tag
-        else
-          "&lt;#{possible_tag[1..]}"
-        end
-      end
-
-      val = val.gsub(%r{</[^> ]+}) do |possible_tag|
-        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
-        if tags.include?(possible_tag[2..])
-          possible_tag
-        else
-          "&lt;#{possible_tag[1..]}"
-        end
-      end
-
+    def format_mods_html(val, tags: PERMITTED_TAGS, field: nil)
       # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
       url = %r{(?i)\b(?:https?://|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])}i
       # http://www.regular-expressions.info/email.html
       email = %r{[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b}i
       matches = [val.scan(url), val.scan(email)].flatten.uniq
       unless val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
+        val = +val # make the string mutable.
         matches.each do |match|
           if match =~ email
             val.gsub!(match, "<a href='mailto:#{match}'>#{match}</a>")

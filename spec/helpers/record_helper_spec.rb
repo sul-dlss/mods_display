@@ -252,7 +252,7 @@ describe ModsDisplay::RecordHelper, type: :helper do
     end
 
     it 'strips out paragraph tags' do
-      expect(format_mods_html('<p>blah</p>')).to eq '&lt;p&gt;blah&lt;/p&gt;'
+      expect(format_mods_html('<p>blah</p>')).to eq 'blah'
     end
   end
 end
