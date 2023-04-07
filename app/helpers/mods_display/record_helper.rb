@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rails_autolink/helpers'
+
 module ModsDisplay
   module RecordHelper
     def mods_display_label(label)
@@ -88,22 +90,7 @@ module ModsDisplay
         end
       end
 
-      # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-      url = %r{(?i)\b(?:https?://|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\([^\s()<>]+|\([^\s()<>]+\)*\))+(?:\([^\s()<>]+|\([^\s()<>]+\)*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])}i
-      # http://www.regular-expressions.info/email.html
-      email = %r{[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b}i
-      matches = [val.scan(url), val.scan(email)].flatten.uniq
-      unless val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
-        matches.each do |match|
-          if match =~ email
-            val.gsub!(match, "<a href='mailto:#{match}'>#{match}</a>")
-          else
-            match = match.delete_suffix('&gt')
-
-            val.gsub!(match, "<a href='#{match}'>#{match}</a>")
-          end
-        end
-      end
+      val = auto_link(val) unless val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
 
       formatted_val = sanitize val, tags: tags, attributes: %w[href]
 
