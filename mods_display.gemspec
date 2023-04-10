@@ -24,6 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'stanford-mods', '~> 3.3'
   gem.add_dependency 'i18n'
   gem.add_dependency 'view_component'
+  gem.add_dependency 'rails_autolink'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3.0'
