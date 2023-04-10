@@ -71,28 +71,21 @@ module ModsDisplay
       link
     end
 
+    class MetadataScrubber < Rails::Html::PermitScrubber
+      # Override the superclass to escape the non-permitted nodes
+      def scrub_node(node)
+        node.add_next_sibling Nokogiri::XML::Text.new(node.to_s, node.document)
+        node.remove
+      end
+    end
+
     def format_mods_html(val, tags: %w[a dl dd dt i b em strong cite br], field: nil)
-      val = val.gsub(%r{<[^/> ]+}) do |possible_tag|
-        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
-        if tags.include?(possible_tag[1..])
-          possible_tag
-        else
-          "&lt;#{possible_tag[1..]}"
-        end
-      end
+      scrubber = MetadataScrubber.new
+      scrubber.tags = tags
 
-      val = val.gsub(%r{</[^> ]+}) do |possible_tag|
-        # Allow potentially valid HTML tags through to the sanitizer step, and HTML escape the rest
-        if tags.include?(possible_tag[2..])
-          possible_tag
-        else
-          "&lt;#{possible_tag[1..]}"
-        end
-      end
+      formatted_val = Loofah.fragment(val).scrub!(scrubber).to_s
 
-      val = auto_link(val) unless val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
-
-      formatted_val = sanitize val, tags: tags, attributes: %w[href]
+      formatted_val = auto_link(formatted_val) unless formatted_val =~ /<a/ # we'll assume that linking has alraedy occured and we don't want to double link
 
       # Martin Wong data has significant linebreaks in abstracts and notes that we want
       # to preserve and display in HTML.
@@ -102,7 +95,7 @@ module ModsDisplay
       if simple_formatted_fields.any? { |klass| field&.field.is_a? klass } && formatted_val.include?("\n")
         simple_format(formatted_val, {}, sanitize: false)
       else
-        formatted_val
+        formatted_val.html_safe
       end
     end
 
