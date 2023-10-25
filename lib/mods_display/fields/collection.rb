@@ -29,8 +29,8 @@ module ModsDisplay
     end
 
     def resource_type_is_collection?(value)
-      return unless value.respond_to?(:typeOfResource)
-      return unless value.typeOfResource.attributes.length.positive?
+      return false unless value.respond_to?(:typeOfResource)
+      return false unless value.typeOfResource.attributes.length.positive?
 
       value.typeOfResource.attributes.length.positive? &&
         value.typeOfResource.attributes.first.key?('collection') &&
