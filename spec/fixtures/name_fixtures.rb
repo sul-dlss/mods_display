@@ -421,4 +421,16 @@ module NameFixtures
     </mods>
     XML
   end
+
+  def name_with_identifiers
+    <<-XML
+    <mods xmlns="http://www.loc.gov/mods/v3">
+      <name type="personal">
+        <namePart>Wingnut</namePart>
+        <nameIdentifier typeURI="https://notarealdoctor.org" type="rando">ignored</nameIdentifier>
+        <nameIdentifier typeURI="https://orcid.org" type="orcid">0000-0002-6666-7777</nameIdentifier>
+      </name>
+    </mods>
+    XML
+  end
 end

@@ -5,10 +5,11 @@ module ModsDisplay
     include ModsDisplay::RelatorCodes
     def fields
       return_fields = @values.map do |value|
+        name_identifiers = value.element_children.select { |child| child.name == 'nameIdentifier' }
         person = if value.displayForm.length.positive?
-                   ModsDisplay::Name::Person.new(name: element_text(value.displayForm))
+                   ModsDisplay::Name::Person.new(name: element_text(value.displayForm), name_identifiers: name_identifiers)
                  elsif !name_parts(value).empty?
-                   ModsDisplay::Name::Person.new(name: name_parts(value))
+                   ModsDisplay::Name::Person.new(name: name_parts(value), name_identifiers: name_identifiers)
                  end
         # The person may have multiple roles, so we have to divide them up into an array
         role_labels(value).collect do |role_label|
@@ -163,7 +164,7 @@ module ModsDisplay
       # Build the new fields data, stripping out the roles within the Person classes
       label_keys.uniq.map do |k|
         values = results[k].map do |person|
-          ModsDisplay::Name::Person.new(name: person.name)
+          ModsDisplay::Name::Person.new(name: person.name, orcid: person.orcid)
         end
 
         ModsDisplay::Values.new(label: k, values: values)
@@ -171,14 +172,28 @@ module ModsDisplay
     end
 
     class Person
-      attr_accessor :name
+      attr_accessor :name, :orcid
 
       def initialize(data)
         @name = data[:name]
+        @orcid = if data[:orcid].present?
+                   data[:orcid]
+                 elsif data[:name_identifiers].present?
+                   orcid_identifier(data[:name_identifiers])
+                 end
       end
 
       def to_s
         @name
+      end
+
+      private
+
+      def orcid_identifier(name_identifiers)
+        orcid = name_identifiers.select do |name_identifier|
+          name_identifier.attribute('type')&.value == 'orcid'
+        end
+        orcid.first&.text
       end
     end
   end
