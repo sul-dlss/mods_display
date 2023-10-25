@@ -22,13 +22,13 @@ RSpec.describe ModsDisplay::Record do
     end
 
     it 'returns a single <dl>' do
-      expect(record.mods_display_html.to_html.scan(/<dl>/).length).to eq(1)
+      expect(record.mods_display_html.to_html.scan('<dl>').length).to eq(1)
       expect(record.mods_display_html.to_html.scan(%r{</dl>}).length).to eq(1)
     end
 
     it 'returns a dt/dd pair for each piece of metadata in the mods' do
-      expect(record.mods_display_html.to_html.scan(/<dt/).length).to eq(1)
-      expect(record.mods_display_html.to_html.scan(/<dd>/).length).to eq(1)
+      expect(record.mods_display_html.to_html.scan('<dt').length).to eq(1)
+      expect(record.mods_display_html.to_html.scan('<dd>').length).to eq(1)
     end
 
     it 'returns a proper label' do

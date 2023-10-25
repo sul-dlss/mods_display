@@ -400,7 +400,7 @@ describe ModsDisplay::Imprint do
       expect(html.scan(%r{<dt>Imprint</dt>}).length).to eq(1)
       expect(html.scan(%r{<dt>Issuance</dt>}).length).to eq(1)
       expect(html.scan(%r{<dt>Date captured</dt>}).length).to eq(1)
-      expect(html.scan(/<dd>/).length).to eq(3)
+      expect(html.scan('<dd>').length).to eq(3)
     end
   end
 end
