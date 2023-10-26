@@ -29,6 +29,7 @@ describe ModsDisplay::Name do
     @author_role = Stanford::Mods::Record.new.from_str(author_role_fixture).plain_name
     @many_roles_and_names = Stanford::Mods::Record.new.from_str(many_roles_and_names_fixture).plain_name
     @names_with_code_and_text_roles = Stanford::Mods::Record.new.from_str(names_with_code_and_text_roles_fixture).plain_name
+    @name_with_identifiers = Stanford::Mods::Record.new.from_str(name_with_identifiers).plain_name
   end
 
   let(:default_label) { 'Associated with:' }
@@ -181,6 +182,20 @@ describe ModsDisplay::Name do
     it 'adds the role to the name in parens' do
       html = mods_display_name(@name_with_role).to_html
       expect(html).to match(%r{<dd>John Doe</dd>})
+    end
+  end
+
+  describe 'orcid' do
+    it 'returns the orcid value if there is one' do
+      person_name = mods_display_name(@name_with_identifiers).fields.first.values.first
+      expect(person_name).to be_a(ModsDisplay::Name::Person)
+      expect(person_name.orcid).to eq('0000-0002-6666-7777')
+    end
+
+    it 'returns nil if no orcid' do
+      person_name = mods_display_name(@name).fields.first.values.first
+      expect(person_name).to be_a(ModsDisplay::Name::Person)
+      expect(person_name.orcid).to be_nil
     end
   end
 end
