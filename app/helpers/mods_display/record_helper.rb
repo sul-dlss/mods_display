@@ -90,8 +90,12 @@ module ModsDisplay
       # Martin Wong data has significant linebreaks in abstracts and notes that we want
       # to preserve and display in HTML.
       #
+      # Some user-deposited items have complex use and reproduction statements that also
+      # need linebreaks preserved.
+      #
       # See https://github.com/sul-dlss/mods_display/issues/78
-      simple_formatted_fields = [ModsDisplay::Abstract, ModsDisplay::Contents, ModsDisplay::Note]
+      # and https://github.com/sul-dlss/mods_display/issues/145
+      simple_formatted_fields = [ModsDisplay::Abstract, ModsDisplay::Contents, ModsDisplay::Note, ModsDisplay::AccessCondition]
       if simple_formatted_fields.any? { |klass| field&.field.is_a? klass } && formatted_val.include?("\n")
         simple_format(formatted_val, {}, sanitize: false)
       else

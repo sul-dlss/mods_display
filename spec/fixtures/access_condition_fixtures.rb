@@ -16,6 +16,14 @@ module AccessConditionFixtures
     XML
   end
 
+  def custom_use_reproduction_fixture
+    <<-XML
+      <mods xmlns="http://www.loc.gov/mods/v3">
+        <accessCondition type='useAndReproduction'>Special use agreement&#10;&#10;Text of the agreement</accessCondition>
+      </mods>
+    XML
+  end
+
   def copyright_access_fixture
     <<-XML
       <mods xmlns="http://www.loc.gov/mods/v3">

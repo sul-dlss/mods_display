@@ -13,6 +13,7 @@ describe ModsDisplay::AccessCondition do
   before :all do
     @access_condition = Stanford::Mods::Record.new.from_str(simple_access_condition_fixture).accessCondition
     @restrict_condition = Stanford::Mods::Record.new.from_str(restricted_access_fixture).accessCondition
+    @custom_use_reproduction = Stanford::Mods::Record.new.from_str(custom_use_reproduction_fixture).accessCondition
     @copyright_note = Stanford::Mods::Record.new.from_str(copyright_access_fixture).accessCondition
     @cc_license_note = Stanford::Mods::Record.new.from_str(cc_license_fixture).accessCondition
     @odc_license_note = Stanford::Mods::Record.new.from_str(odc_license_fixture).accessCondition
@@ -82,6 +83,14 @@ describe ModsDisplay::AccessCondition do
           'Unknown garbage that does not look like a license'
         )
         expect(fields.first.values.first).not_to include('<a.*>')
+      end
+    end
+
+    describe 'use and reproduction' do
+      it 'preserves newlines' do
+        fields = mods_display_access_condition(@custom_use_reproduction).fields
+        expect(fields.length).to eq(1)
+        expect(fields.first.values).to eq ["Special use agreement\n\nText of the agreement"]
       end
     end
   end
