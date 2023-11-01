@@ -54,7 +54,8 @@ module ModsDisplay
       return_fields = @values.map do |value|
         ModsDisplay::Values.new(
           label: displayLabel(value) || access_label(value),
-          values: [process_access_statement(value)]
+          values: [process_access_statement(value)],
+          field: self
         )
       end
       collapse_fields(return_fields)

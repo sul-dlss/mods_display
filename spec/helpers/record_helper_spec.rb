@@ -246,6 +246,11 @@ RSpec.describe ModsDisplay::RecordHelper, type: :helper do
                               field: ModsDisplay::Values.new(field: ModsDisplay::Abstract.new(nil)))).to eq "<p>this\n<br />that</p>"
     end
 
+    it 'formats newline characters for access conditions' do
+      expect(format_mods_html("This is a\n\nuse statement",
+                              field: ModsDisplay::Values.new(field: ModsDisplay::AccessCondition.new(nil)))).to eq "<p>This is a</p>\n\n<p>use statement</p>"
+    end
+
     it 'formats newline characters for notes' do
       expect(format_mods_html("this\nthat",
                               field: ModsDisplay::Values.new(field: ModsDisplay::Note.new(nil)))).to eq "<p>this\n<br />that</p>"
