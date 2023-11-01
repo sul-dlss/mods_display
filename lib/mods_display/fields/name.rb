@@ -3,6 +3,9 @@
 module ModsDisplay
   class Name < Field
     include ModsDisplay::RelatorCodes
+
+    # this returns a hash:
+    #  { role1 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...], role2 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...] }
     def fields
       return_fields = @values.map do |value|
         name_identifiers = value.element_children.select { |child| child.name == 'nameIdentifier' }
