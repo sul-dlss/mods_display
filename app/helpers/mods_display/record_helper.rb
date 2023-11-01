@@ -17,6 +17,7 @@ module ModsDisplay
       render component.new(field: field, delimiter: delimiter, value_transformer: block)
     end
 
+    # this returns a role's label and the display names for ModsDisplay:Name:Person
     def mods_name_field(field)
       mods_record_field(field) do |name|
         block_given? ? capture { yield(name.name) } : name.name
