@@ -40,6 +40,22 @@ module AccessConditionFixtures
     XML
   end
 
+  def legacy_cc_license_fixture
+    <<-XML
+      <mods xmlns="http://www.loc.gov/mods/v3">
+        <accessCondition type='license'>CC by-sa: This work is licensed under a Creative Commons Attribution-Noncommercial 3.0 Unported License</accessCondition>
+      </mods>
+    XML
+  end
+
+  def cc_license_fixture
+    <<-XML
+      <mods xmlns="http://www.loc.gov/mods/v3">
+        <accessCondition type="license" xlink:href="https://creativecommons.org/licenses/by/3.0/legalcode">This work is licensed under a Creative Commons Attribution 3.0 Unported license (CC BY).</accessCondition>
+      </mods>
+    XML
+  end
+
   def odc_license_fixture
     <<-XML
       <mods xmlns="http://www.loc.gov/mods/v3">

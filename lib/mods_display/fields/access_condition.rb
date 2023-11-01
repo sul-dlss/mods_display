@@ -82,10 +82,21 @@ module ModsDisplay
     end
 
     def license_statement(element)
-      matches = element_text(element).match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
+      element_text = element_text(element)
+      legacy_matches = element_text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
+      return legacy_license_statement(element, legacy_matches) if legacy_matches
 
-      return element_text(element) unless matches
+      matches = element_text.match(/^This work is licensed under a (.+?)\.$/)
+      return linked_licensed_statement(element, matches) if matches && element['xlink:href'].present?
 
+      element_text
+    end
+
+    def linked_licensed_statement(element, matches)
+      "This work is licensed under a <a href='#{element['xlink:href']}'>#{matches[1]}</a>."
+    end
+
+    def legacy_license_statement(_element, matches)
       code = matches[:code].downcase
       type = matches[:type].downcase
       description = license_description(code, type) || matches[:description]
