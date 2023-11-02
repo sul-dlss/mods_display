@@ -64,12 +64,12 @@ module ModsDisplay
                        element.place.respond_to?(:placeTerm)
 
       if unencoded_place_terms?(element)
-        element.place.placeTerm.select do |term|
+        element.xpath('mods:place/mods:placeTerm', mods: MODS_NS).select do |term|
           !term.attributes['type'].respond_to?(:value) ||
             term.attributes['type'].value == 'text'
         end.compact
       else
-        element.place.placeTerm.map do |term|
+        element.xpath('mods:place/mods:placeTerm', mods: MODS_NS).map do |term|
           next unless term.attributes['type'].respond_to?(:value) &&
                       term.attributes['type'].value == 'code' &&
                       term.attributes['authority'].respond_to?(:value) &&
@@ -84,7 +84,7 @@ module ModsDisplay
     end
 
     def unencoded_place_terms?(element)
-      element.place.placeTerm.any? do |term|
+      element.xpath('mods:place/mods:placeTerm', mods: MODS_NS).any? do |term|
         !term.attributes['type'].respond_to?(:value) ||
           term.attributes['type'].value == 'text'
       end

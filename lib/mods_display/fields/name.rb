@@ -7,12 +7,11 @@ module ModsDisplay
     # this returns a hash:
     #  { role1 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...], role2 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...] }
     def fields
-      return_fields = @values.map do |value|
-        name_identifiers = value.element_children.select { |child| child.name == 'nameIdentifier' }
-        person = if value.displayForm.length.positive?
-                   ModsDisplay::Name::Person.new(name: element_text(value.displayForm), name_identifiers: name_identifiers)
-                 elsif !name_parts(value).empty?
-                   ModsDisplay::Name::Person.new(name: name_parts(value), name_identifiers: name_identifiers)
+      return_fields = NameValue.for_values(@values).map do |value|
+        person = if value.displayForm_nodeset.length.positive?
+                   ModsDisplay::Name::Person.new(name: element_text(value.displayForm_nodeset), name_identifiers: value.nameIdentifier_nodeset)
+                 elsif !(name_parts = name_parts(value)).empty?
+                   ModsDisplay::Name::Person.new(name: name_parts, name_identifiers: value.nameIdentifier_nodeset)
                  end
         # The person may have multiple roles, so we have to divide them up into an array
         role_labels(value).collect do |role_label|
@@ -50,10 +49,10 @@ module ModsDisplay
 
     def role_labels(element)
       default_label = I18n.t('mods_display.associated_with')
-      return [default_label] unless element.role.present? && element.role.roleTerm.present?
+      return [default_label] unless element.xpath('mods:role/mods:roleTerm', mods: MODS_NS).present?
 
-      element.role.collect do |role|
-        codes, text = role.roleTerm.partition { |term| term['type'] == 'code' }
+      element.role_nodeset.collect do |role|
+        codes, text = role.xpath('mods:roleTerm', mods: MODS_NS).partition { |term| term['type'] == 'code' }
 
         # prefer mappable role term codes
         label = codes.map { |term| relator_codes[term.text.downcase] }.first
@@ -70,15 +69,6 @@ module ModsDisplay
       element_text(element).capitalize.sub(/[.,:;]+$/, '')
     end
 
-    def role?(element)
-      element.respond_to?(:role) && !element.role.empty?
-    end
-
-    def primary?(element)
-      element.attributes['usage'].respond_to?(:value) &&
-        element.attributes['usage'].value == 'primary'
-    end
-
     def name_parts(element)
       output = [unqualified_name_parts(element),
                 qualified_name_parts(element, 'family'),
@@ -90,22 +80,19 @@ module ModsDisplay
         output = [output, terms.join(', ')].flatten.compact.join(term_delimiter)
       end
       dates = qualified_name_parts(element, 'date')
-      output = [output, qualified_name_parts(element, 'date')].flatten.compact.join(', ') unless dates.empty?
+      output = [output, dates].flatten.compact.join(', ') unless dates.empty?
       output
     end
 
     def unqualified_name_parts(element)
-      element.namePart.map do |part|
+      element.namePart_nodeset.map do |part|
         element_text(part) unless part.attributes['type']
       end.compact
     end
 
     def qualified_name_parts(element, type)
-      element.namePart.map do |part|
-        if part.attributes['type'].respond_to?(:value) &&
-           part.attributes['type'].value == type
-          element_text(part)
-        end
+      element.namePart_nodeset.map do |part|
+        element_text(part) if part.get_attribute('type') == type
       end.compact
     end
 
@@ -113,30 +100,6 @@ module ModsDisplay
       first_part = part.split(/\s|,/).first.strip
       first_part.chars.all? do |char|
         %w[I X C L V].include? char
-      end
-    end
-
-    def unencoded_role_term(element)
-      roles = element.role.map do |role|
-        role.roleTerm.find do |term|
-          term.attributes['type'].respond_to?(:value) &&
-            term.attributes['type'].value == 'text'
-        end
-      end.compact
-      if roles.empty?
-        roles = element.role.map do |role|
-          role.roleTerm.find do |term|
-            !term.attributes['type'].respond_to?(:value)
-          end
-        end.compact
-      end
-      roles.map { |t| element_text(t) }
-    end
-
-    def unencoded_role_term?(element)
-      element.role.roleTerm.any? do |term|
-        !term.attributes['type'].respond_to?(:value) ||
-          term.attributes['type'].value == 'text'
       end
     end
 
@@ -194,9 +157,31 @@ module ModsDisplay
 
       def orcid_identifier(name_identifiers)
         orcid = name_identifiers.select do |name_identifier|
-          name_identifier.attribute('type')&.value == 'orcid'
+          name_identifier.get_attribute('type') == 'orcid'
         end
         orcid.first&.text
+      end
+    end
+
+    class NameValue < SimpleDelegator
+      def self.for_values(values)
+        values.map { |value| new(value) }
+      end
+
+      def nameIdentifier_nodeset
+        @nameIdentifier_nodeset ||= xpath('mods:nameIdentifier', mods: MODS_NS)
+      end
+
+      def displayForm_nodeset
+        @displayForm_nodeset ||= xpath('mods:displayForm', mods: MODS_NS)
+      end
+
+      def namePart_nodeset
+        @namePart_nodeset ||= xpath('mods:namePart', mods: MODS_NS)
+      end
+
+      def role_nodeset
+        @role_nodeset ||= xpath('mods:role', mods: MODS_NS)
       end
     end
   end
