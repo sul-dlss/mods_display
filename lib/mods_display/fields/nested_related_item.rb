@@ -10,8 +10,8 @@ module ModsDisplay
 
     def fields
       @fields ||= begin
-        return_fields = @values.map do |value|
-          next if related_item_is_a_collection?(value)
+        return_fields = RelatedItemValue.for_values(@values).map do |value|
+          next if value.collection?
           next unless render_nested_related_item?(value)
 
           related_item_mods_object(value)
@@ -63,7 +63,7 @@ module ModsDisplay
 
     def related_item_label(item)
       return displayLabel(item) if displayLabel(item)
-      return I18n.t('mods_display.constituent') if related_item_is_a_constituent?(item)
+      return I18n.t('mods_display.constituent') if item.constituent?
 
       I18n.t('mods_display.host')
     end

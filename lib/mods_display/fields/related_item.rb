@@ -5,8 +5,8 @@ module ModsDisplay
     include ModsDisplay::RelatedItemConcerns
 
     def fields
-      return_fields = @values.map do |value|
-        next if related_item_is_a_collection?(value)
+      return_fields = RelatedItemValue.for_values(@values).map do |value|
+        next if value.collection?
         next if render_nested_related_item?(value)
 
         text = related_item_value(value)
@@ -25,15 +25,14 @@ module ModsDisplay
     end
 
     def related_item_value(item)
-      if related_item_is_a_location?(item)
-        element_text(item.location)
-      elsif related_item_is_a_reference?(item)
+      if item.location?
+        element_text(item.location_nodeset)
+      elsif item.reference?
         reference_title(item)
-      elsif item.titleInfo.any?
-        title = element_text(item.titleInfo)
+      elsif item.titleInfo_nodeset.any?
+        title = element_text(item.titleInfo_nodeset)
         location = nil
-        location = element_text(item.location.url) if item.location.length.positive? &&
-                                                      item.location.url.length.positive?
+        location = element_text(item.location_url_nodeset) if item.location_url_nodeset.length.positive?
 
         return if title.empty?
 
@@ -42,31 +41,18 @@ module ModsDisplay
         else
           title
         end
-      elsif item.note.any?
-        citation = item.note.find { |note| note['type'] == 'preferred citation' }
+      elsif item.note_nodeset.any?
+        citation = item.note_nodeset.find { |note| note['type'] == 'preferred citation' }
 
         element_text(citation) if citation
       end
     end
 
     def reference_title(item)
-      [item.titleInfo,
+      [item.titleInfo_nodeset,
        item.originInfo.dateOther,
        item.part.detail.number,
-       item.note].flatten.compact.map!(&:text).map!(&:strip).join(' ')
-    end
-
-    def related_item_is_a_location?(item)
-      !related_item_is_a_collection?(item) &&
-        !related_item_is_a_reference?(item) &&
-        item.location.length.positive? &&
-        item.titleInfo.empty?
-    end
-
-    def related_item_is_a_reference?(item)
-      !related_item_is_a_collection?(item) &&
-        item.attributes['type'].respond_to?(:value) &&
-        item.attributes['type'].value == 'isReferencedBy'
+       item.note_nodeset].flatten.compact.map!(&:text).map!(&:strip).join(' ')
     end
 
     def related_item_label(item)
@@ -74,9 +60,9 @@ module ModsDisplay
         displayLabel(item)
       else
         case
-        when related_item_is_a_location?(item)
+        when item.location?
           return I18n.t('mods_display.location')
-        when related_item_is_a_reference?(item)
+        when item.reference?
           return I18n.t('mods_display.referenced_by')
         end
         I18n.t('mods_display.related_item')

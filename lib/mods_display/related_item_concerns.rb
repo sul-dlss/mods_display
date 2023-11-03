@@ -5,25 +5,60 @@ module ModsDisplay
     private
 
     def render_nested_related_item?(item)
-      related_item_is_a_constituent?(item) || related_item_is_host?(item)
+      item.constituent? || item.host?
     end
 
-    def related_item_is_a_collection?(item)
-      item.respond_to?(:titleInfo) &&
-        item.respond_to?(:typeOfResource) &&
-        !item.typeOfResource.attributes.empty? &&
-        item.typeOfResource.attributes.first.key?('collection') &&
-        item.typeOfResource.attributes.first['collection'].value == 'yes'
-    end
+    class RelatedItemValue < SimpleDelegator
+      def collection?
+        @collection ||= typeOfResource_nodeset.first&.get_attribute('collection') == 'yes'
+      end
 
-    def related_item_is_a_constituent?(item)
-      item.attributes['type'].respond_to?(:value) &&
-        item.attributes['type'].value == 'constituent'
-    end
+      def constituent?
+        @constituent ||= type_attribute == 'constituent'
+      end
 
-    def related_item_is_host?(item)
-      item.attributes['type'].respond_to?(:value) &&
-        item.attributes['type'].value == 'host'
+      def host?
+        @host ||= type_attribute == 'host'
+      end
+
+      def location?
+        @location ||= !collection? &&
+                      !reference? &&
+                      location_nodeset.length.positive? &&
+                      titleInfo_nodeset.empty?
+      end
+
+      def reference?
+        @reference ||= !collection? && type_attribute == 'isReferencedBy'
+      end
+
+      def typeOfResource_nodeset
+        @typeOfResource_nodeset ||= xpath('mods:typeOfResource', mods: MODS_NS)
+      end
+
+      def location_nodeset
+        @location_nodeset ||= xpath('mods:location', mods: MODS_NS)
+      end
+
+      def location_url_nodeset
+        @location_url_nodeset ||= xpath('mods:location/mods:url', mods: MODS_NS)
+      end
+
+      def titleInfo_nodeset
+        @titleInfo_nodeset ||= xpath('mods:titleInfo', mods: MODS_NS)
+      end
+
+      def note_nodeset
+        @note_nodeset ||= xpath('mods:note', mods: MODS_NS)
+      end
+
+      def type_attribute
+        @type_attribute ||= get_attribute('type')
+      end
+
+      def self.for_values(values)
+        values.map { |value| new(value) }
+      end
     end
   end
 end
