@@ -7,12 +7,9 @@ module ModsDisplay
     # this returns a hash:
     #  { role1 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...], role2 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...] }
     def fields
-      return_fields = NameValue.for_values(@values).map do |value|
-        person = if value.displayForm_nodeset.length.positive?
-                   ModsDisplay::Name::Person.new(name: element_text(value.displayForm_nodeset), name_identifiers: value.nameIdentifier_nodeset)
-                 elsif !(name_parts = name_parts(value)).empty?
-                   ModsDisplay::Name::Person.new(name: name_parts, name_identifiers: value.nameIdentifier_nodeset)
-                 end
+      return_fields = @values.map do |value|
+        name_parts = ModsDisplay::NameFormatter.format(value)
+        person = name_parts ? ModsDisplay::Name::Person.new(name: name_parts, name_identifiers: value.xpath('mods:nameIdentifier', mods: MODS_NS)) : nil
         # The person may have multiple roles, so we have to divide them up into an array
         role_labels(value).collect do |role_label|
           ModsDisplay::Values.new(label: displayLabel(value) || role_label, values: [person]) if person
@@ -51,7 +48,7 @@ module ModsDisplay
       default_label = I18n.t('mods_display.associated_with')
       return [default_label] unless element.xpath('mods:role/mods:roleTerm', mods: MODS_NS).present?
 
-      element.role_nodeset.collect do |role|
+      element.xpath('mods:role', mods: MODS_NS).collect do |role|
         codes, text = role.xpath('mods:roleTerm', mods: MODS_NS).partition { |term| term['type'] == 'code' }
 
         # prefer mappable role term codes
@@ -67,40 +64,6 @@ module ModsDisplay
 
     def format_role(element)
       element_text(element).capitalize.sub(/[.,:;]+$/, '')
-    end
-
-    def name_parts(element)
-      output = [unqualified_name_parts(element),
-                qualified_name_parts(element, 'family'),
-                qualified_name_parts(element, 'given')].flatten.compact.join(', ')
-      terms = qualified_name_parts(element, 'termsOfAddress')
-      unless terms.empty?
-        term_delimiter = ', '
-        term_delimiter = ' ' if name_part_begins_with_roman_numeral?(terms.first)
-        output = [output, terms.join(', ')].flatten.compact.join(term_delimiter)
-      end
-      dates = qualified_name_parts(element, 'date')
-      output = [output, dates].flatten.compact.join(', ') unless dates.empty?
-      output
-    end
-
-    def unqualified_name_parts(element)
-      element.namePart_nodeset.map do |part|
-        element_text(part) unless part.attributes['type']
-      end.compact
-    end
-
-    def qualified_name_parts(element, type)
-      element.namePart_nodeset.map do |part|
-        element_text(part) if part.get_attribute('type') == type
-      end.compact
-    end
-
-    def name_part_begins_with_roman_numeral?(part)
-      first_part = part.split(/\s|,/).first.strip
-      first_part.chars.all? do |char|
-        %w[I X C L V].include? char
-      end
     end
 
     # Consolidate all names under label headings
@@ -160,28 +123,6 @@ module ModsDisplay
           name_identifier.get_attribute('type') == 'orcid'
         end
         orcid.first&.text
-      end
-    end
-
-    class NameValue < SimpleDelegator
-      def self.for_values(values)
-        values.map { |value| new(value) }
-      end
-
-      def nameIdentifier_nodeset
-        @nameIdentifier_nodeset ||= xpath('mods:nameIdentifier', mods: MODS_NS)
-      end
-
-      def displayForm_nodeset
-        @displayForm_nodeset ||= xpath('mods:displayForm', mods: MODS_NS)
-      end
-
-      def namePart_nodeset
-        @namePart_nodeset ||= xpath('mods:namePart', mods: MODS_NS)
-      end
-
-      def role_nodeset
-        @role_nodeset ||= xpath('mods:role', mods: MODS_NS)
       end
     end
   end
