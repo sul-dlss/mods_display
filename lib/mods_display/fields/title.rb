@@ -2,6 +2,11 @@
 
 module ModsDisplay
   class Title < Field
+    def initialize(values, link: nil)
+      @link = link
+      super(values)
+    end
+
     def fields
       return_values = sorted_values.map do |value|
         ModsDisplay::Values.new(
@@ -31,21 +36,7 @@ module ModsDisplay
         str = value.text.strip
         next if str.empty?
 
-        delimiter = if title.empty? || title.end_with?(' ')
-                      nil
-                    elsif previous_element&.name == 'nonSort' && title.end_with?('-', '\'')
-                      nil
-                    elsif title.end_with?('.', ',', ':', ';')
-                      ' '
-                    elsif value.name == 'subTitle'
-                      ' : '
-                    elsif value.name == 'partName' && previous_element.name == 'partNumber'
-                      ', '
-                    elsif value.name == 'partNumber' || value.name == 'partName'
-                      '. '
-                    else
-                      ' '
-                    end
+        delimiter = title_delimiter(title, previous_element, value)
 
         title += delimiter if delimiter
         title += str
@@ -53,11 +44,36 @@ module ModsDisplay
         previous_element = value
       end
 
-      if element['type'] == 'uniform' && element['nameTitleGroup'].present?
-        [uniform_title_name_part(element), title].compact.join('. ')
+      full_title = if element['type'] == 'uniform' && element['nameTitleGroup'].present?
+                     [uniform_title_name_part(element), title].compact.join('. ')
+                   else
+                     title
+                   end
+      linked_title(full_title)
+    end
+
+    def title_delimiter(title, previous_element, value)
+      if title.empty? || title.end_with?(' ')
+        nil
+      elsif previous_element&.name == 'nonSort' && title.end_with?('-', '\'')
+        nil
+      elsif title.end_with?('.', ',', ':', ';')
+        ' '
+      elsif value.name == 'subTitle'
+        ' : '
+      elsif value.name == 'partName' && previous_element.name == 'partNumber'
+        ', '
+      elsif value.name == 'partNumber' || value.name == 'partName'
+        '. '
       else
-        title
+        ' '
       end
+    end
+
+    def linked_title(title)
+      return title unless @link
+
+      "<a href=\"#{@link}\">#{title}</a>"
     end
 
     def uniform_title_name_part(element)

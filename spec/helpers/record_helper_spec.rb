@@ -52,6 +52,61 @@ RSpec.describe ModsDisplay::RecordHelper, type: :helper do
     end
   end
 
+  describe 'mods_record_definition_field' do
+    let(:mods_field) { OpenStruct.new(label: 'test', values: ['hello, there']) }
+    let(:url_field) { OpenStruct.new(label: 'test', values: ['https://library.stanford.edu']) }
+    let(:multi_values) { double(label: 'test', values: %w[123 321], field: nil) }
+
+    it 'returns correct content' do
+      expect(helper.mods_record_definition_field(mods_field)).to have_css('dt', text: 'test')
+      expect(helper.mods_record_definition_field(mods_field)).to have_css('dd', text: 'hello, there')
+    end
+
+    it 'adds html attributes to the dt' do
+      expect(helper.mods_record_definition_field(mods_field, label_html_attributes: { class: 'wu' })).to have_css('dt.wu', text: 'test')
+    end
+
+    it 'links fields with URLs' do
+      expect(helper.mods_record_field(url_field)).to have_css("a[href='https://library.stanford.edu']", text: 'https://library.stanford.edu')
+    end
+
+    it 'does not print empty labels' do
+      expect(helper.mods_record_field(empty_field)).not_to be_present
+    end
+
+    it 'joins values with a <dd> by default' do
+      expect(helper.mods_record_field(multi_values)).to have_css('dd', count: 2)
+    end
+
+    it 'joins values with a supplied delimiter' do
+      expect(helper.mods_record_field(multi_values, 'DELIM')).to have_css('dd', count: 1)
+      expect(helper.mods_record_field(multi_values, 'DELIM')).to have_css('dd', text: '123DELIM321')
+    end
+  end
+
+  describe 'mods_record_row_field' do
+    let(:mods_field) { OpenStruct.new(label: 'test', values: ['hello, there']) }
+    let(:multi_values) { double(label: 'test', values: %w[123 456 789], field: nil) }
+
+    it 'returns correct content' do
+      expect(helper.mods_record_row_field(mods_field)).to have_css('th', text: 'test')
+      expect(helper.mods_record_row_field(mods_field)).to have_css('td', text: 'hello, there')
+      expect(helper.mods_record_row_field(mods_field)).to have_css('tr', count: 1)
+    end
+
+    it 'joins values with a comma by default' do
+      expect(helper.mods_record_row_field(multi_values)).to have_css('td', text: '123, 456, 789')
+    end
+
+    it 'joins values with a supplied delimiter' do
+      expect(helper.mods_record_row_field(multi_values, delimiter: 'DELIM')).to have_css('td', text: '123DELIM456DELIM789')
+    end
+
+    it 'splits into separate rows' do
+      expect(helper.mods_record_row_field(multi_values, delimiter: nil)).to have_css('tr', count: 3)
+    end
+  end
+
   describe 'names' do
     let(:name_field) do
       OpenStruct.new(

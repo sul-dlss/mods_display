@@ -5,6 +5,7 @@ module ModsDisplay
     MODS_DISPLAY_FIELD_MAPPING = {
       title: :title_info,
       subTitle: :title_info,
+      referenceTitle: :title_info,
       name: :plain_name,
       resourceType: :typeOfResource,
       genre: :genre,
@@ -40,10 +41,12 @@ module ModsDisplay
       accessCondition: :accessCondition
     }.freeze
 
-    def initialize(xml)
-      @stanford_mods = xml
-      @xml = xml.mods_ng_xml
+    def initialize(mods)
+      @mods = mods
+      @xml = mods.mods_ng_xml
     end
+
+    attr_reader :xml
 
     def title
       title_fields = mods_field(:title).fields
@@ -57,8 +60,8 @@ module ModsDisplay
     # Need to figure out how to get the 1st title out of the list.
     # Maybe have a separate class that will omit the first title natively
     # and replace the first key in the the fields list with that.
-    def body(view_context = ApplicationController.renderer)
-      view_context.render ModsDisplay::RecordComponent.new(record: self), layout: false
+    def body(view_context = ApplicationController.renderer, html_attributes: {}, component: ModsDisplay::RecordComponent)
+      view_context.render component.new(record: self, html_attributes: html_attributes), layout: false
     end
 
     # @deprecated
@@ -70,19 +73,19 @@ module ModsDisplay
     MODS_DISPLAY_FIELD_MAPPING.each_key do |key|
       next if key == :title
 
-      define_method(key) do |raw: false|
-        field = mods_field(key)
+      define_method(key) do |raw: false, **field_args|
+        field = mods_field(key, field_args: field_args)
         next field if raw
 
         field.fields
       end
     end
 
-    def mods_field(key)
+    def mods_field(key, field_args: {})
       raise ArgumentError unless MODS_DISPLAY_FIELD_MAPPING[key] && @xml.respond_to?(MODS_DISPLAY_FIELD_MAPPING[key])
 
       field = @xml.public_send(MODS_DISPLAY_FIELD_MAPPING[key])
-      mods_field_class(key).new(field)
+      mods_field_class(key).new(field, **field_args)
     end
 
     private
