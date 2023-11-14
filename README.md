@@ -1,6 +1,15 @@
 # ModsDisplay
 
-A gem for displaying MODS Metadata in a configurable way.
+A gem for displaying MODS Metadata in a configurable way.  
+
+This gem is used to centralize the display logic of MODS metadata by creating html fragments such as
+
+```
+   <dt>Publisher</dt>
+   <dd>Diagon Alley Publications</dd>
+```
+
+which can be styled in consuming apps such as SearchWorks or Exhibits.
 
 ## Demo
 
