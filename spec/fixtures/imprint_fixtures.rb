@@ -59,11 +59,11 @@ module ImprintFixtures
       <mods xmlns="http://www.loc.gov/mods/v3">
         <originInfo displayLabel="TheLabel">
           <edition>The edition</edition>
-          <place><placeTerm>A Place</placeTerm></place>
+          <place><placeTerm>One Place</placeTerm></place>
           <publisher>A Publisher</publisher>
         </originInfo>
         <originInfo displayLabel="IssuanceLabel">
-          <place><placeTerm>A Place</placeTerm></place>
+          <place><placeTerm>Two Place</placeTerm></place>
           <publisher>A Publisher</publisher>
           <issuance>The Edition</issuance>
         </originInfo>

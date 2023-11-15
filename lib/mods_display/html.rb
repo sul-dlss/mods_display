@@ -12,6 +12,7 @@ module ModsDisplay
       extent: :physical_description,
       geo: :extension,
       imprint: :origin_info,
+      place: :origin_info,
       language: :language,
       description: :physical_description,
       cartographics: :subject,

@@ -117,6 +117,8 @@ module ModsDisplay
       end.map(&:text).join(' ').strip
     end
 
+    # not an exact duplicate of the method in ModsDisplay::Place, particularly trailing punctuation code
+    #  as ModsDisplay::Place is not intended to combine with publisher in an imprint string
     def place_element(value)
       return if value.place.text.strip.empty?
 
