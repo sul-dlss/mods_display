@@ -11,6 +11,7 @@ module ModsDisplay
       form: :physical_description,
       extent: :physical_description,
       geo: :extension,
+      edition: :origin_info,
       imprint: :origin_info,
       place: :origin_info,
       publisher: :origin_info,
