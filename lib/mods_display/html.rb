@@ -13,6 +13,7 @@ module ModsDisplay
       geo: :extension,
       imprint: :origin_info,
       place: :origin_info,
+      publisher: :origin_info,
       language: :language,
       description: :physical_description,
       cartographics: :subject,

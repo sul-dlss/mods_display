@@ -60,11 +60,11 @@ module ImprintFixtures
         <originInfo displayLabel="TheLabel">
           <edition>The edition</edition>
           <place><placeTerm>One Place</placeTerm></place>
-          <publisher>A Publisher</publisher>
+          <publisher>One Publisher</publisher>
         </originInfo>
         <originInfo displayLabel="IssuanceLabel">
           <place><placeTerm>Two Place</placeTerm></place>
-          <publisher>A Publisher</publisher>
+          <publisher>Two Publisher</publisher>
           <issuance>The Edition</issuance>
         </originInfo>
       </mods>
