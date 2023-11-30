@@ -41,6 +41,7 @@ module ImprintFixtures
     MODS
   end
 
+  # "mixed" refers to the different imprint fields in the same originInfo: dateCaptured, issuance, publisher
   def mixed_mods
     <<-MODS
       <mods xmlns="http://www.loc.gov/mods/v3">
@@ -59,12 +60,12 @@ module ImprintFixtures
       <mods xmlns="http://www.loc.gov/mods/v3">
         <originInfo displayLabel="TheLabel">
           <edition>The edition</edition>
-          <place><placeTerm>A Place</placeTerm></place>
-          <publisher>A Publisher</publisher>
+          <place><placeTerm>One Place</placeTerm></place>
+          <publisher>One Publisher</publisher>
         </originInfo>
         <originInfo displayLabel="IssuanceLabel">
-          <place><placeTerm>A Place</placeTerm></place>
-          <publisher>A Publisher</publisher>
+          <place><placeTerm>Two Place</placeTerm></place>
+          <publisher>Two Publisher</publisher>
           <issuance>The Edition</issuance>
         </originInfo>
       </mods>
