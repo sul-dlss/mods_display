@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_contact(mods_record)
   ModsDisplay::Contact.new(mods_record)
 end

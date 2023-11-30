@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_language(mods_record)
   ModsDisplay::Language.new(mods_record)
 end

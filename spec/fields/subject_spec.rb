@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'fixtures/subjects_fixtures'
 include SubjectsFixtures
 

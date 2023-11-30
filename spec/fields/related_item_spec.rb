@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_item(mods_record)
   ModsDisplay::RelatedItem.new(mods_record)
 end

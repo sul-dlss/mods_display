@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe ModsDisplay::Location do
   let(:location_mods) do
     <<-XML

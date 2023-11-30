@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_resource_type(mods_record)
   ModsDisplay::ResourceType.new(mods_record)
 end

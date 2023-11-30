@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_id(mods_record)
   ModsDisplay::Identifier.new(mods_record)
 end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_collection(mods_record)
   ModsDisplay::Collection.new(
     mods_record

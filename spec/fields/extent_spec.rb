@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 describe ModsDisplay::Extent do
   subject do
     parsed_mods = Stanford::Mods::Record.new.from_str(mods).physical_description

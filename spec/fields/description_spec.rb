@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_description(mods)
   ModsDisplay::Description.new(mods)
 end

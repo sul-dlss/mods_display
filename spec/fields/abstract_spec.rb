@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_abstract(mods_record)
   ModsDisplay::Abstract.new(mods_record)
 end

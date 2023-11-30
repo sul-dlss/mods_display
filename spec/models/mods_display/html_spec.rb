@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe ModsDisplay::HTML do
   let(:instance) { described_class.new(stanford_mods) }
   let(:stanford_mods) { Stanford::Mods::Record.new.tap { |record| record.from_str(mods) } }

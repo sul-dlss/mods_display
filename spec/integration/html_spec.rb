@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def html_from_mods(xml, locale = nil)
   I18n.locale = locale if locale
   I18n.fallbacks[:fr] = %i[fr en]

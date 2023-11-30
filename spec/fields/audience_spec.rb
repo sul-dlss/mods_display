@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_audience(mods_record)
   ModsDisplay::Audience.new(mods_record)
 end

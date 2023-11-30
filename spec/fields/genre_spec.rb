@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_genre(mods_record)
   ModsDisplay::Genre.new(mods_record)
 end
