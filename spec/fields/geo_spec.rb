@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_geo(mods_record)
   ModsDisplay::Geo.new(mods_record)
 end

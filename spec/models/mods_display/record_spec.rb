@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'fixtures/title_fixtures'
 
 RSpec.describe ModsDisplay::Record do

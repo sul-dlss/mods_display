@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_sub_title(mods_record)
   ModsDisplay::SubTitle.new(mods_record)
 end

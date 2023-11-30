@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 def mods_display_note(mods_record)
   ModsDisplay::Note.new(mods_record)
 end
