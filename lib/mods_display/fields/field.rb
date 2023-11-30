@@ -58,6 +58,21 @@ module ModsDisplay
       element.xpath('.//text()').to_html.strip
     end
 
+    # used for originInfo date fields, e.g. DateCreated, DateIssued ...
+    def date_fields(date_symbol)
+      return_fields = @values.map do |value|
+        date_values = Stanford::Mods::Imprint.new(value).dates([date_symbol])
+        next unless date_values.present?
+
+        ModsDisplay::Values.new(
+          label: I18n.t("mods_display.#{date_symbol.to_s.underscore}"),
+          values: select_best_date(date_values),
+          field: self
+        )
+      end.compact
+      collapse_fields(return_fields)
+    end
+
     # used for originInfo dates, e.g. for Imprint, DateCreated, DateIssued, etc.
     def select_best_date(dates)
       # ensure dates are unique with respect to their base values
