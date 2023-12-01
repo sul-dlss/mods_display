@@ -48,7 +48,7 @@ module ModsDisplay
 
         ModsDisplay::Values.new(
           label: displayLabel(element) || pub_info_labels[date_field],
-          values: select_the_best_date(date_values)
+          values: select_best_date(date_values)
         )
       end.compact
     end
@@ -144,7 +144,7 @@ module ModsDisplay
         date_values = imprint.dates([date_field])
         next if date_values.empty?
 
-        select_the_best_date(date_values)
+        select_best_date(date_values)
       end.flatten.compact.reject do |date|
         date.strip.empty?
       end.map(&:strip)
@@ -163,31 +163,6 @@ module ModsDisplay
         copyrightDate: I18n.t('mods_display.copyright_date'),
         issuance: I18n.t('mods_display.issuance'),
         frequency: I18n.t('mods_display.frequency') }
-    end
-
-    def select_the_best_date(dates)
-      # ensure dates are unique with respect to their base values
-      dates = dates.group_by(&:base_value).map do |_value, group|
-        group.first if group.one?
-
-        # if one of the duplicates wasn't encoded, use that one. see:
-        # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
-        if group.reject(&:encoding).any?
-          group.reject(&:encoding).first
-
-        # otherwise just randomly pick the last in the group
-        else
-          group.last
-        end
-      end
-
-      # if any single dates are already part of a range, discard them
-      range_base_values = dates.select { |date| date.is_a?(Stanford::Mods::Imprint::DateRange) }
-                               .map(&:base_values).flatten
-      dates = dates.reject { |date| range_base_values.include?(date.base_value) }
-
-      # output formatted dates with qualifiers, CE/BCE, etc.
-      dates.map(&:qualified_value)
     end
   end
 end
