@@ -21,7 +21,7 @@ Gem::Specification.new do |gem|
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'stanford-mods', '~> 3.3', '>=3.3.8' # require stanford-mods 3.3.8 for publisher field
+  gem.add_dependency 'stanford-mods', '~> 3.3', '>=3.3.9' # require stanford-mods 3.3.9 for edition field
   gem.add_dependency 'i18n'
   gem.add_dependency 'view_component'
   gem.add_dependency 'rails_autolink'

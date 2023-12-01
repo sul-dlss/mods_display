@@ -4,7 +4,7 @@ module ModsDisplay
   class Edition < Field
     def fields
       return_fields = @values.map do |value|
-        edition_value = Stanford::Mods::Imprint.new(value).send(:edition_vals_str)
+        edition_value = Stanford::Mods::Imprint.new(value).edition_vals_str
         next unless edition_value.present?
 
         # remove trailing spaces (thanks MARC for catalog card formatting!)
