@@ -12,6 +12,7 @@ module ModsDisplay
       extent: :physical_description,
       geo: :extension,
       edition: :origin_info,
+      frequency: :origin_info,
       imprint: :origin_info,
       issuance: :origin_info,
       place: :origin_info,
