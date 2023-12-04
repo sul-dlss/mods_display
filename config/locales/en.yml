@@ -19,6 +19,7 @@ en:
     date_created: "Date created:"
     date_issued: "Publication date:"
     date_modified: "Date modified:"
+    date_other: "Other date:"
     date_sequential_designation: "Date/Sequential designation:"
     date_valid: "Date valid:"
     digital_origin: "Digital origin:"

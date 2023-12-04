@@ -17,6 +17,7 @@ module ModsDisplay
       dateCreated: :origin_info,
       dateIssued: :origin_info,
       dateModified: :origin_info,
+      dateOther: :origin_info,
       dateValid: :origin_info,
       edition: :origin_info,
       frequency: :origin_info,

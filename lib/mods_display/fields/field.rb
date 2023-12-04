@@ -102,6 +102,9 @@ module ModsDisplay
                                .map(&:base_values).flatten
       dates = dates.reject { |date| range_base_values.include?(date.base_value) }
 
+      # for DateOther field (but not for Imprint field), include the type attribute value in parens
+      return dates.map { |date| qualified_value_with_type(date) } if instance_of?(ModsDisplay::DateOther)
+
       # output formatted dates with qualifiers, CE/BCE, etc.
       dates.map(&:qualified_value)
     end
