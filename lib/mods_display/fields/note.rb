@@ -18,9 +18,9 @@ module ModsDisplay
 
     def note_fields
       @values.select do |value|
-        (!value.attributes['type'].respond_to?(:value) ||
-           (value.attributes['type'].respond_to?(:value) &&
-              value.attributes['type'].value.downcase != 'contact'))
+        !value.attributes['type'].respond_to?(:value) ||
+          (value.attributes['type'].respond_to?(:value) &&
+             value.attributes['type'].value.downcase != 'contact')
       end
     end
 

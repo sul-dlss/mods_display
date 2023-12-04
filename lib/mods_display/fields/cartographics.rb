@@ -18,7 +18,7 @@ module ModsDisplay
                          [projection, coordinates].compact.join(' ')
                        end
           return_fields << ModsDisplay::Values.new(
-            label: (displayLabel(field) || label || I18n.t('mods_display.map_data')),
+            label: displayLabel(field) || label || I18n.t('mods_display.map_data'),
             values: [[scale, post_scale].compact.join(' ; ')]
           )
         end
