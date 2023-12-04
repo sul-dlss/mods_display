@@ -51,8 +51,8 @@ describe ModsDisplay::Issuance do
       expect(mods_display_issuance(edition_and_date_mods).fields.map(&:label)).to eq(['Issuance:'])
     end
 
-    it 'uses the displayLabel when available' do
-      expect(mods_display_issuance(display_label).fields.map(&:label)).to eq(['IssuanceLabel:'])
+    it 'ignores the displayLabel when available' do
+      expect(mods_display_issuance(display_label).fields.map(&:label)).to eq(['Issuance:'])
     end
 
     it 'has only one label for multiple originInfo elements with issuance' do

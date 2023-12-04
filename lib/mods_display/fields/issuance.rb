@@ -8,7 +8,7 @@ module ModsDisplay
         next unless issuance_value.present?
 
         ModsDisplay::Values.new(
-          label: displayLabel(origin_info_element) || I18n.t('mods_display.issuance'),
+          label: I18n.t('mods_display.issuance'),
           values: [issuance_value],
           field: self
         )
