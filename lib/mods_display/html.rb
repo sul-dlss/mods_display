@@ -67,7 +67,7 @@ module ModsDisplay
       view_context.render ModsDisplay::RecordComponent.new(record: self, fields: fields), layout: false
     end
 
-    MODS_DISPLAY_FIELD_MAPPING.each do |key, _value|
+    MODS_DISPLAY_FIELD_MAPPING.each_key do |key|
       next if key == :title
 
       define_method(key) do |raw: false|
