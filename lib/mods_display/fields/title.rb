@@ -8,10 +8,10 @@ module ModsDisplay
     end
 
     def fields
-      return_values = sorted_values.map do |value|
+      return_values = sorted_title_info_elements.map do |title_info_element|
         ModsDisplay::Values.new(
-          label: displayLabel(value) || title_label(value),
-          values: [assemble_title(value)]
+          label: displayLabel(title_info_element) || title_label(title_info_element),
+          values: [assemble_title(title_info_element)]
         )
       end
       collapse_fields(return_values)
@@ -20,50 +20,50 @@ module ModsDisplay
     private
 
     # If there is a node with usage="primary", then it should come first.
-    def sorted_values
-      Array(@values).sort_by { |node| node['usage'] == 'primary' ? 0 : 1 }
+    def sorted_title_info_elements
+      Array(@stanford_mods_elements).sort_by { |title_info_element| title_info_element['usage'] == 'primary' ? 0 : 1 }
     end
 
     def delimiter
       '<br />'.html_safe
     end
 
-    def assemble_title(element)
+    def assemble_title(title_info_element)
       title = ''
       previous_element = nil
 
-      element.children.select { |value| title_parts.include? value.name }.each do |value|
-        str = value.text.strip
-        next if str.empty?
+      title_info_element.children.select { |child| title_parts.include? child.name }.each do |child|
+        text = child.text.strip
+        next if text.empty?
 
-        delimiter = title_delimiter(title, previous_element, value)
+        delimiter = title_delimiter(title, previous_element, child)
 
         title += delimiter if delimiter
-        title += str
+        title += text
 
-        previous_element = value
+        previous_element = child
       end
 
-      full_title = if element['type'] == 'uniform' && element['nameTitleGroup'].present?
-                     [uniform_title_name_part(element), title].compact.join('. ')
+      full_title = if title_info_element['type'] == 'uniform' && title_info_element['nameTitleGroup'].present?
+                     [uniform_title_name_part(title_info_element), title].compact.join('. ')
                    else
                      title
                    end
       linked_title(full_title)
     end
 
-    def title_delimiter(title, previous_element, value)
+    def title_delimiter(title, previous_element, child)
       if title.empty? || title.end_with?(' ')
         nil
       elsif previous_element&.name == 'nonSort' && title.end_with?('-', '\'')
         nil
       elsif title.end_with?('.', ',', ':', ';')
         ' '
-      elsif value.name == 'subTitle'
+      elsif child.name == 'subTitle'
         ' : '
-      elsif value.name == 'partName' && previous_element.name == 'partNumber'
+      elsif child.name == 'partName' && previous_element.name == 'partNumber'
         ', '
-      elsif value.name == 'partNumber' || value.name == 'partName'
+      elsif child.name == 'partNumber' || child.name == 'partName'
         '. '
       else
         ' '

@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
 module ModsDisplay
+  # superclass for processing stanford-mods elements into ModsDisplay::Values retrieved by the fields method
+  #   by consuming applications.
   class Field
-    def initialize(values)
-      @values = values
+    # @stanford_mods_elements is an array of Nokogiri::XML::Element-ish objects from stanford-mods
+    # per ModsDisplay::HTML::MODS_DISPLAY_FIELD_MAPPING
+    def initialize(stanford_mods_elements)
+      @stanford_mods_elements = stanford_mods_elements
     end
 
     def fields
-      return_fields = @values.map do |value|
+      return_fields = @stanford_mods_elements.map do |stanford_mods_element|
         ModsDisplay::Values.new(
-          label: displayLabel(value) || label,
-          values: [element_text(value)],
+          label: displayLabel(stanford_mods_element) || label,
+          values: [element_text(stanford_mods_element)],
           field: self
         )
       end
@@ -18,9 +22,9 @@ module ModsDisplay
     end
 
     def label
-      return nil if @values.nil?
+      return nil if @stanford_mods_elements.nil?
 
-      displayLabel(@values.first)
+      displayLabel(@stanford_mods_elements.first)
     end
 
     def to_html(view_context = ApplicationController.renderer)
@@ -50,7 +54,10 @@ module ModsDisplay
       display_fields.slice_when { |before, after| before.label != after.label }.map do |group|
         next group.first if group.length == 1
 
-        ModsDisplay::Values.new(label: group.first.label, values: group.map(&:values).flatten(1))
+        ModsDisplay::Values.new(
+          label: group.first.label,
+          values: group.map(&:values).flatten(1)
+        )
       end
     end
 
@@ -60,8 +67,8 @@ module ModsDisplay
 
     # used for originInfo date fields, e.g. DateCreated, DateIssued ...
     def date_fields(date_symbol)
-      return_fields = @values.map do |value|
-        date_values = Stanford::Mods::Imprint.new(value).dates([date_symbol])
+      return_fields = @stanford_mods_elements.map do |origin_info_element|
+        date_values = Stanford::Mods::Imprint.new(origin_info_element).dates([date_symbol])
         next unless date_values.present?
 
         ModsDisplay::Values.new(

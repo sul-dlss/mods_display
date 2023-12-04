@@ -4,20 +4,20 @@ module ModsDisplay
   class Location < Field
     def fields
       return_fields = []
-      @values.each do |location|
-        location.children.each do |child|
+      @stanford_mods_elements.each do |location_element|
+        location_element.children.each do |child|
           next unless location_field_keys.include?(child.name.to_sym)
 
           if child.name.to_sym == :url
-            loc_label = displayLabel(location) || I18n.t('mods_display.location')
+            loc_label = displayLabel(location_element) || I18n.t('mods_display.location')
             value = "<a href='#{element_text(child)}'>#{(displayLabel(child) || element_text(child)).gsub(/:$/,
                                                                                                           '')}</a>"
           else
-            loc_label = location_label(child) || displayLabel(location) || I18n.t('mods_display.location')
+            loc_label = location_label(child) || displayLabel(location_element) || I18n.t('mods_display.location')
             value = element_text(child)
           end
           return_fields << ModsDisplay::Values.new(
-            label: loc_label || displayLabel(location) || I18n.t('mods_display.location'),
+            label: loc_label || displayLabel(location_element) || I18n.t('mods_display.location'),
             values: [value]
           )
         end

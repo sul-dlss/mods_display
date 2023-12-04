@@ -3,10 +3,10 @@
 module ModsDisplay
   class Contact < Field
     def fields
-      return_fields = contact_fields.map do |value|
+      return_fields = contact_elements.map do |contact_element|
         ModsDisplay::Values.new(
-          label: displayLabel(value) || I18n.t('mods_display.contact'),
-          values: [element_text(value)]
+          label: displayLabel(contact_element) || I18n.t('mods_display.contact'),
+          values: [element_text(contact_element)]
         )
       end
       collapse_fields(return_fields)
@@ -14,10 +14,10 @@ module ModsDisplay
 
     private
 
-    def contact_fields
-      @values.select do |value|
-        value.attributes['type'].respond_to?(:value) &&
-          value.attributes['type'].value.downcase == 'contact'
+    def contact_elements
+      @stanford_mods_elements.select do |note_element|
+        note_element.attributes['type'].respond_to?(:value) &&
+          note_element.attributes['type'].value.downcase == 'contact'
       end
     end
   end

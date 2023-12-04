@@ -3,20 +3,20 @@
 module ModsDisplay
   class Extent < Field
     def fields
-      return [] unless extent_fields.present?
+      return [] unless extent_elements.present?
 
       [
         ModsDisplay::Values.new(
           label: I18n.t('mods_display.extent'),
-          values: extent_fields.map { |x| element_text(x) }
+          values: extent_elements.map { |x| element_text(x) }
         )
       ]
     end
 
     private
 
-    def extent_fields
-      @values.map(&:extent).flatten
+    def extent_elements
+      @stanford_mods_elements.map(&:extent).flatten
     end
   end
 end

@@ -3,8 +3,11 @@
 module ModsDisplay
   class Description < Field
     def fields
-      return_fields = description_fields.map do |value|
-        ModsDisplay::Values.new(label: description_label(value), values: [element_text(value)])
+      return_fields = description_fields.map do |element|
+        ModsDisplay::Values.new(
+          label: description_label(element),
+          values: [element_text(element)]
+        )
       end
       collapse_fields(return_fields)
     end
@@ -16,7 +19,7 @@ module ModsDisplay
     private
 
     def description_fields
-      @values.children.select do |child|
+      @stanford_mods_elements.children.select do |child|
         labels.keys.include?(child.name.to_sym)
       end
     end

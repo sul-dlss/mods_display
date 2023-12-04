@@ -3,8 +3,8 @@
 module ModsDisplay
   class Publisher < Field
     def fields
-      return_fields = @values.map do |value|
-        publisher_value = Stanford::Mods::Imprint.new(value).publisher_vals_str
+      return_fields = @stanford_mods_elements.map do |origin_info_element|
+        publisher_value = Stanford::Mods::Imprint.new(origin_info_element).publisher_vals_str
         next unless publisher_value.present?
 
         publisher_value.gsub!(/ *,$/, '')

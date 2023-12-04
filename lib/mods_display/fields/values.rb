@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module ModsDisplay
+  # This class has what is needed by view code in downstream applications
   class Values
     attr_accessor :label, :values, :field
 

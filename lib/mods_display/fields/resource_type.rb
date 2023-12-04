@@ -3,16 +3,19 @@
 module ModsDisplay
   class ResourceType < Field
     def fields
-      return_fields = @values.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || label, values: [element_text(value)])
+      return_fields = @stanford_mods_elements.map do |type_of_resource_element|
+        ModsDisplay::Values.new(
+          label: displayLabel(type_of_resource_element) || label,
+          values: [element_text(type_of_resource_element)]
+        )
       end
       collapse_fields(return_fields)
     end
 
     private
 
-    def displayLabel(element)
-      super(element) || I18n.t('mods_display.type_of_resource')
+    def displayLabel(type_of_resource_element)
+      super(type_of_resource_element) || I18n.t('mods_display.type_of_resource')
     end
   end
 end

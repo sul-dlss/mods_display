@@ -51,10 +51,10 @@ module ModsDisplay
     }.freeze
 
     def fields
-      return_fields = @values.map do |value|
+      return_fields = @stanford_mods_elements.map do |stanford_mods_element|
         ModsDisplay::Values.new(
-          label: displayLabel(value) || access_label(value),
-          values: [process_access_statement(value)],
+          label: displayLabel(stanford_mods_element) || access_label(stanford_mods_element),
+          values: [process_access_statement(stanford_mods_element)],
           field: self
         )
       end
@@ -85,7 +85,7 @@ module ModsDisplay
     def license_statement(element)
       element_text = element_text(element)
       legacy_matches = element_text.match(/^(?<code>.*) (?<type>.*):(?<description>.*)$/)
-      return legacy_license_statement(element, legacy_matches) if legacy_matches
+      return legacy_license_statement(legacy_matches) if legacy_matches
 
       matches = element_text.match(/^This work is licensed under a (.+?)\.$/)
       return linked_licensed_statement(element, matches) if matches && element['xlink:href'].present?
@@ -97,7 +97,7 @@ module ModsDisplay
       "This work is licensed under a <a href='#{element['xlink:href']}'>#{matches[1]}</a>."
     end
 
-    def legacy_license_statement(_element, matches)
+    def legacy_license_statement(matches)
       code = matches[:code].downcase
       type = matches[:type].downcase
       description = license_description(code, type) || matches[:description]

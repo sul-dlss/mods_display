@@ -3,7 +3,7 @@
 module ModsDisplay
   class Issuance < Field
     def fields
-      return_fields = @values.map do |origin_info_element|
+      return_fields = @stanford_mods_elements.map do |origin_info_element|
         issuance_value = origin_info_element.issuance&.text&.strip
         next unless issuance_value.present?
 
