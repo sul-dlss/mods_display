@@ -32,10 +32,39 @@ describe ModsDisplay::NestedRelatedItem do
     let(:mods) { multi_constituent_fixture }
 
     describe 'memoization' do
+      before do
+        allow(ModsDisplay::NestedRelatedItem::ValueRenderer).to receive(:new).and_call_original
+      end
+
       it 'only calls related_item_mods_object once per item regardless of how many times the method is called' do
-        expect(nested_related_item).to receive(:related_item_mods_object).twice
+        expect(ModsDisplay::NestedRelatedItem::ValueRenderer).to receive(:new).twice
 
         5.times { nested_related_item.fields }
+      end
+    end
+
+    context 'when a value renderer is provided' do
+      let(:fields) { nested_related_item.fields }
+      let(:nested_related_item) do
+        described_class.new(
+          Stanford::Mods::Record.new.from_str(mods).related_item,
+          value_renderer: value_renderer
+        )
+      end
+
+      # rubocop:disable RSpec/VerifiedDoubles
+      let(:value_renderer) { double('ValueRenderer', new: value_renderer_instance) }
+      let(:value_renderer_instance) { double('ValueRendererInstance') }
+      # rubocop:enable RSpec/VerifiedDoubles
+
+      before do
+        allow(value_renderer_instance).to receive(:render).and_return('rendered value1', 'rendered value2')
+      end
+
+      it 'calls the value renderer to get Values values' do
+        expect(value_renderer).to receive(:new).twice
+
+        expect(fields.first.values).to eq ['rendered value1', 'rendered value2']
       end
     end
 

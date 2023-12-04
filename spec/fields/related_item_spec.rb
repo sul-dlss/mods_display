@@ -84,5 +84,26 @@ describe ModsDisplay::RelatedItem do
       expect(fields.first.values.first).to(match(%r{<a href=.*>Library</a>}))
       expect(fields.first.values.last).to(match(%r{<a href=.*>SDR</a>}))
     end
+
+    context 'when a value renderer is provided' do
+      let(:fields) { related_item.fields }
+      let(:related_item) do
+        described_class.new(
+          @item,
+          value_renderer: value_renderer
+        )
+      end
+
+      # rubocop:disable RSpec/VerifiedDoubles
+      let(:value_renderer) { double('ValueRenderer', new: value_renderer_instance) }
+      let(:value_renderer_instance) { double('ValueRendererInstance', render: 'rendered value') }
+      # rubocop:enable RSpec/VerifiedDoubles
+
+      it 'calls the value renderer to get Values values' do
+        expect(value_renderer).to receive(:new).once
+
+        expect(fields.first.values).to eq ['rendered value']
+      end
+    end
   end
 end
