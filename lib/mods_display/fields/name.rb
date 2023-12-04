@@ -4,15 +4,16 @@ module ModsDisplay
   class Name < Field
     include ModsDisplay::RelatorCodes
 
-    # this returns a hash:
-    #  { role1 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...], role2 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...] }
+    # returns a hash:
+    #  { role1 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...],
+    #    role2 label => [ ModsDisplay:Name:Person,  ModsDisplay:Name:Person, ...] }
     def fields
-      return_fields = @values.map do |value|
-        name_parts = ModsDisplay::NameFormatter.format(value)
-        person = name_parts ? ModsDisplay::Name::Person.new(name: name_parts, name_identifiers: value.xpath('mods:nameIdentifier', mods: MODS_NS)) : nil
+      return_fields = @stanford_mods_elements.map do |plain_name_element|
+        name_parts = ModsDisplay::NameFormatter.format(plain_name_element)
+        person = name_parts ? ModsDisplay::Name::Person.new(name: name_parts, name_identifiers: plain_name_element.xpath('mods:nameIdentifier', mods: MODS_NS)) : nil
         # The person may have multiple roles, so we have to divide them up into an array
-        role_labels(value).collect do |role_label|
-          ModsDisplay::Values.new(label: displayLabel(value) || role_label, values: [person]) if person
+        role_labels(plain_name_element).collect do |role_label|
+          ModsDisplay::Values.new(label: displayLabel(plain_name_element) || role_label, values: [person]) if person
         end
       end.flatten.compact
       collapse_roles(collapse_fields(return_fields))

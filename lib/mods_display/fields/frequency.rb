@@ -3,7 +3,7 @@
 module ModsDisplay
   class Frequency < Field
     def fields
-      return_fields = @values.map do |origin_info_element|
+      return_fields = @stanford_mods_elements.map do |origin_info_element|
         frequency_value = origin_info_element.frequency&.text&.strip
         next unless frequency_value.present?
 

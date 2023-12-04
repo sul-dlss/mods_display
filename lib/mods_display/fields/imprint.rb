@@ -9,28 +9,28 @@ module ModsDisplay
     end
 
     def origin_info_data
-      @values.map do |value|
+      @stanford_mods_elements.map do |origin_info_element|
         return_fields = []
 
-        edition = edition_element(value)
-        place = place_element(value)
-        publisher = publisher_element(value)
-        parts = parts_element(value)
+        edition = edition_element(origin_info_element)
+        place = place_element(origin_info_element)
+        publisher = publisher_element(origin_info_element)
+        parts = parts_element(origin_info_element)
         place_pub = compact_and_join_with_delimiter([place, publisher], ' : ')
         edition_place = compact_and_join_with_delimiter([edition, place_pub], ' - ')
         joined_place_parts = compact_and_join_with_delimiter([edition_place, parts], ', ')
 
         unless joined_place_parts.empty?
           return_fields << ModsDisplay::Values.new(
-            label: displayLabel(value) || I18n.t('mods_display.imprint'),
+            label: displayLabel(origin_info_element) || I18n.t('mods_display.imprint'),
             values: [joined_place_parts]
           )
         end
-        return_fields.concat(date_values(value))
+        return_fields.concat(date_values(origin_info_element))
 
-        other_pub_info(value).each do |pub_info|
+        other_pub_info(origin_info_element).each do |pub_info|
           return_fields << ModsDisplay::Values.new(
-            label: displayLabel(value) || pub_info_labels[pub_info.name.to_sym],
+            label: displayLabel(origin_info_element) || pub_info_labels[pub_info.name.to_sym],
             values: [element_text(pub_info)]
           )
         end

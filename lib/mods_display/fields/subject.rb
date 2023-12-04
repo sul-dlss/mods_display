@@ -4,11 +4,11 @@ module ModsDisplay
   class Subject < Field
     def fields
       return_fields = []
-      @values.each do |value|
+      @stanford_mods_elements.each do |subject_element|
         return_values = []
-        label = displayLabel(value) || I18n.t('mods_display.subject')
+        label = displayLabel(subject_element) || I18n.t('mods_display.subject')
         return_text = []
-        selected_subjects(value).each do |child|
+        selected_subjects(subject_element).each do |child|
           if respond_to?(:"process_#{child.name}")
             method_send = send(:"process_#{child.name}", child)
             return_text << method_send unless method_send.to_s.empty?

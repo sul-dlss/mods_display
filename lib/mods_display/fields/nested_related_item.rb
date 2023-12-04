@@ -15,14 +15,14 @@ module ModsDisplay
 
     def fields
       @fields ||= begin
-        return_fields = RelatedItemValue.for_values(@values).map do |value|
-          next if value.collection?
-          next unless render_nested_related_item?(value)
+        return_fields = RelatedItemValue.for_values(@stanford_mods_elements).map do |related_item_element|
+          next if related_item_element.collection?
+          next unless render_nested_related_item?(related_item_element)
 
-          related_item_text = @value_renderer.new(value).render
+          related_item_text = @value_renderer.new(related_item_element).render
 
           ModsDisplay::Values.new(
-            label: related_item_label(value),
+            label: related_item_label(related_item_element),
             values: [related_item_text]
           )
         end.compact
@@ -30,9 +30,10 @@ module ModsDisplay
       end
     end
 
+    # this class provides html markup and is subclassed in purl application
     class ValueRenderer
-      def initialize(value)
-        @value = value
+      def initialize(related_item_element)
+        @related_item_element = related_item_element
       end
 
       def render
@@ -41,7 +42,7 @@ module ModsDisplay
 
       protected
 
-      attr_reader :value
+      attr_reader :related_item_element
 
       def mods_display_html
         @mods_display_html ||= ModsDisplay::HTML.new(mods)
@@ -50,7 +51,7 @@ module ModsDisplay
       def mods
         @mods ||= ::Stanford::Mods::Record.new.tap do |r|
           # dup'ing the value adds the appropriate namespaces, but...
-          munged_node = value.dup.tap do |x|
+          munged_node = related_item_element.dup.tap do |x|
             # ... the mods gem also expects the root of the document to have the root tag <mods>
             x.name = 'mods'
           end
@@ -68,9 +69,9 @@ module ModsDisplay
 
     private
 
-    def related_item_label(item)
-      return displayLabel(item) if displayLabel(item)
-      return I18n.t('mods_display.constituent') if item.constituent?
+    def related_item_label(related_item_element)
+      return displayLabel(related_item_element) if displayLabel(related_item_element)
+      return I18n.t('mods_display.constituent') if related_item_element.constituent?
 
       I18n.t('mods_display.host')
     end

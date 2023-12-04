@@ -3,8 +3,11 @@
 module ModsDisplay
   class Identifier < Field
     def fields
-      return_fields = @values.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || identifier_label(value), values: [element_text(value)])
+      return_fields = @stanford_mods_elements.map do |identifier_element|
+        ModsDisplay::Values.new(
+          label: displayLabel(identifier_element) || identifier_label(identifier_element),
+          values: [element_text(identifier_element)]
+        )
       end
       collapse_fields(return_fields)
     end

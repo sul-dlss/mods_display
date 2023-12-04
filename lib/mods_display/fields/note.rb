@@ -3,9 +3,12 @@
 module ModsDisplay
   class Note < Field
     def fields
-      return_fields = note_fields.map do |value|
-        ModsDisplay::Values.new(label: displayLabel(value) || note_label(value), values: [element_text(value)],
-                                field: self)
+      return_fields = note_fields.map do |note_element|
+        ModsDisplay::Values.new(
+          label: displayLabel(note_element) || note_label(note_element),
+          values: [element_text(note_element)],
+          field: self
+        )
       end
       collapse_fields(return_fields)
     end
@@ -17,10 +20,10 @@ module ModsDisplay
     end
 
     def note_fields
-      @values.select do |value|
-        !value.attributes['type'].respond_to?(:value) ||
-          (value.attributes['type'].respond_to?(:value) &&
-             value.attributes['type'].value.downcase != 'contact')
+      @stanford_mods_elements.select do |note_element|
+        !note_element.attributes['type'].respond_to?(:value) ||
+          (note_element.attributes['type'].respond_to?(:value) &&
+             note_element.attributes['type'].value.downcase != 'contact')
       end
     end
 
