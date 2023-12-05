@@ -8,6 +8,7 @@ module ModsDisplay
 
     private
 
+    # this is called from the Field.select_best_date method
     # @param date [Stanford::Mods::Imprint::Date]
     def qualified_value_with_type(date)
       type = type_attribute_value(date)
