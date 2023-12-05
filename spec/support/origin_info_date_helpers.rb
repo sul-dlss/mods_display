@@ -55,6 +55,17 @@ def date_modified_values(mods_text)
   date_modified_fields(mods_text).map(&:values).flatten
 end
 
+def date_other_fields(mods_text)
+  ModsDisplay::DateOther.new(
+    Stanford::Mods::Record.new.from_str(mods_text).origin_info
+  ).fields
+end
+
+def date_other_values(mods_text)
+  # without flatten, this returns an outer array for fields and an inner array for values
+  date_other_fields(mods_text).map(&:values).flatten
+end
+
 def date_valid_fields(mods_text)
   ModsDisplay::DateValid.new(
     Stanford::Mods::Record.new.from_str(mods_text).origin_info
