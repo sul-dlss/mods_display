@@ -86,15 +86,10 @@ module ModsDisplay
       dates = dates.group_by(&:base_value).map do |_value, group|
         group.first if group.one?
 
-        # if one of the duplicates wasn't encoded, use that one. see:
-        # https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E
-        if group.reject(&:encoding).any?
-          group.reject(&:encoding).first
-
-        # otherwise just randomly pick the last in the group
-        else
-          group.last
-        end
+        # if one of the duplicates wasn't encoded, use that one (see:
+        #   https://consul.stanford.edu/display/chimera/MODS+display+rules#MODSdisplayrules-3b.%3CoriginInfo%3E),
+        #   otherwise just randomly pick the last in the group
+        group.reject(&:encoding).first || group.last
       end
 
       # if any single dates are already part of a range, discard them
