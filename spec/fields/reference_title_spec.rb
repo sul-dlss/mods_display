@@ -21,7 +21,7 @@ describe ModsDisplay::ReferenceTitle do
 
   describe 'label' do
     it 'gets the reference label' do
-      expect(mods_display_item(reference).fields.first.label).to eq('Referenced by:')
+      expect(mods_display_item(reference).fields.first.label).to eq('Title:')
     end
   end
 

@@ -17,7 +17,7 @@ module ModsDisplay
     end
 
     def displayLabel(element)
-      super(element) || I18n.t('mods_display.referenced_by')
+      super(element) || I18n.t('mods_display.title')
     end
 
     def title_value
