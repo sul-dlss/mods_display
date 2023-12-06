@@ -15,7 +15,7 @@ module ModsDisplay
 
     def fields
       @fields ||= begin
-        return_fields = RelatedItemValue.for_values(@stanford_mods_elements).map do |related_item_element|
+        return_fields = RelatedItemValue.for_stanford_mods_elements(@stanford_mods_elements).map do |related_item_element|
           next if related_item_element.collection?
           next unless render_nested_related_item?(related_item_element)
 

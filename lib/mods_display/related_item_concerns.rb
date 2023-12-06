@@ -56,8 +56,8 @@ module ModsDisplay
         @type_attribute ||= get_attribute('type')
       end
 
-      def self.for_values(values)
-        values.map { |value| new(value) }
+      def self.for_stanford_mods_elements(stanford_mods_elements)
+        stanford_mods_elements.map { |element| new(element) }
       end
     end
   end
