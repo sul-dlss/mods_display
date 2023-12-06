@@ -8,8 +8,8 @@ module ModsDisplay
   class NestedRelatedItem < Field
     include ModsDisplay::RelatedItemConcerns
 
-    def initialize(values, value_renderer: ValueRenderer)
-      super(values)
+    def initialize(related_item_elements, value_renderer: ValueRenderer)
+      super(related_item_elements)
       @value_renderer = value_renderer
     end
 
