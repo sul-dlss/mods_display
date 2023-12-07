@@ -25,7 +25,7 @@ module ModsDisplay
     end
 
     def geo_extensions
-      @geo_values ||= @stanford_mods_elements.select do |extension_element|
+      @geo_extensions ||= @stanford_mods_elements.select do |extension_element|
         displayLabel(extension_element) =~ /^geo:?$/
       end
     end
