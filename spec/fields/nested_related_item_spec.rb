@@ -96,12 +96,10 @@ describe ModsDisplay::NestedRelatedItem do
     let(:mods) { related_item_host_fixture }
 
     it 'renders an unordered list with an embedded dl containing the metadata of the related item' do
-      within(html.first('dd')) do |dd|
-        expect(dd).to have_css('ul.mods_display_nested_related_items')
-        within(dd.find('ul.mods_display_nested_related_items li')) do |li|
-          expect(li).to have_css('dl dt', text: 'Custom Notes:')
-          expect(li).to have_css('dl dd', text: 'A note content')
-        end
+      expect(html.first('dd')).to have_css('ul.mods_display_nested_related_items')
+      within(html.first('dd')) do
+        expect(find('ul.mods_display_nested_related_items li')).to have_css('dl dt', text: 'Custom Notes:')
+        expect(find('ul.mods_display_nested_related_items li')).to have_css('dl dd', text: 'A note content')
       end
     end
 
@@ -109,12 +107,10 @@ describe ModsDisplay::NestedRelatedItem do
       let(:mods) { namespace_prefixed_related_item_fixture }
 
       it 'renders the list' do
-        within(html.first('dd')) do |dd|
-          expect(dd).to have_css('ul.mods_display_nested_related_items')
-          within(dd.find('ul.mods_display_nested_related_items li')) do |li|
-            expect(li).to have_css('dl dt', text: 'Constituent Title:')
-            expect(li).to have_css('dl dd', text: 'Constituent note')
-          end
+        expect(html.first('dd')).to have_css('ul.mods_display_nested_related_items')
+        within(html.first('dd')) do
+          expect(find('ul.mods_display_nested_related_items li')).to have_css('dl dt', text: 'Constituent Title:')
+          expect(find('ul.mods_display_nested_related_items li')).to have_css('dl dd', text: 'Constituent note')
         end
       end
     end
