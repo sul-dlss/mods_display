@@ -30,6 +30,20 @@ module ModsDisplay
       end
     end
 
+    # Used by exhibits
+    def to_html(view_context = ApplicationController.renderer)
+      helpers = view_context.respond_to?(:simple_format) ? view_context : ApplicationController.new.view_context
+
+      component = ModsDisplay::ListFieldComponent.with_collection(
+        fields,
+        value_transformer: ->(value) { helpers.format_mods_html(value.to_s) },
+        list_html_attributes: { class: 'mods_display_nested_related_items' },
+        list_item_html_attributes: { class: 'mods_display_nested_related_item open' }
+      )
+
+      view_context.render component, layout: false
+    end
+
     # this class provides html markup and is subclassed in purl application
     class ValueRenderer
       def initialize(related_item_element)
