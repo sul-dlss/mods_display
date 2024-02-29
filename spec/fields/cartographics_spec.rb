@@ -25,7 +25,7 @@ describe ModsDisplay::Cartographics do
     it 'puts a scale not given note if no scale is present' do
       values = mods_display_cartographics(@no_scale).fields
       expect(values.length).to eq(1)
-      expect(values.first.values).to eq(['Scale not given ; the projection the coordinates'])
+      expect(values.first.values).to eq(['the projection the coordinates'])
     end
 
     it 'handles when there is only a scale note' do
@@ -37,7 +37,7 @@ describe ModsDisplay::Cartographics do
     it 'handles when only one post-scale piece of the data is available' do
       values = mods_display_cartographics(@coordinates).fields
       expect(values.length).to eq(1)
-      expect(values.first.values).to eq(['Scale not given ; the coordinates'])
+      expect(values.first.values).to eq(['the coordinates'])
     end
   end
 end

@@ -10,7 +10,7 @@ module ModsDisplay
         next unless subject_element.respond_to?(:cartographics)
 
         subject_element.cartographics.each do |field|
-          scale = field.scale.empty? ? 'Scale not given' : element_text(field.scale)
+          scale = field.scale.empty? ? nil : element_text(field.scale)
           projection = field.projection.empty? ? nil : element_text(field.projection)
           coordinates = field.coordinates.empty? ? nil : element_text(field.coordinates)
           post_scale = [projection, coordinates].compact.join(' ') if [projection, coordinates].compact.length.positive?
