@@ -5,7 +5,7 @@ RSpec.describe ModsDisplay::RecordHelper, type: :helper do
 
   describe 'mods_display_label' do
     it 'returns correct label' do
-      expect(helper.mods_display_label('test:')).not_to have_content ':'
+      expect(helper.mods_display_label('test:')).to have_no_content ':'
       expect(helper.mods_display_label('test:')).to have_css('dt', text: 'test')
     end
   end
