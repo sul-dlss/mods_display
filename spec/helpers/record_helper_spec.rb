@@ -86,29 +86,6 @@ RSpec.describe ModsDisplay::RecordHelper, type: :helper do
     end
   end
 
-  describe 'mods_record_row_field' do
-    let(:mods_field) { OpenStruct.new(label: 'test', values: ['hello, there']) }
-    let(:multi_values) { double(label: 'test', values: %w[123 456 789], field: nil) }
-
-    it 'returns correct content' do
-      expect(helper.mods_record_row_field(mods_field)).to have_css('th', text: 'test')
-      expect(helper.mods_record_row_field(mods_field)).to have_css('td', text: 'hello, there')
-      expect(helper.mods_record_row_field(mods_field)).to have_css('tr', count: 1)
-    end
-
-    it 'joins values with a comma by default' do
-      expect(helper.mods_record_row_field(multi_values)).to have_css('td', text: '123, 456, 789')
-    end
-
-    it 'joins values with a supplied delimiter' do
-      expect(helper.mods_record_row_field(multi_values, delimiter: 'DELIM')).to have_css('td', text: '123DELIM456DELIM789')
-    end
-
-    it 'splits into separate rows' do
-      expect(helper.mods_record_row_field(multi_values, delimiter: nil)).to have_css('tr', count: 3)
-    end
-  end
-
   describe 'names' do
     let(:name_field) do
       OpenStruct.new(
