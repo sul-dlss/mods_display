@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ostruct'
+
 RSpec.describe ModsDisplay::RecordHelper, type: :helper do
   let(:empty_field) { OpenStruct.new(label: 'test', values: ['']) }
 

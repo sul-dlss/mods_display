@@ -15,7 +15,7 @@ module ModsDisplay
     private
 
     def displayLabel(type_of_resource_element)
-      super(type_of_resource_element) || I18n.t('mods_display.type_of_resource')
+      super || I18n.t('mods_display.type_of_resource')
     end
   end
 end

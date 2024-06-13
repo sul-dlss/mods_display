@@ -52,15 +52,13 @@ module ModsDisplay
     end
 
     def values_from_subjects(element)
-      return_values = []
-      selected_subjects(element).each do |child|
-        return_values << if element_text(child).include?('--')
-                           element_text(child).split('--').map(&:strip)
-                         else
-                           element_text(child)
-                         end
+      selected_subjects(element).map do |child|
+        if element_text(child).include?('--')
+          element_text(child).split('--').map(&:strip)
+        else
+          element_text(child)
+        end
       end
-      return_values
     end
 
     def selected_subjects(element = @value)

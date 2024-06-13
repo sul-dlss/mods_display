@@ -20,7 +20,7 @@ module ModsDisplay
     end
 
     def to_html(view_context = ApplicationController.renderer)
-      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: ->(value) { value.to_s })
+      component = ModsDisplay::FieldComponent.with_collection(fields, value_transformer: lambda(&:to_s))
 
       view_context.render component, layout: false
     end
