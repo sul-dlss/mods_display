@@ -9,18 +9,18 @@
 # Offense count: 2
 Capybara/SpecificMatcher:
   Exclude:
-    - 'spec/helpers/record_helper_spec.rb'
+    - "spec/helpers/record_helper_spec.rb"
 
 # Offense count: 2
 # Configuration parameters: IgnoreLiteralBranches, IgnoreConstantBranches.
 Lint/DuplicateBranch:
   Exclude:
-    - 'lib/mods_display/fields/title.rb'
+    - "lib/mods_display/fields/title.rb"
 
 # Offense count: 1
 Lint/ShadowingOuterLocalVariable:
   Exclude:
-    - 'spec/helpers/record_helper_spec.rb'
+    - "spec/helpers/record_helper_spec.rb"
 
 # Offense count: 15
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes.
@@ -36,7 +36,7 @@ Metrics/ClassLength:
 # Configuration parameters: LengthThreshold.
 Metrics/CollectionLiteralLength:
   Exclude:
-    - 'lib/mods_display/relator_codes.rb'
+    - "lib/mods_display/relator_codes.rb"
 
 # Offense count: 9
 # Configuration parameters: AllowedMethods, AllowedPatterns.
@@ -62,31 +62,31 @@ RSpec/BeforeAfterAll:
 # Prefixes: when, with, without
 RSpec/ContextWording:
   Exclude:
-    - 'spec/fields/contents_spec.rb'
-    - 'spec/fields/form_spec.rb'
+    - "spec/fields/contents_spec.rb"
+    - "spec/fields/form_spec.rb"
 
 # Offense count: 1
 # Configuration parameters: IgnoredMetadata.
 RSpec/DescribeClass:
   Exclude:
-    - '**/spec/features/**/*'
-    - '**/spec/requests/**/*'
-    - '**/spec/routing/**/*'
-    - '**/spec/system/**/*'
-    - '**/spec/views/**/*'
-    - 'spec/integration/html_spec.rb'
+    - "**/spec/features/**/*"
+    - "**/spec/requests/**/*"
+    - "**/spec/routing/**/*"
+    - "**/spec/system/**/*"
+    - "**/spec/views/**/*"
+    - "spec/integration/html_spec.rb"
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 RSpec/ExpectActual:
   Exclude:
-    - '**/spec/routing/**/*'
-    - 'spec/fields/name_spec.rb'
+    - "**/spec/routing/**/*"
+    - "spec/fields/name_spec.rb"
 
 # Offense count: 39
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
 # Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
+RSpec/SpecFilePathSuffix:
   Enabled: false
 
 # Offense count: 96
@@ -97,8 +97,8 @@ RSpec/InstanceVariable:
 # Offense count: 2
 RSpec/IteratedExpectation:
   Exclude:
-    - 'spec/helpers/record_helper_spec.rb'
-    - 'spec/integration/html_spec.rb'
+    - "spec/helpers/record_helper_spec.rb"
+    - "spec/integration/html_spec.rb"
 
 # Offense count: 4
 # Configuration parameters: .
@@ -119,9 +119,9 @@ RSpec/NestedGroups:
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Inferences.
-RSpec/Rails/InferredSpecType:
+RSpecRails/InferredSpecType:
   Exclude:
-    - 'spec/helpers/record_helper_spec.rb'
+    - "spec/helpers/record_helper_spec.rb"
 
 # Offense count: 39
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, IgnoreMetadata.
@@ -133,7 +133,7 @@ RSpec/SpecFilePathFormat:
 # Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
 RSpec/VerifiedDoubles:
   Exclude:
-    - 'spec/helpers/record_helper_spec.rb'
+    - "spec/helpers/record_helper_spec.rb"
 
 # Offense count: 50
 # Configuration parameters: AllowedConstants.
@@ -143,20 +143,20 @@ Style/Documentation:
 # Offense count: 4
 Style/MixinUsage:
   Exclude:
-    - 'spec/fields/cartographics_spec.rb'
-    - 'spec/fields/imprint_spec.rb'
-    - 'spec/fields/name_spec.rb'
-    - 'spec/fields/subject_spec.rb'
+    - "spec/fields/cartographics_spec.rb"
+    - "spec/fields/imprint_spec.rb"
+    - "spec/fields/name_spec.rb"
+    - "spec/fields/subject_spec.rb"
 
 # Offense count: 1
 Style/MultilineBlockChain:
   Exclude:
-    - 'lib/mods_display/fields/imprint.rb'
+    - "lib/mods_display/fields/imprint.rb"
 
 # Offense count: 13
 Style/OpenStructUse:
   Exclude:
-    - 'spec/helpers/record_helper_spec.rb'
+    - "spec/helpers/record_helper_spec.rb"
 
 # Offense count: 46
 # This cop supports safe autocorrection (--autocorrect).

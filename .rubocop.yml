@@ -1,16 +1,20 @@
 inherit_from: .rubocop_todo.yml
 
-require: rubocop-rspec
+require:
+  - rubocop-rspec
+  - rubocop-rspec_rails
+  - rubocop-capybara
 
 AllCops:
   Exclude:
-    - '*.gemspec'
-    - 'bin/**/*'
-    - 'db/**/*'
-    - 'spec/fixtures/**/*'
-    - 'vendor/**/*'
+    - "*.gemspec"
+    - "bin/**/*"
+    - "db/**/*"
+    - "spec/fixtures/**/*"
+    - "vendor/**/*"
   TargetRubyVersion: 2.7
   NewCops: enable
+  SuggestExtensions: false
 
 # Use single-quoted strings where possible
 Style/StringLiterals:

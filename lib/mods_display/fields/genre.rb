@@ -19,7 +19,7 @@ module ModsDisplay
     end
 
     def displayLabel(element)
-      super(element) || I18n.t('mods_display.genre')
+      super || I18n.t('mods_display.genre')
     end
   end
 end
