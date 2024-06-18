@@ -21,10 +21,6 @@ module ModsDisplay
       render ModsDisplay::FieldComponent.new(field: field, delimiter: delimiter, label_html_attributes: label_html_attributes, value_transformer: block)
     end
 
-    def mods_record_row_field(field, delimiter: ', ', &block)
-      render ModsDisplay::RowFieldComponent.new(field: field, delimiter: delimiter, value_transformer: block)
-    end
-
     # this returns a role's label and the display names for ModsDisplay:Name:Person
     def mods_name_field(field)
       mods_record_field(field) do |name|
@@ -49,20 +45,8 @@ module ModsDisplay
       end
     end
 
-    def mods_subject_row_field(field, delimiter: nil, &block)
-      mods_record_row_field(field, delimiter: delimiter) do |subject_line|
-        safe_join(link_mods_subjects(subject_line, &block), ' > ')
-      end
-    end
-
     def mods_genre_field(field, &block)
       mods_record_field(field) do |genre_line|
-        link_to_mods_subject(genre_line, &block)
-      end
-    end
-
-    def mods_genre_row_field(field, delimiter: nil, &block)
-      mods_record_row_field(field, delimiter: delimiter) do |genre_line|
         link_to_mods_subject(genre_line, &block)
       end
     end
