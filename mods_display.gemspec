@@ -31,6 +31,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec-rails'
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'capybara'
-  gem.add_development_dependency 'rails', ENV['RAILS_VERSION'] || '~> 6.0'
+  gem.add_development_dependency 'rails', ENV['RAILS_VERSION'] || '~> 7.0'
   gem.add_development_dependency 'combustion', '~> 1.3'
 end
