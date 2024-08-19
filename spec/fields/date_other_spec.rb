@@ -18,74 +18,119 @@ describe ModsDisplay::DateOther do
     XML
   end
 
-  it 'gets correct label' do
-    expect(date_other_fields(many_dates).first.label).to eq('Other date:')
+  describe '#date_other_fields' do
+    it 'gets correct label' do
+      expect(date_other_fields(many_dates).first.label).to eq('Other date:')
+    end
   end
 
-  it 'gets contents of dateValid field' do
-    expect(date_other_values(many_dates)).to eq(['other 1944'])
-  end
+  describe '#date_other_values' do
+    subject { date_other_values(value) }
 
-  it 'appends the type attribute value in parens' do
-    with_type =
-      <<~XML
-        <mods xmlns="http://www.loc.gov/mods/v3">
-          <originInfo>
-            <dateOther type="phonograph" keyDate="yes" encoding="w3cdtf">1992</dateOther>
-          </originInfo>
-        </mods>
-      XML
-    expect(date_other_values(with_type)).to eq(['1992 (phonograph)'])
-  end
+    context 'with many dates' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateCreated>created 1725</dateCreated>
+              <dateCaptured>captured 1825</dateCaptured>
+              <dateOther>other 1944</dateOther>
+              <copyrightDate>copyright 1925</copyright>
+              <dateIssued>issued 2025</dateIssued>
+              <dateValid>valid 2125</dateValid>
+            </originInfo>
+          </mods>
+        XML
+      end
 
-  it 'ignores type attribute of empty string' do
-    type_empty_string =
-      <<~XML
-        <mods xmlns="http://www.loc.gov/mods/v3">
-          <originInfo>
-            <dateOther type="">1992</dateOther>
-          </originInfo>
-        </mods>
-      XML
-    expect(date_other_values(type_empty_string)).to eq(['1992'])
-  end
+      it { is_expected.to eq ['other 1944'] }
+    end
 
-  it 'ignores empty type attribute' do
-    type_unassigned =
-      <<~XML
-        <mods xmlns="http://www.loc.gov/mods/v3">
-          <originInfo>
-            <dateOther type>1992</dateOther>
-          </originInfo>
-        </mods>
-      XML
-    expect(date_other_values(type_unassigned)).to eq(['1992'])
-  end
+    context 'with a type attribute' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateOther type="phonograph" keyDate="yes" encoding="w3cdtf">1992</dateOther>
+            </originInfo>
+          </mods>
+        XML
+      end
 
-  it 'handles multiple values' do
-    type_unassigned =
-      <<~XML
-        <mods xmlns="http://www.loc.gov/mods/v3">
-          <originInfo>
-            <dateOther>5730 [1969 or 1970]</dateOther>
-            <dateOther type="hijri">5730</dateOther>
-          </originInfo>
-        </mods>
-      XML
-    expect(date_other_values(type_unassigned)).to eq(['5730 [1969 or 1970]', '5730 (hijri)'])
-  end
+      it { is_expected.to eq ['1992 (phonograph)'] }
+    end
 
-  it 'range value' do
-    range_value =
-      <<~XML
-        <mods xmlns="http://www.loc.gov/mods/v3">
-          <originInfo>
-            <dateOther point="start">20011008</dateOther>
-            <dateOther point="end">20011027</dateOther>
-          </originInfo>
-        </mods>
-      XML
-    expect(date_other_values(range_value)).to eq(['20011008 - 20011027'])
+    context 'with an type attribute of empty string' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateOther type="">1992</dateOther>
+            </originInfo>
+          </mods>
+        XML
+      end
+
+      it { is_expected.to eq ['1992'] }
+    end
+
+    context 'with a null type attribute' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateOther type>1992</dateOther>
+            </originInfo>
+          </mods>
+        XML
+      end
+
+      it { is_expected.to eq ['1992'] }
+    end
+
+    context 'with multiple values' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateOther>5730 [1969 or 1970]</dateOther>
+              <dateOther type="hijri">5730</dateOther>
+            </originInfo>
+          </mods>
+        XML
+      end
+
+      it { is_expected.to eq ['5730 [1969 or 1970]', '5730 (hijri)'] }
+    end
+
+    context 'with a double-ended range' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateOther point="start">20011008</dateOther>
+              <dateOther point="end">20011027</dateOther>
+            </originInfo>
+          </mods>
+        XML
+      end
+
+      it { is_expected.to eq ['20011008 - 20011027'] }
+    end
+
+    context 'with a single-ended range' do
+      let(:value) do
+        <<~XML
+          <mods xmlns="http://www.loc.gov/mods/v3">
+            <originInfo>
+              <dateOther qualifier="approximate" point="end">1925</dateOther>
+            </originInfo>
+          </mods>
+        XML
+      end
+
+      it { is_expected.to eq [' - [ca. 1925]'] }
+    end
   end
 
   describe 'to_html' do

@@ -17,7 +17,8 @@ module ModsDisplay
 
     def type_attribute_value(date)
       if date.is_a?(Stanford::Mods::Imprint::DateRange)
-        date.start.value.type || date.stop.value.type
+        # Note that a range can be only single ended.
+        date.start&.value&.type || date.stop&.value&.type
       else
         date.value.type
       end
