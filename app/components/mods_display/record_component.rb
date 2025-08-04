@@ -31,7 +31,7 @@ module ModsDisplay
     with_collection_parameter :record
 
     def initialize(record:, fields: DEFAULT_FIELDS, html_attributes: {})
-      super
+      super()
 
       @record = record
       @fields = fields
