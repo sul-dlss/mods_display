@@ -63,7 +63,7 @@ module ModsDisplay
         ' : '
       elsif child.name == 'partName' && previous_element.name == 'partNumber'
         ', '
-      elsif child.name == 'partNumber' || child.name == 'partName'
+      elsif %w[partNumber partName].include?(child.name)
         '. '
       else
         ' '
@@ -80,7 +80,10 @@ module ModsDisplay
       names = element.xpath("//m:name[@nameTitleGroup=\"#{element['nameTitleGroup']}\"]", **Mods::Record::NS_HASH)
       names = element.xpath("//name[@nameTitleGroup=\"#{element['nameTitleGroup']}\"]") if names.empty?
 
-      ModsDisplay::Name.new(names).fields.first&.values&.first&.to_s
+      field = ModsDisplay::Name.new(names).fields.first
+      return unless field
+
+      field.values.first.to_s
     end
 
     def title_parts

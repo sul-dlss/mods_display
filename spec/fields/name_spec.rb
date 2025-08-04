@@ -9,6 +9,7 @@ end
 
 describe ModsDisplay::Name do
   include NameFixtures
+
   before(:all) do
     @name = Stanford::Mods::Record.new.from_str(simple_name_fixture).plain_name
     @blank_name = Stanford::Mods::Record.new.from_str(blank_name_fixture).plain_name
