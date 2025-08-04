@@ -5,7 +5,7 @@ module ModsDisplay
     with_collection_parameter :field
 
     def initialize(field:, delimiter: nil, label_html_attributes: {}, value_html_attributes: {}, value_transformer: nil)
-      super
+      super()
 
       @field = field
       @delimiter = delimiter
