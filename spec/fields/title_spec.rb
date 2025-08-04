@@ -6,6 +6,7 @@ end
 
 describe ModsDisplay::Title do
   include TitleFixtures
+
   before(:all) do
     @title = Stanford::Mods::Record.new.from_str(simple_title_fixture).title_info
     @title_parts = Stanford::Mods::Record.new.from_str(title_parts_fixture).title_info
